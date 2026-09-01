@@ -1,0 +1,950 @@
+{
+  "schemaVersion": 1,
+  "protocol": "VisionPsy Standard preprocessing ablation · RealWorldQA official 20-case sample",
+  "finishedAt": "2026-08-30T13:44:27.960Z",
+  "datasetMd5": "4de008f55dc4fd008ca9e15321dc44b7",
+  "official": {
+    "passed": 10,
+    "cases": 20,
+    "accuracy": 0.5,
+    "meanTtftMs": 3834.65,
+    "meanLatencyMs": 3850.45,
+    "meanTokensPerSecond": 145.52556221488123,
+    "meanPromptTokens": 877.4,
+    "preprocessPolicies": [
+      "official-standard-tiled-upscale"
+    ]
+  },
+  "diagnosticNoUpscale": {
+    "passed": 10,
+    "cases": 20,
+    "accuracy": 0.5,
+    "meanTtftMs": 1501.65,
+    "meanLatencyMs": 1514.5,
+    "meanTokensPerSecond": 150.40290908873163,
+    "meanPromptTokens": 431.05,
+    "preprocessPolicies": [
+      "diagnostic-standard-no-upscale"
+    ]
+  },
+  "paired": {
+    "bothPass": 9,
+    "bothFail": 9,
+    "officialOnly": 1,
+    "diagnosticOnly": 1,
+    "discordant": 2,
+    "exactMcNemarP": 1,
+    "disagreements": [
+      {
+        "caseId": "realworldqa-118",
+        "winner": "diagnostic-standard-no-upscale"
+      },
+      {
+        "caseId": "realworldqa-170",
+        "winner": "official-standard-tiled-upscale"
+      }
+    ]
+  },
+  "diagnosticResults": [
+    {
+      "caseId": "realworldqa-5",
+      "sourceIndex": 5,
+      "output": "A",
+      "evaluation": {
+        "status": "PASS",
+        "expectedAnswer": "A · The pile of scrambled eggs is the biggest object on the plate.",
+        "expectedLetter": "A",
+        "predictedLetter": "A",
+        "scoring": "RealWorldQA multiple-choice exact"
+      },
+      "metrics": {
+        "latencyMs": 236,
+        "timeToFirstTokenMs": 226,
+        "promptToFirstTokenMs": 219,
+        "outputTokens": 2,
+        "tokensPerSecond": 214.13276231263384,
+        "coldStartMs": null,
+        "serverReused": true,
+        "backend": "metal",
+        "gpuLayers": 99,
+        "promptTokens": 1,
+        "preprocessPolicy": "diagnostic-standard-no-upscale",
+        "nativeTimings": {
+          "promptEvalMs": 8,
+          "promptTokens": 1,
+          "generationMs": 9.34,
+          "generationTokens": 2,
+          "totalMs": 17.34
+        },
+        "resources": {
+          "sampleCount": 2,
+          "processRssPeakBytes": 1008910336,
+          "processRssLastBytes": 1008910336,
+          "processCpuPeakPercent": 34,
+          "systemRamUsedPeakBytes": 17080762368,
+          "systemRamDeltaBytes": 0,
+          "gpuUtilizationPeakPercent": 39,
+          "gpuUtilizationLastPercent": 39,
+          "gpuMemoryUsedPeakBytes": 3713744896,
+          "gpuMemoryAllocatedPeakBytes": 10343727104,
+          "gpuScope": "macOS system-wide IOAccelerator sample"
+        }
+      }
+    },
+    {
+      "caseId": "realworldqa-8",
+      "sourceIndex": 8,
+      "output": "B",
+      "evaluation": {
+        "status": "FAIL",
+        "expectedAnswer": "C · The dog is facing the left.",
+        "expectedLetter": "C",
+        "predictedLetter": "B",
+        "scoring": "RealWorldQA multiple-choice exact"
+      },
+      "metrics": {
+        "latencyMs": 1984,
+        "timeToFirstTokenMs": 1969,
+        "promptToFirstTokenMs": 1964,
+        "outputTokens": 2,
+        "tokensPerSecond": 133.15579227696404,
+        "coldStartMs": null,
+        "serverReused": true,
+        "backend": "metal",
+        "gpuLayers": 99,
+        "promptTokens": 542,
+        "preprocessPolicy": "diagnostic-standard-no-upscale",
+        "nativeTimings": {
+          "promptEvalMs": 1890.4,
+          "promptTokens": 542,
+          "generationMs": 15.02,
+          "generationTokens": 2,
+          "totalMs": 1905.42
+        },
+        "resources": {
+          "sampleCount": 6,
+          "processRssPeakBytes": 1054621696,
+          "processRssLastBytes": 1051099136,
+          "processCpuPeakPercent": 15.8,
+          "systemRamUsedPeakBytes": 17041948672,
+          "systemRamDeltaBytes": 0,
+          "gpuUtilizationPeakPercent": 99,
+          "gpuUtilizationLastPercent": 94,
+          "gpuMemoryUsedPeakBytes": 3732652032,
+          "gpuMemoryAllocatedPeakBytes": 10365747200,
+          "gpuScope": "macOS system-wide IOAccelerator sample"
+        }
+      }
+    },
+    {
+      "caseId": "realworldqa-39",
+      "sourceIndex": 39,
+      "output": "B",
+      "evaluation": {
+        "status": "PASS",
+        "expectedAnswer": "B · The white object is smaller than the bowl.",
+        "expectedLetter": "B",
+        "predictedLetter": "B",
+        "scoring": "RealWorldQA multiple-choice exact"
+      },
+      "metrics": {
+        "latencyMs": 824,
+        "timeToFirstTokenMs": 813,
+        "promptToFirstTokenMs": 807,
+        "outputTokens": 2,
+        "tokensPerSecond": 187.26591760299624,
+        "coldStartMs": null,
+        "serverReused": true,
+        "backend": "metal",
+        "gpuLayers": 99,
+        "promptTokens": 256,
+        "preprocessPolicy": "diagnostic-standard-no-upscale",
+        "nativeTimings": {
+          "promptEvalMs": 580.72,
+          "promptTokens": 256,
+          "generationMs": 10.68,
+          "generationTokens": 2,
+          "totalMs": 591.39
+        },
+        "resources": {
+          "sampleCount": 2,
+          "processRssPeakBytes": 1106624512,
+          "processRssLastBytes": 1106624512,
+          "processCpuPeakPercent": 33.8,
+          "systemRamUsedPeakBytes": 16446390272,
+          "systemRamDeltaBytes": 81526784,
+          "gpuUtilizationPeakPercent": 97,
+          "gpuUtilizationLastPercent": 97,
+          "gpuMemoryUsedPeakBytes": 3735699456,
+          "gpuMemoryAllocatedPeakBytes": 10364649472,
+          "gpuScope": "macOS system-wide IOAccelerator sample"
+        }
+      }
+    },
+    {
+      "caseId": "realworldqa-41",
+      "sourceIndex": 41,
+      "output": "C",
+      "evaluation": {
+        "status": "PASS",
+        "expectedAnswer": "C · The ring is below the necklace in the bottom right of the case.",
+        "expectedLetter": "C",
+        "predictedLetter": "C",
+        "scoring": "RealWorldQA multiple-choice exact"
+      },
+      "metrics": {
+        "latencyMs": 1787,
+        "timeToFirstTokenMs": 1772,
+        "promptToFirstTokenMs": 1769,
+        "outputTokens": 2,
+        "tokensPerSecond": 134.2281879194631,
+        "coldStartMs": null,
+        "serverReused": true,
+        "backend": "metal",
+        "gpuLayers": 99,
+        "promptTokens": 558,
+        "preprocessPolicy": "diagnostic-standard-no-upscale",
+        "nativeTimings": {
+          "promptEvalMs": 1688.9,
+          "promptTokens": 558,
+          "generationMs": 14.9,
+          "generationTokens": 2,
+          "totalMs": 1703.8
+        },
+        "resources": {
+          "sampleCount": 6,
+          "processRssPeakBytes": 1131266048,
+          "processRssLastBytes": 1131266048,
+          "processCpuPeakPercent": 16.6,
+          "systemRamUsedPeakBytes": 16608264192,
+          "systemRamDeltaBytes": 49905664,
+          "gpuUtilizationPeakPercent": 98,
+          "gpuUtilizationLastPercent": 93,
+          "gpuMemoryUsedPeakBytes": 3735781376,
+          "gpuMemoryAllocatedPeakBytes": 10360635392,
+          "gpuScope": "macOS system-wide IOAccelerator sample"
+        }
+      }
+    },
+    {
+      "caseId": "realworldqa-44",
+      "sourceIndex": 44,
+      "output": "B",
+      "evaluation": {
+        "status": "PASS",
+        "expectedAnswer": "B · The squirrel is right at the window looking in.",
+        "expectedLetter": "B",
+        "predictedLetter": "B",
+        "scoring": "RealWorldQA multiple-choice exact"
+      },
+      "metrics": {
+        "latencyMs": 783,
+        "timeToFirstTokenMs": 771,
+        "promptToFirstTokenMs": 767,
+        "outputTokens": 2,
+        "tokensPerSecond": 169.4915254237288,
+        "coldStartMs": null,
+        "serverReused": true,
+        "backend": "metal",
+        "gpuLayers": 99,
+        "promptTokens": 242,
+        "preprocessPolicy": "diagnostic-standard-no-upscale",
+        "nativeTimings": {
+          "promptEvalMs": 587.03,
+          "promptTokens": 242,
+          "generationMs": 11.8,
+          "generationTokens": 2,
+          "totalMs": 598.83
+        },
+        "resources": {
+          "sampleCount": 2,
+          "processRssPeakBytes": 1179680768,
+          "processRssLastBytes": 1179680768,
+          "processCpuPeakPercent": 30.7,
+          "systemRamUsedPeakBytes": 16560308224,
+          "systemRamDeltaBytes": 0,
+          "gpuUtilizationPeakPercent": 91,
+          "gpuUtilizationLastPercent": 91,
+          "gpuMemoryUsedPeakBytes": 3730440192,
+          "gpuMemoryAllocatedPeakBytes": 10360438784,
+          "gpuScope": "macOS system-wide IOAccelerator sample"
+        }
+      }
+    },
+    {
+      "caseId": "realworldqa-48",
+      "sourceIndex": 48,
+      "output": "C",
+      "evaluation": {
+        "status": "FAIL",
+        "expectedAnswer": "A · There is one pink scrunchie.",
+        "expectedLetter": "A",
+        "predictedLetter": "C",
+        "scoring": "RealWorldQA multiple-choice exact"
+      },
+      "metrics": {
+        "latencyMs": 1809,
+        "timeToFirstTokenMs": 1797,
+        "promptToFirstTokenMs": 1792,
+        "outputTokens": 2,
+        "tokensPerSecond": 171.67381974248926,
+        "coldStartMs": null,
+        "serverReused": true,
+        "backend": "metal",
+        "gpuLayers": 99,
+        "promptTokens": 552,
+        "preprocessPolicy": "diagnostic-standard-no-upscale",
+        "nativeTimings": {
+          "promptEvalMs": 1697.7,
+          "promptTokens": 552,
+          "generationMs": 11.65,
+          "generationTokens": 2,
+          "totalMs": 1709.36
+        },
+        "resources": {
+          "sampleCount": 6,
+          "processRssPeakBytes": 1199849472,
+          "processRssLastBytes": 1199816704,
+          "processCpuPeakPercent": 13.7,
+          "systemRamUsedPeakBytes": 17094901760,
+          "systemRamDeltaBytes": 250740736,
+          "gpuUtilizationPeakPercent": 99,
+          "gpuUtilizationLastPercent": 93,
+          "gpuMemoryUsedPeakBytes": 3735748608,
+          "gpuMemoryAllocatedPeakBytes": 10360635392,
+          "gpuScope": "macOS system-wide IOAccelerator sample"
+        }
+      }
+    },
+    {
+      "caseId": "realworldqa-53",
+      "sourceIndex": 53,
+      "output": "B",
+      "evaluation": {
+        "status": "PASS",
+        "expectedAnswer": "B · The stove is inbetween the stack of boxes and refrigerator.",
+        "expectedLetter": "B",
+        "predictedLetter": "B",
+        "scoring": "RealWorldQA multiple-choice exact"
+      },
+      "metrics": {
+        "latencyMs": 587,
+        "timeToFirstTokenMs": 575,
+        "promptToFirstTokenMs": 570,
+        "outputTokens": 2,
+        "tokensPerSecond": 152.0912547528517,
+        "coldStartMs": null,
+        "serverReused": true,
+        "backend": "metal",
+        "gpuLayers": 99,
+        "promptTokens": 201,
+        "preprocessPolicy": "diagnostic-standard-no-upscale",
+        "nativeTimings": {
+          "promptEvalMs": 446.39,
+          "promptTokens": 201,
+          "generationMs": 13.15,
+          "generationTokens": 2,
+          "totalMs": 459.54
+        },
+        "resources": {
+          "sampleCount": 3,
+          "processRssPeakBytes": 1241726976,
+          "processRssLastBytes": 1241726976,
+          "processCpuPeakPercent": 16.7,
+          "systemRamUsedPeakBytes": 16536125440,
+          "systemRamDeltaBytes": 80232448,
+          "gpuUtilizationPeakPercent": 95,
+          "gpuUtilizationLastPercent": 95,
+          "gpuMemoryUsedPeakBytes": 3733209088,
+          "gpuMemoryAllocatedPeakBytes": 10360438784,
+          "gpuScope": "macOS system-wide IOAccelerator sample"
+        }
+      }
+    },
+    {
+      "caseId": "realworldqa-64",
+      "sourceIndex": 64,
+      "output": "A",
+      "evaluation": {
+        "status": "FAIL",
+        "expectedAnswer": "C · The cat is looking forward.",
+        "expectedLetter": "C",
+        "predictedLetter": "A",
+        "scoring": "RealWorldQA multiple-choice exact"
+      },
+      "metrics": {
+        "latencyMs": 2022,
+        "timeToFirstTokenMs": 2014,
+        "promptToFirstTokenMs": 2007,
+        "outputTokens": 2,
+        "tokensPerSecond": 129.11555842479018,
+        "coldStartMs": null,
+        "serverReused": true,
+        "backend": "metal",
+        "gpuLayers": 99,
+        "promptTokens": 543,
+        "preprocessPolicy": "diagnostic-standard-no-upscale",
+        "nativeTimings": {
+          "promptEvalMs": 1908.96,
+          "promptTokens": 543,
+          "generationMs": 15.49,
+          "generationTokens": 2,
+          "totalMs": 1924.45
+        },
+        "resources": {
+          "sampleCount": 5,
+          "processRssPeakBytes": 1305165824,
+          "processRssLastBytes": 1305165824,
+          "processCpuPeakPercent": 21.5,
+          "systemRamUsedPeakBytes": 16902012928,
+          "systemRamDeltaBytes": 365887488,
+          "gpuUtilizationPeakPercent": 100,
+          "gpuUtilizationLastPercent": 98,
+          "gpuMemoryUsedPeakBytes": 3820863488,
+          "gpuMemoryAllocatedPeakBytes": 10448519168,
+          "gpuScope": "macOS system-wide IOAccelerator sample"
+        }
+      }
+    },
+    {
+      "caseId": "realworldqa-112",
+      "sourceIndex": 112,
+      "output": "A",
+      "evaluation": {
+        "status": "FAIL",
+        "expectedAnswer": "C · The cable is plugged into the computer.",
+        "expectedLetter": "C",
+        "predictedLetter": "A",
+        "scoring": "RealWorldQA multiple-choice exact"
+      },
+      "metrics": {
+        "latencyMs": 746,
+        "timeToFirstTokenMs": 732,
+        "promptToFirstTokenMs": 728,
+        "outputTokens": 2,
+        "tokensPerSecond": 141.04372355430183,
+        "coldStartMs": null,
+        "serverReused": true,
+        "backend": "metal",
+        "gpuLayers": 99,
+        "promptTokens": 221,
+        "preprocessPolicy": "diagnostic-standard-no-upscale",
+        "nativeTimings": {
+          "promptEvalMs": 552.07,
+          "promptTokens": 221,
+          "generationMs": 14.18,
+          "generationTokens": 2,
+          "totalMs": 566.25
+        },
+        "resources": {
+          "sampleCount": 3,
+          "processRssPeakBytes": 1348370432,
+          "processRssLastBytes": 1348370432,
+          "processCpuPeakPercent": 33.8,
+          "systemRamUsedPeakBytes": 17010147328,
+          "systemRamDeltaBytes": 77512704,
+          "gpuUtilizationPeakPercent": 92,
+          "gpuUtilizationLastPercent": 92,
+          "gpuMemoryUsedPeakBytes": 3821256704,
+          "gpuMemoryAllocatedPeakBytes": 10448715776,
+          "gpuScope": "macOS system-wide IOAccelerator sample"
+        }
+      }
+    },
+    {
+      "caseId": "realworldqa-118",
+      "sourceIndex": 118,
+      "output": "B",
+      "evaluation": {
+        "status": "PASS",
+        "expectedAnswer": "B · The dog is to the left of the stuffed animal.",
+        "expectedLetter": "B",
+        "predictedLetter": "B",
+        "scoring": "RealWorldQA multiple-choice exact"
+      },
+      "metrics": {
+        "latencyMs": 1861,
+        "timeToFirstTokenMs": 1849,
+        "promptToFirstTokenMs": 1846,
+        "outputTokens": 2,
+        "tokensPerSecond": 157.35641227380015,
+        "coldStartMs": null,
+        "serverReused": true,
+        "backend": "metal",
+        "gpuLayers": 99,
+        "promptTokens": 554,
+        "preprocessPolicy": "diagnostic-standard-no-upscale",
+        "nativeTimings": {
+          "promptEvalMs": 1756.18,
+          "promptTokens": 554,
+          "generationMs": 12.71,
+          "generationTokens": 2,
+          "totalMs": 1768.89
+        },
+        "resources": {
+          "sampleCount": 6,
+          "processRssPeakBytes": 1372061696,
+          "processRssLastBytes": 1090093056,
+          "processCpuPeakPercent": 15.8,
+          "systemRamUsedPeakBytes": 17026777088,
+          "systemRamDeltaBytes": 18415616,
+          "gpuUtilizationPeakPercent": 99,
+          "gpuUtilizationLastPercent": 93,
+          "gpuMemoryUsedPeakBytes": 3847307264,
+          "gpuMemoryAllocatedPeakBytes": 10448453632,
+          "gpuScope": "macOS system-wide IOAccelerator sample"
+        }
+      }
+    },
+    {
+      "caseId": "realworldqa-152",
+      "sourceIndex": 152,
+      "output": "B",
+      "evaluation": {
+        "status": "FAIL",
+        "expectedAnswer": "A · The pink suitcase is underneath of the backpack.",
+        "expectedLetter": "A",
+        "predictedLetter": "B",
+        "scoring": "RealWorldQA multiple-choice exact"
+      },
+      "metrics": {
+        "latencyMs": 1854,
+        "timeToFirstTokenMs": 1842,
+        "promptToFirstTokenMs": 1841,
+        "outputTokens": 2,
+        "tokensPerSecond": 166.80567139282735,
+        "coldStartMs": null,
+        "serverReused": true,
+        "backend": "metal",
+        "gpuLayers": 99,
+        "promptTokens": 557,
+        "preprocessPolicy": "diagnostic-standard-no-upscale",
+        "nativeTimings": {
+          "promptEvalMs": 1747.03,
+          "promptTokens": 557,
+          "generationMs": 11.99,
+          "generationTokens": 2,
+          "totalMs": 1759.02
+        },
+        "resources": {
+          "sampleCount": 6,
+          "processRssPeakBytes": 1173618688,
+          "processRssLastBytes": 1173618688,
+          "processCpuPeakPercent": 14.1,
+          "systemRamUsedPeakBytes": 17058185216,
+          "systemRamDeltaBytes": 34766848,
+          "gpuUtilizationPeakPercent": 99,
+          "gpuUtilizationLastPercent": 91,
+          "gpuMemoryUsedPeakBytes": 3936894976,
+          "gpuMemoryAllocatedPeakBytes": 10541121536,
+          "gpuScope": "macOS system-wide IOAccelerator sample"
+        }
+      }
+    },
+    {
+      "caseId": "realworldqa-159",
+      "sourceIndex": 159,
+      "output": "B",
+      "evaluation": {
+        "status": "FAIL",
+        "expectedAnswer": "A · The guitar is to the left of the table.",
+        "expectedLetter": "A",
+        "predictedLetter": "B",
+        "scoring": "RealWorldQA multiple-choice exact"
+      },
+      "metrics": {
+        "latencyMs": 1846,
+        "timeToFirstTokenMs": 1830,
+        "promptToFirstTokenMs": 1823,
+        "outputTokens": 2,
+        "tokensPerSecond": 124.92192379762649,
+        "coldStartMs": null,
+        "serverReused": true,
+        "backend": "metal",
+        "gpuLayers": 99,
+        "promptTokens": 551,
+        "preprocessPolicy": "diagnostic-standard-no-upscale",
+        "nativeTimings": {
+          "promptEvalMs": 1674.86,
+          "promptTokens": 551,
+          "generationMs": 16.01,
+          "generationTokens": 2,
+          "totalMs": 1690.87
+        },
+        "resources": {
+          "sampleCount": 6,
+          "processRssPeakBytes": 1177812992,
+          "processRssLastBytes": 1149485056,
+          "processCpuPeakPercent": 18,
+          "systemRamUsedPeakBytes": 17073504256,
+          "systemRamDeltaBytes": 0,
+          "gpuUtilizationPeakPercent": 99,
+          "gpuUtilizationLastPercent": 93,
+          "gpuMemoryUsedPeakBytes": 3962077184,
+          "gpuMemoryAllocatedPeakBytes": 10543595520,
+          "gpuScope": "macOS system-wide IOAccelerator sample"
+        }
+      }
+    },
+    {
+      "caseId": "realworldqa-166",
+      "sourceIndex": 166,
+      "output": "A",
+      "evaluation": {
+        "status": "PASS",
+        "expectedAnswer": "A · The guitar is to the left of the dog's head in the upper left hand corner of the photo.",
+        "expectedLetter": "A",
+        "predictedLetter": "A",
+        "scoring": "RealWorldQA multiple-choice exact"
+      },
+      "metrics": {
+        "latencyMs": 1923,
+        "timeToFirstTokenMs": 1910,
+        "promptToFirstTokenMs": 1906,
+        "outputTokens": 2,
+        "tokensPerSecond": 134.77088948787062,
+        "coldStartMs": null,
+        "serverReused": true,
+        "backend": "metal",
+        "gpuLayers": 99,
+        "promptTokens": 582,
+        "preprocessPolicy": "diagnostic-standard-no-upscale",
+        "nativeTimings": {
+          "promptEvalMs": 1769.82,
+          "promptTokens": 582,
+          "generationMs": 14.84,
+          "generationTokens": 2,
+          "totalMs": 1784.66
+        },
+        "resources": {
+          "sampleCount": 6,
+          "processRssPeakBytes": 1176010752,
+          "processRssLastBytes": 1066614784,
+          "processCpuPeakPercent": 18.9,
+          "systemRamUsedPeakBytes": 17039360000,
+          "systemRamDeltaBytes": 1540096,
+          "gpuUtilizationPeakPercent": 99,
+          "gpuUtilizationLastPercent": 93,
+          "gpuMemoryUsedPeakBytes": 3962077184,
+          "gpuMemoryAllocatedPeakBytes": 10543595520,
+          "gpuScope": "macOS system-wide IOAccelerator sample"
+        }
+      }
+    },
+    {
+      "caseId": "realworldqa-170",
+      "sourceIndex": 170,
+      "output": "C",
+      "evaluation": {
+        "status": "FAIL",
+        "expectedAnswer": "A · The dog is sitting in the center facing the chicken in the oven.",
+        "expectedLetter": "A",
+        "predictedLetter": "C",
+        "scoring": "RealWorldQA multiple-choice exact"
+      },
+      "metrics": {
+        "latencyMs": 762,
+        "timeToFirstTokenMs": 750,
+        "promptToFirstTokenMs": 747,
+        "outputTokens": 2,
+        "tokensPerSecond": 161.29032258064515,
+        "coldStartMs": null,
+        "serverReused": true,
+        "backend": "metal",
+        "gpuLayers": 99,
+        "promptTokens": 238,
+        "preprocessPolicy": "diagnostic-standard-no-upscale",
+        "nativeTimings": {
+          "promptEvalMs": 526.32,
+          "promptTokens": 238,
+          "generationMs": 12.4,
+          "generationTokens": 2,
+          "totalMs": 538.72
+        },
+        "resources": {
+          "sampleCount": 3,
+          "processRssPeakBytes": 1118158848,
+          "processRssLastBytes": 1115832320,
+          "processCpuPeakPercent": 33.7,
+          "systemRamUsedPeakBytes": 17035837440,
+          "systemRamDeltaBytes": 3227648,
+          "gpuUtilizationPeakPercent": 93,
+          "gpuUtilizationLastPercent": 93,
+          "gpuMemoryUsedPeakBytes": 3821289472,
+          "gpuMemoryAllocatedPeakBytes": 10511187968,
+          "gpuScope": "macOS system-wide IOAccelerator sample"
+        }
+      }
+    },
+    {
+      "caseId": "realworldqa-201",
+      "sourceIndex": 201,
+      "output": "A",
+      "evaluation": {
+        "status": "PASS",
+        "expectedAnswer": "A · The cat on the left is smaller.",
+        "expectedLetter": "A",
+        "predictedLetter": "A",
+        "scoring": "RealWorldQA multiple-choice exact"
+      },
+      "metrics": {
+        "latencyMs": 1900,
+        "timeToFirstTokenMs": 1888,
+        "promptToFirstTokenMs": 1882,
+        "outputTokens": 2,
+        "tokensPerSecond": 165.15276630883568,
+        "coldStartMs": null,
+        "serverReused": true,
+        "backend": "metal",
+        "gpuLayers": 99,
+        "promptTokens": 543,
+        "preprocessPolicy": "diagnostic-standard-no-upscale",
+        "nativeTimings": {
+          "promptEvalMs": 1771.68,
+          "promptTokens": 543,
+          "generationMs": 12.11,
+          "generationTokens": 2,
+          "totalMs": 1783.79
+        },
+        "resources": {
+          "sampleCount": 6,
+          "processRssPeakBytes": 1119862784,
+          "processRssLastBytes": 1072791552,
+          "processCpuPeakPercent": 19.6,
+          "systemRamUsedPeakBytes": 17038688256,
+          "systemRamDeltaBytes": 11616256,
+          "gpuUtilizationPeakPercent": 100,
+          "gpuUtilizationLastPercent": 91,
+          "gpuMemoryUsedPeakBytes": 3850108928,
+          "gpuMemoryAllocatedPeakBytes": 10500702208,
+          "gpuScope": "macOS system-wide IOAccelerator sample"
+        }
+      }
+    },
+    {
+      "caseId": "realworldqa-310",
+      "sourceIndex": 310,
+      "output": "C",
+      "evaluation": {
+        "status": "PASS",
+        "expectedAnswer": "C · The white potted plant is on the left hand side of the gray column.",
+        "expectedLetter": "C",
+        "predictedLetter": "C",
+        "scoring": "RealWorldQA multiple-choice exact"
+      },
+      "metrics": {
+        "latencyMs": 2306,
+        "timeToFirstTokenMs": 2294,
+        "promptToFirstTokenMs": 2291,
+        "outputTokens": 2,
+        "tokensPerSecond": 147.05882352941177,
+        "coldStartMs": null,
+        "serverReused": true,
+        "backend": "metal",
+        "gpuLayers": 99,
+        "promptTokens": 557,
+        "preprocessPolicy": "diagnostic-standard-no-upscale",
+        "nativeTimings": {
+          "promptEvalMs": 1690.72,
+          "promptTokens": 557,
+          "generationMs": 13.6,
+          "generationTokens": 2,
+          "totalMs": 1704.32
+        },
+        "resources": {
+          "sampleCount": 7,
+          "processRssPeakBytes": 1143177216,
+          "processRssLastBytes": 1143177216,
+          "processCpuPeakPercent": 48.6,
+          "systemRamUsedPeakBytes": 17035493376,
+          "systemRamDeltaBytes": 61472768,
+          "gpuUtilizationPeakPercent": 99,
+          "gpuUtilizationLastPercent": 94,
+          "gpuMemoryUsedPeakBytes": 3850108928,
+          "gpuMemoryAllocatedPeakBytes": 10481336320,
+          "gpuScope": "macOS system-wide IOAccelerator sample"
+        }
+      }
+    },
+    {
+      "caseId": "realworldqa-339",
+      "sourceIndex": 339,
+      "output": "C",
+      "evaluation": {
+        "status": "FAIL",
+        "expectedAnswer": "A · The drill is to the left of the window.",
+        "expectedLetter": "A",
+        "predictedLetter": "C",
+        "scoring": "RealWorldQA multiple-choice exact"
+      },
+      "metrics": {
+        "latencyMs": 1425,
+        "timeToFirstTokenMs": 1409,
+        "promptToFirstTokenMs": 1405,
+        "outputTokens": 2,
+        "tokensPerSecond": 123.3806292412091,
+        "coldStartMs": null,
+        "serverReused": true,
+        "backend": "metal",
+        "gpuLayers": 99,
+        "promptTokens": 388,
+        "preprocessPolicy": "diagnostic-standard-no-upscale",
+        "nativeTimings": {
+          "promptEvalMs": 1053.54,
+          "promptTokens": 388,
+          "generationMs": 16.21,
+          "generationTokens": 2,
+          "totalMs": 1069.75
+        },
+        "resources": {
+          "sampleCount": 5,
+          "processRssPeakBytes": 1206878208,
+          "processRssLastBytes": 1206878208,
+          "processCpuPeakPercent": 65.2,
+          "systemRamUsedPeakBytes": 17051680768,
+          "systemRamDeltaBytes": 262455296,
+          "gpuUtilizationPeakPercent": 100,
+          "gpuUtilizationLastPercent": 88,
+          "gpuMemoryUsedPeakBytes": 3850485760,
+          "gpuMemoryAllocatedPeakBytes": 10468982784,
+          "gpuScope": "macOS system-wide IOAccelerator sample"
+        }
+      }
+    },
+    {
+      "caseId": "realworldqa-412",
+      "sourceIndex": 412,
+      "output": "C",
+      "evaluation": {
+        "status": "FAIL",
+        "expectedAnswer": "A · The drink with the lime is in the middle of the two yellow drinks.",
+        "expectedLetter": "A",
+        "predictedLetter": "C",
+        "scoring": "RealWorldQA multiple-choice exact"
+      },
+      "metrics": {
+        "latencyMs": 1554,
+        "timeToFirstTokenMs": 1542,
+        "promptToFirstTokenMs": 1537,
+        "outputTokens": 2,
+        "tokensPerSecond": 137.83597518952448,
+        "coldStartMs": null,
+        "serverReused": true,
+        "backend": "metal",
+        "gpuLayers": 99,
+        "promptTokens": 424,
+        "preprocessPolicy": "diagnostic-standard-no-upscale",
+        "nativeTimings": {
+          "promptEvalMs": 1154.01,
+          "promptTokens": 424,
+          "generationMs": 14.51,
+          "generationTokens": 2,
+          "totalMs": 1168.51
+        },
+        "resources": {
+          "sampleCount": 5,
+          "processRssPeakBytes": 1220427776,
+          "processRssLastBytes": 1151811584,
+          "processCpuPeakPercent": 70.5,
+          "systemRamUsedPeakBytes": 17058480128,
+          "systemRamDeltaBytes": 0,
+          "gpuUtilizationPeakPercent": 98,
+          "gpuUtilizationLastPercent": 95,
+          "gpuMemoryUsedPeakBytes": 3850108928,
+          "gpuMemoryAllocatedPeakBytes": 10449977344,
+          "gpuScope": "macOS system-wide IOAccelerator sample"
+        }
+      }
+    },
+    {
+      "caseId": "realworldqa-566",
+      "sourceIndex": 566,
+      "output": "B",
+      "evaluation": {
+        "status": "FAIL",
+        "expectedAnswer": "C · The guacamole is between the green and red salsa.",
+        "expectedLetter": "C",
+        "predictedLetter": "B",
+        "scoring": "RealWorldQA multiple-choice exact"
+      },
+      "metrics": {
+        "latencyMs": 1988,
+        "timeToFirstTokenMs": 1974,
+        "promptToFirstTokenMs": 1967,
+        "outputTokens": 2,
+        "tokensPerSecond": 130.4631441617743,
+        "coldStartMs": null,
+        "serverReused": true,
+        "backend": "metal",
+        "gpuLayers": 99,
+        "promptTokens": 567,
+        "preprocessPolicy": "diagnostic-standard-no-upscale",
+        "nativeTimings": {
+          "promptEvalMs": 1855.51,
+          "promptTokens": 567,
+          "generationMs": 15.33,
+          "generationTokens": 2,
+          "totalMs": 1870.84
+        },
+        "resources": {
+          "sampleCount": 5,
+          "processRssPeakBytes": 1227685888,
+          "processRssLastBytes": 1227685888,
+          "processCpuPeakPercent": 23,
+          "systemRamUsedPeakBytes": 16804200448,
+          "systemRamDeltaBytes": 0,
+          "gpuUtilizationPeakPercent": 100,
+          "gpuUtilizationLastPercent": 97,
+          "gpuMemoryUsedPeakBytes": 3851190272,
+          "gpuMemoryAllocatedPeakBytes": 10450173952,
+          "gpuScope": "macOS system-wide IOAccelerator sample"
+        }
+      }
+    },
+    {
+      "caseId": "realworldqa-757",
+      "sourceIndex": 757,
+      "output": "C",
+      "evaluation": {
+        "status": "PASS",
+        "expectedAnswer": "C · There are two cups of coffee.",
+        "expectedLetter": "C",
+        "predictedLetter": "C",
+        "scoring": "RealWorldQA multiple-choice exact"
+      },
+      "metrics": {
+        "latencyMs": 2093,
+        "timeToFirstTokenMs": 2076,
+        "promptToFirstTokenMs": 2074,
+        "outputTokens": 2,
+        "tokensPerSecond": 126.82308180088776,
+        "coldStartMs": null,
+        "serverReused": true,
+        "backend": "metal",
+        "gpuLayers": 99,
+        "promptTokens": 544,
+        "preprocessPolicy": "diagnostic-standard-no-upscale",
+        "nativeTimings": {
+          "promptEvalMs": 1959.45,
+          "promptTokens": 544,
+          "generationMs": 15.77,
+          "generationTokens": 2,
+          "totalMs": 1975.22
+        },
+        "resources": {
+          "sampleCount": 7,
+          "processRssPeakBytes": 1284636672,
+          "processRssLastBytes": 1180663808,
+          "processCpuPeakPercent": 13.2,
+          "systemRamUsedPeakBytes": 17019273216,
+          "systemRamDeltaBytes": 210829312,
+          "gpuUtilizationPeakPercent": 97,
+          "gpuUtilizationLastPercent": 78,
+          "gpuMemoryUsedPeakBytes": 4066508800,
+          "gpuMemoryAllocatedPeakBytes": 10579247104,
+          "gpuScope": "macOS system-wide IOAccelerator sample"
+        }
+      }
+    }
+  ]
+}

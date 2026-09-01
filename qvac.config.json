@@ -1,0 +1,7 @@
+{
+  "registryStreamTimeoutMs": 300000,
+  "registryDownloadMaxRetries": 10,
+  "httpConnectionTimeoutMs": 60000,
+  "httpDownloadConcurrency": 3,
+  "loggerConsoleOutput": false
+}

@@ -1,0 +1,113 @@
+.quick-advanced {
+  grid-column: 1 / -1;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  padding: 14px 16px;
+  background: #0f1111;
+}
+
+.quick-advanced summary {
+  cursor: pointer;
+  color: var(--muted);
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.quick-advanced[open] summary {
+  color: var(--lime);
+  margin-bottom: 14px;
+}
+
+.quick-run-status {
+  padding: 26px;
+  border-color: #506d31;
+  box-shadow: 0 0 0 1px rgba(185, 246, 90, .08), 0 20px 55px rgba(0, 0, 0, .3);
+}
+
+.quick-run-head {
+  display: flex;
+  justify-content: space-between;
+  gap: 24px;
+  align-items: start;
+}
+
+.quick-run-head h3 {
+  font-size: 28px;
+  margin: 0 0 8px;
+}
+
+.quick-run-head p:not(.eyebrow) {
+  color: var(--muted);
+  margin: 0;
+  line-height: 1.55;
+}
+
+.quick-run-head > strong {
+  font-size: 34px;
+  color: var(--lime);
+}
+
+.quick-progress-track {
+  height: 12px;
+  background: #252a27;
+  border-radius: 999px;
+  overflow: hidden;
+  margin: 24px 0 16px;
+}
+
+.quick-progress-track i {
+  display: block;
+  height: 100%;
+  background: linear-gradient(90deg, #7ea93e, var(--lime));
+  border-radius: inherit;
+  transition: width .35s ease;
+}
+
+.quick-running-signal {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: var(--muted);
+  font-size: 12px;
+}
+
+.quick-running-signal i {
+  width: 12px;
+  height: 12px;
+  border: 2px solid #506d31;
+  border-top-color: var(--lime);
+  border-radius: 50%;
+  animation: spin .8s linear infinite;
+}
+
+.quick-connection-lost {
+  display: grid;
+  gap: 4px;
+  padding: 12px 14px;
+  border: 1px solid #8a5f32;
+  border-radius: 10px;
+  background: rgba(242, 189, 102, .08);
+  color: var(--amber);
+  font-size: 12px;
+}
+
+.quick-connection-lost span {
+  color: var(--muted);
+}
+
+.quick-run-status .primary {
+  margin-top: 18px;
+  text-align: center;
+  font-size: 15px;
+}
+
+.arena-tabs button.selected {
+  border-color: var(--lime);
+  color: var(--lime);
+}
+
+@media (max-width: 650px) {
+  .quick-run-head { align-items: center; }
+  .quick-run-head h3 { font-size: 22px; }
+  .quick-run-head > strong { font-size: 26px; }
+}

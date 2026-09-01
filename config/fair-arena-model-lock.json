@@ -1,0 +1,50 @@
+{
+  "schemaVersion": 1,
+  "id": "fair-arena-model-lock-v1",
+  "createdAt": "2026-08-15T12:35:00.000Z",
+  "precisionPolicy": {
+    "target": "Q8_0 model and Q8_0 projector",
+    "status": "CLOSELY_COMPARABLE",
+    "reason": "All primary artifacts are Q8_0; architecture-specific kernels and two local runtime interfaces prevent a claim of mathematical identity."
+  },
+  "runtime": {
+    "name": "patched llama.cpp mtmd",
+    "revision": "896c8b90f5fe372bd587bc4336ab9f07e8ea1eca",
+    "binaryPath": "${HOME}/Projects/visionpsy-twinpaws/vendor/llama-mtmd-metal/bin/llama-server",
+    "sha256": "cc4378feae55860bfb700d92cf6be9265347a1dba579da6930c64a3664800bc8"
+  },
+  "primaryModels": [
+    {
+      "providerId": "visionpsy-patched-base",
+      "repository": "qvac/VisionPsy-Nano-460M-GGUFs",
+      "revision": "4138c5bd6e026d67cebf2dbd2d81c6229c14cdc1",
+      "architecture": "VisionPsy-Nano-460M",
+      "license": "Apache-2.0",
+      "model": { "path": "${HOME}/.qvac/models/194207cdb1a218aa_visionpsy-nano-460m-q8_0.gguf", "quantization": "Q8_0", "parameters": 409133760, "bytes": 436676000, "sha256": "fc70a6c6eed7d2f82ed48cbd52cc7118b249eff8b91112ef9cbfca6813a1eefa" },
+      "projector": { "path": "${HOME}/.qvac/models/4abdf8c5183110ba_mmproj-visionpsy-nano-460m-q8.gguf", "quantization": "Q8_0", "parameters": 98229504, "bytes": 108782144, "sha256": "92f1bb80acaba3e7b59b6534f47447b830330bc9051018d6d8b5d768e58503c2" }
+    },
+    {
+      "providerId": "lfm2.5-vl-450m",
+      "repository": "LiquidAI/LFM2.5-VL-450M-GGUF",
+      "revision": "6f15859c2de1583b6180a9bc56338342592b589a",
+      "architecture": "LFM2.5-VL-450M",
+      "license": "LFM Open License v1.0",
+      "model": { "path": "${HOME}/.qvac/models/fair_lfm2.5-vl-450m-q8_0.gguf", "quantization": "Q8_0", "parameters": 354483968, "bytes": 379219104, "sha256": "263aca93039e22140d55e046831c700c796affa8143d7638581c488a30c712bc" },
+      "projector": { "path": "${HOME}/.qvac/models/fair_mmproj-lfm2.5-vl-450m-q8_0.gguf", "quantization": "Q8_0", "parameters": 94234880, "bytes": 102815168, "sha256": "ebfc428baa37efad8bae93864f914b2634a09009f91ad59f974fe1a1565d8561" }
+    },
+    {
+      "providerId": "qvac-smolvlm2",
+      "repository": "ggml-org/SmolVLM2-500M-Video-Instruct-GGUF",
+      "upstreamRepository": "HuggingFaceTB/SmolVLM2-500M-Video-Instruct",
+      "revision": "ccd7aae53bcb1997355c2f094959e72b3642ce17",
+      "upstreamRevision": "7b375e1b73b11138ff12fe22c8f2822d8fe03467",
+      "architecture": "SmolVLM2-500M",
+      "license": "Apache-2.0",
+      "model": { "path": "${HOME}/.qvac/models/2996614861fa183c_SmolVLM2-500M-Video-Instruct-Q8_0.gguf", "quantization": "Q8_0", "parameters": 409252800, "bytes": 436808704, "sha256": "6f67b8036b2469fcd71728702720c6b51aebd759b78137a8120733b4d66438bc" },
+      "projector": { "path": "${HOME}/.qvac/models/5e88688181c2002e_mmproj-SmolVLM2-500M-Video-Instruct-Q8_0.gguf", "quantization": "Q8_0", "parameters": 98229504, "bytes": 108785184, "sha256": "921dc7e259f308e5b027111fa185efcbf33db13f6e35749ddf7f5cdb60ef520b" }
+    }
+  ],
+  "secondaryModels": [
+    { "providerId": "visionpsy-patched", "role": "secondary speed/control only", "primaryQualityRanking": false }
+  ]
+}

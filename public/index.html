@@ -1,0 +1,335 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="color-scheme" content="dark">
+  <link rel="icon" href="data:,">
+  <title>QVAC Vision Lab · Local Vision Evaluation</title>
+  <link rel="stylesheet" href="/styles.css">
+  <link rel="stylesheet" href="/arena-guided.css">
+  <link rel="stylesheet" href="/arena-fair.css">
+  <link rel="stylesheet" href="/status.css">
+  <link rel="stylesheet" href="/benchmark.css">
+  <link rel="stylesheet" href="/ground-truth.css">
+  <link rel="stylesheet" href="/apple-ui.css">
+  <link rel="stylesheet" href="/vision-lab.css">
+  <link rel="stylesheet" href="/showcase.css">
+</head>
+<body>
+  <header class="topbar">
+    <a class="brand" href="/" aria-label="QVAC Vision Lab home"><span class="mark">QV</span><span>QVAC <b>Vision Lab</b></span></a>
+    <nav class="primary-nav" aria-label="Primary navigation"><a href="/">Home</a><a href="/experiments/01/">01</a><a href="/experiments/02/">02</a><a href="/experiments/03/">03</a><a href="/experiments/04/">04</a><a href="/experiments/05/">05</a><a href="/experiments/06/">06</a></nav>
+    <div class="header-status"><span id="provider-pill" class="pill"></span></div>
+  </header>
+
+  <nav class="experiment-page-menu" aria-label="Experiment pages"><a href="/">HOME</a><a href="/experiments/01/">01 · PawVault</a><a href="/experiments/02/">02 · Visual Q&amp;A</a><a href="/experiments/03/">03 · Screenshots</a><a href="/experiments/04/">04 · Documents</a><a href="/experiments/05/">05 · Arena</a><a href="/experiments/06/">06 · Live</a></nav>
+
+  <main id="top">
+    <section id="experiments" class="lab-home">
+      <div class="lab-intro">
+        <p class="eyebrow">LOCAL · PRIVATE · EVIDENCE-DRIVEN</p>
+        <h1>QVAC Vision Lab</h1>
+        <p>Small, reproducible experiments for learning what local vision models can actually see—before model output becomes product logic.</p>
+      </div>
+      <div id="experiment-grid" class="experiment-grid"></div>
+    </section>
+
+    <section id="showcase" class="showcase-section hidden" aria-labelledby="showcase-title">
+      <header class="showcase-hero">
+        <div>
+          <p class="eyebrow">EXPERIMENT 06 · SCREEN-RECORDING READY</p>
+          <h1 id="showcase-title">VisionPsy,<br><em>live on this Mac.</em></h1>
+          <p>Drop one image, ask one exact question, and watch the local model answer token by token while the lab measures what actually happened.</p>
+        </div>
+        <div class="showcase-runtime-card panel">
+          <span id="showcase-runtime-signal" class="showcase-live-signal"><i></i>CHECKING LOCAL RUNTIME</span>
+          <b id="showcase-runtime-model">VisionPsy-Nano-460M-Flash</b>
+          <strong id="showcase-runtime-version" class="showcase-runtime-version">MODEL VERSION · CHECKING</strong>
+          <small id="showcase-runtime-detail">llama.cpp · Metal · no cloud inference</small>
+        </div>
+      </header>
+
+      <section class="showcase-demo-launch panel">
+        <div><p class="eyebrow">TWO PUBLIC SCENARIOS</p><h2>Understand the models first. Audit the benchmark second.</h2><p>The Dog Demo uses four personal photos and natural questions to make the comparison intuitive. The RealWorldQA scenario uses the official 765-question perimeter, exact option scoring and publication-safe statistics.</p></div>
+        <div class="showcase-demo-actions" aria-label="Automated live demos">
+          <button id="showcase-live-demo-3" class="showcase-demo-button dogs"><span>SCENARIO 1 · EXPLAINER</span><b>Dog stories</b></button>
+          <button id="showcase-live-demo" class="showcase-demo-button featured"><span>SCENARIO 2 · AUDIT</span><b>RealWorldQA cycle</b></button>
+        </div>
+      </section>
+
+      <section id="showcase-history-wrap" class="showcase-history-wrap hidden" aria-live="polite">
+        <div class="showcase-subhead"><div><p class="eyebrow">COMPLETED IN THIS RECORDING</p><h2>Previous live runs</h2></div><button id="showcase-clear-history" class="text-button">Clear</button></div>
+        <div id="showcase-history" class="showcase-history"></div>
+      </section>
+
+      <div class="showcase-subhead"><div><p class="eyebrow">CHOOSE A SCENE</p><h2 id="showcase-library-title">Twenty official real-image cases</h2></div><span id="showcase-library-count">RealWorldQA · checksum locked</span></div>
+      <div id="showcase-suite-picker" class="showcase-suite-picker" aria-label="Showcase test suite">
+        <button data-showcase-suite="official-real" class="selected">Official real · 20</button>
+        <button data-showcase-suite="validation-real">New real · 50</button>
+        <button data-showcase-suite="validation-real-b">More real · 50</button>
+        <button data-showcase-suite="validation-real-c">Extended real · 150</button>
+        <button data-showcase-suite="official-remainder">Final real · 495</button>
+        <button data-showcase-suite="official-all">Official total · 765</button>
+      </div>
+      <div id="showcase-case-list" class="showcase-case-list" aria-label="Prepared demo images"></div>
+
+      <div class="showcase-workbench">
+        <section class="showcase-visual panel">
+          <div class="showcase-panel-head"><div><p class="eyebrow">01 · IMAGE INPUT</p><h2 id="showcase-image-title">RealWorldQA case</h2></div><span id="showcase-image-source" class="showcase-source-badge">OFFICIAL REALWORLDQA</span></div>
+          <label id="showcase-drop-zone" class="showcase-drop-zone" tabindex="0">
+            <img id="showcase-image" alt="RealWorldQA visual reasoning case">
+            <span class="showcase-drop-overlay"><b>Drop a new image here</b><small>JPEG, PNG, WebP or HEIC · up to 12 MB</small></span>
+            <input id="showcase-file" type="file" accept="image/jpeg,image/png,image/webp,image/heic" hidden>
+          </label>
+          <div class="showcase-image-actions"><label for="showcase-file" class="secondary">Select image</label><span id="showcase-image-meta">Official benchmark image</span></div>
+        </section>
+
+        <section class="showcase-console panel">
+          <div class="showcase-panel-head"><div><p class="eyebrow">02 · CONVERSATION</p><h2>Talk with VisionPsy</h2></div><div class="showcase-chat-controls"><button id="showcase-clear-chat" class="text-button">New conversation</button><label class="showcase-model-select">Model<select id="showcase-provider"><option value="qvac-visionpsy-standard-q8">VisionPsy Standard Q8</option><option value="qvac-visionpsy">VisionPsy Flash Q8</option><option value="qvac-visionpsy-flash-q4">VisionPsy Flash Q4</option></select></label></div></div>
+
+          <div class="showcase-response-head showcase-chat-status"><span id="showcase-stage"><i></i>READY</span><time id="showcase-live-time">0.00 s</time></div>
+          <div id="showcase-conversation" class="showcase-conversation" role="log" aria-live="polite" aria-label="VisionPsy conversation"></div>
+
+          <div class="showcase-composer">
+          <textarea id="showcase-question" maxlength="500" rows="3" placeholder="Ask something about the image…" aria-label="Message to VisionPsy"></textarea>
+          <div class="showcase-suggestion"><span><b>Official question</b><small id="showcase-suggested-question">Loading RealWorldQA…</small></span><button id="showcase-use-question" class="text-button">Insert</button></div>
+          <div id="showcase-ground-truth" class="showcase-ground-truth"><span>EXPECTED ANSWER</span><b id="showcase-expected-answer">Loading…</b><small>RealWorldQA gold · exact option scoring</small></div>
+          <div class="showcase-actions"><button id="showcase-compare" class="primary">Compare 3 VisionPsy</button><button id="showcase-run" class="secondary">Send to selected <kbd>↵</kbd></button><button id="showcase-cancel" class="danger hidden">Cancel</button><button id="showcase-autoplay" class="secondary">Run official real 20 · 60 inferences</button></div>
+          <p class="showcase-assist-note">The public clone includes a 20-case RealWorldQA display sample. The audited result uses all 765 source questions (762 unique real images) with one exact multiple-choice metric; the checksum-locked full dataset installer is documented in the README. No external or synthetic suite is aggregated.</p>
+          </div>
+        </section>
+      </div>
+
+      <section id="showcase-comparison" class="showcase-comparison panel" aria-live="polite">
+        <div class="showcase-panel-head"><div><p class="eyebrow">03 · SAME IMAGE · SAME QUESTION</p><h2>Standard Q8 vs Flash Q8 vs Flash Q4</h2></div><span id="showcase-comparison-status">READY TO COMPARE</span></div>
+        <div id="showcase-comparison-grid" class="showcase-comparison-grid"></div>
+      </section>
+
+      <section id="showcase-cycle" class="showcase-cycle panel hidden" aria-live="polite">
+        <div class="showcase-panel-head"><div><p id="showcase-cycle-label" class="eyebrow">04 · OFFICIAL REAL 20-SCENE CYCLE</p><h2>Individual results + final aggregates</h2></div><span id="showcase-cycle-status">NOT STARTED</span></div>
+        <div id="showcase-cycle-progress" class="showcase-cycle-progress"><i></i><span>0 / 20 scenes</span></div>
+        <div id="showcase-cycle-results" class="showcase-cycle-results"></div>
+        <div id="showcase-cycle-summary" class="showcase-cycle-summary"></div>
+      </section>
+
+      <section id="showcase-verified" class="showcase-cycle panel hidden" aria-live="polite">
+        <div class="showcase-panel-head"><div><p class="eyebrow">05 · LATEST VERIFIED RESULT</p><h2 id="showcase-verified-title">Complete official RealWorldQA 765</h2></div><span id="showcase-verified-status">WAITING FOR BENCHMARK</span></div>
+        <div id="showcase-verified-summary" class="showcase-cycle-summary"></div>
+      </section>
+
+      <section class="showcase-telemetry panel">
+        <div class="showcase-panel-head"><div><p class="eyebrow">06 · LIVE TELEMETRY</p><h2>Measured on this run</h2></div><span id="showcase-telemetry-scope">Local process + macOS system samples</span></div>
+        <div class="showcase-kpis">
+          <article><span>TTFT</span><b id="showcase-kpi-ttft">—</b><small>click → first token</small></article>
+          <article><span>Total latency</span><b id="showcase-kpi-latency">—</b><small>end-to-end</small></article>
+          <article><span>Generation</span><b id="showcase-kpi-tps">—</b><small>tokens / second</small></article>
+          <article><span>Output</span><b id="showcase-kpi-tokens">—</b><small>native tokens</small></article>
+          <article><span>Process RSS</span><b id="showcase-kpi-ram">—</b><small>sampled process peak</small></article>
+          <article><span>Process CPU</span><b id="showcase-kpi-cpu">—</b><small>sampled peak</small></article>
+          <article><span>Metal GPU</span><b id="showcase-kpi-gpu">—</b><small>system-wide peak</small></article>
+          <article><span>GPU memory</span><b id="showcase-kpi-gpu-memory">—</b><small>system-wide in use</small></article>
+        </div>
+        <div id="showcase-run-footnote" class="showcase-run-footnote">No measurement yet. The first run may include model cold start.</div>
+      </section>
+
+      <details class="showcase-honesty panel"><summary>How to read these KPIs</summary><p>TTFT and total latency are measured from the click on Run. Token count and generation speed come from the native llama.cpp timings when available. Process RSS belongs to the owned model server. On Apple Silicon, IOAccelerator GPU utilization and memory are system-wide samples—not model-exclusive VRAM claims.</p></details>
+
+      <div id="showcase-demo-overlay" class="showcase-demo-overlay hidden" role="dialog" aria-modal="true" aria-labelledby="showcase-demo-heading">
+        <div class="showcase-demo-window">
+          <header><div><span><i></i>LIVE LOCAL INFERENCE</span><h2 id="showcase-demo-heading">VisionPsy three-way screen demo</h2></div><div class="showcase-demo-window-actions"><button id="showcase-demo-stop" class="danger hidden">Stop</button><button id="showcase-demo-close" class="secondary">Close</button></div></header>
+          <div class="showcase-demo-frame">
+            <canvas id="showcase-demo-canvas" width="1600" height="900" aria-label="Automated VisionPsy live demo recording"></canvas>
+            <video id="showcase-demo-video" class="hidden" controls playsinline></video>
+          </div>
+          <footer><span id="showcase-demo-note">The demo records this canvas locally. No screen-capture permission is required.</span><div><button id="showcase-demo-replay" class="secondary hidden">Replay</button><a id="showcase-demo-download" class="secondary hidden" download="visionpsy-live-demo.webm">Download recording</a></div></footer>
+        </div>
+      </div>
+    </section>
+
+    <section id="vqa-workbench" class="vqa-workbench hidden">
+      <div class="section-heading"><div><p class="eyebrow" id="vqa-experiment-number">EXPERIMENT</p><h2 id="vqa-title">Visual Q&amp;A</h2></div><p id="vqa-description">Choose real images and write the exact question you want each model to answer.</p></div>
+      <section id="blind-arena" class="blind-arena hidden" aria-labelledby="arena-heading">
+        <div class="arena-topbar"><div><p class="eyebrow">ESPERIMENTO 05 · CONFRONTO LOCALE</p><h2 id="arena-heading">Arena: confronta tre modelli</h2><p>Le stesse immagini e domande vengono mostrate ai tre modelli. I loro nomi restano nascosti finché non hai valutato le risposte.</p></div><div class="arena-tabs"><button class="selected" data-arena-tab="quick">Test rapido</button><button data-arena-tab="live">Una domanda</button><button data-arena-tab="batch">Dataset e benchmark</button></div></div>
+        <div class="arena-workflow"><span>1 Scegli il test</span><span>2 Avvia</span><span>3 Attendi il calcolo</span><span>4 Valuta le risposte</span><span>5 Scopri i modelli</span></div>
+        <section class="arena-readiness panel"><div><p class="eyebrow">PRE-RUN GATE</p><h3>Fairness &amp; readiness audit</h3><p>Exploratory checks real model identity, comparable configuration and runtime health. Ranking adds the locked 30+ dataset and lock-integrity gates. It never runs inference.</p></div><div><select id="arena-audit-level"><option value="exploratory">Exploratory audit</option><option value="ranking">Ranking audit</option></select><button id="arena-audit" class="secondary">Run Fairness &amp; Readiness Audit</button></div><pre id="arena-audit-result">Not audited in this session.</pre></section>
+        <div id="arena-live" class="arena-live">
+          <aside class="arena-compose panel">
+            <label>Dataset<select id="arena-dataset"></select></label>
+            <span class="field-label">Choose exactly one source image</span><div id="arena-photo-picker" class="arena-photo-picker"></div>
+            <label>Exact visual question<textarea id="arena-question" maxlength="500" placeholder="What do you want every model to answer?"></textarea></label>
+            <div class="arena-two"><label>Category<select id="arena-category"></select></label><label>Output budget<select id="arena-budget"><option>32</option><option selected>64</option><option>128</option></select></label></div>
+            <label>Expected answer <small>optional · USER_DEFINED_GROUND_TRUTH</small><input id="arena-expected" maxlength="500" placeholder="Leave empty for pure comparative review"></label>
+            <label><input id="arena-save-question" type="checkbox"> Save this user-authored question to the bank</label>
+            <div id="arena-provider-picker" class="arena-provider-picker"></div>
+            <details class="arena-advanced"><summary>Advanced / secondary controls</summary><p>VisionPsy Flash is a secondary speed/control model and is excluded from the primary quality ranking. QVAC VisionPsy Official remains blocked; there is no silent fallback.</p></details>
+            <button id="arena-create" class="primary" disabled>Create blind round</button><button id="arena-run" class="primary hidden">Run models sequentially</button><button id="arena-cancel" class="danger hidden">Cancel Run</button>
+            <p class="vqa-safety">No provider-specific prompt optimization. No fallback. A timeout or runtime failure is preserved as that model’s result.</p>
+          </aside>
+          <main class="arena-stage">
+            <div id="arena-empty" class="arena-empty panel"><b>No active blind round</b><p>Select one image, write the exact question, and choose at least two available models. Nothing runs until you explicitly start it.</p></div>
+            <article id="arena-round" class="arena-round hidden"></article>
+          </main>
+        </div>
+        <section id="arena-quick" class="arena-quick hidden">
+          <div class="quick-entry-grid"><article class="panel quick-entry selected"><p class="eyebrow">RECOMMENDED FIRST USE</p><h3>Quick Arena</h3><p>Run 5–20 questions immediately. No official benchmark lock required; an immutable reproducibility snapshot is created when you start.</p></article><article class="panel quick-entry" data-arena-tab="batch"><p class="eyebrow">OFFICIAL EVALUATION</p><h3>Build Ranked Benchmark</h3><p>Prepare, validate and irreversibly lock a 30+ question benchmark for primary ranking.</p></article></div>
+          <section class="panel quick-config"><div><p class="eyebrow">PASSO 1 · SCEGLI</p><h3>Quale test vuoi eseguire?</h3><label>Set di domande<select id="quick-arena-set"></select></label><p id="quick-available-count"></p></div><div><span class="field-label">Durata del test</span><div class="run-size-buttons"><button data-run-size="quick5">Rapido · 5</button><button data-run-size="quick10">Medio · 10</button><button data-run-size="preview20">Esteso · 20</button><button data-run-size="ranked30">Completo · 30</button><button data-run-size="all">Tutte</button><button data-run-size="custom">Personalizzato</button></div><label id="quick-custom-wrap" class="hidden">Numero di domande<input id="quick-custom-n" type="number" min="1" value="5"></label></div><details class="quick-advanced"><summary>Opzioni avanzate di selezione</summary><fieldset><legend>Campionamento</legend><label><input type="radio" name="quick-sampling" value="first"> Prime N</label><label><input type="radio" name="quick-sampling" value="random"> Campione casuale</label><label><input type="radio" name="quick-sampling" value="balanced" checked> Campione bilanciato</label><label><input id="quick-image-diversity" type="checkbox" checked> Preferisci immagini diverse</label></fieldset><label><input id="quick-shuffle" type="checkbox"> Mescola l’ordine delle domande</label><p class="screening-note">Queste opzioni cambiano solo quali domande vengono incluse e il loro ordine.</p></details><div class="bulk-actions"><button id="quick-preview" class="primary">PASSO 2 · CONTROLLA E CONFERMA</button><button id="quick-reshuffle" class="secondary">Cambia campione</button></div></section>
+          <section id="quick-confirmation" class="panel quick-confirmation hidden"></section>
+          <section id="quick-run-status" class="panel quick-run-status hidden" aria-live="polite"></section>
+        </section>
+        <section id="arena-batch" class="arena-batch hidden">
+          <div class="builder-hero panel"><div><p class="eyebrow">DATASET &amp; BENCHMARK BUILDER</p><h3>Prepare auditable benchmark data without editing JSON</h3><p>Images use the existing inference pipeline. Questions stay mutable until an explicit, irreversible version lock.</p></div><div class="builder-stepper"><span>1 Datasets</span><span>2 Questions</span><span>3 Coverage</span><span>4 Validate</span><span>5 Lock</span><span>6 Readiness</span></div></div>
+          <div class="builder-grid">
+            <section class="panel builder-card"><p class="eyebrow">STEP 1</p><h3>Dataset Manager</h3><form id="dataset-create-form"><input id="builder-dataset-name" maxlength="120" placeholder="Dataset name" required><textarea id="builder-dataset-description" maxlength="1000" placeholder="Description"></textarea><button class="secondary">Create dataset</button></form><div class="builder-filters"><input id="dataset-search" placeholder="Filter by name"><select id="dataset-ready-filter"><option value="all">All pipeline states</option><option value="ready">Ready only</option><option value="errors">With errors</option></select></div><div class="bulk-actions"><label class="secondary builder-import">Import images through validated pipeline<input id="builder-image-input" type="file" accept="image/jpeg,image/png,image/heic,image/webp" multiple hidden></label><select id="builder-reuse-photo"></select><button id="builder-reuse-photo-button" class="secondary">Reuse existing image</button></div><div id="builder-datasets"></div></section>
+            <section class="panel builder-card"><p class="eyebrow">STEP 2 · <span id="builder-question-count">0/30</span></p><h3>Question Bank Builder</h3><p id="question-selected-count">0 questions selected</p><div class="bulk-actions"><button class="secondary" data-question-select="all">Select all</button><button class="secondary" data-question-select="none">Deselect all</button><button class="secondary" data-question-select="random">Select random N</button><button class="secondary" data-question-select="balanced">Select balanced N</button><button class="secondary" data-question-select="invert">Invert selection</button><button class="secondary" data-question-select="clear">Clear filters</button></div><div class="builder-filters"><input id="question-search" placeholder="Search questions"><select id="question-filter-category"><option value="all">All categories</option></select><select id="question-filter-dataset"><option value="all">All datasets</option></select></div><form id="question-create-form"><select id="builder-question-dataset" required></select><select id="builder-question-photo" required></select><img id="builder-question-preview" class="question-image-preview" alt="Selected question image preview"><textarea id="builder-question-text" maxlength="500" placeholder="Exact visual question" required></textarea><select id="builder-question-category" required></select><input id="builder-expected-answer" maxlength="500" placeholder="Expected answer (optional)"><input id="builder-expected-source" maxlength="100" placeholder="Expected answer source"><textarea id="builder-question-notes" maxlength="1000" placeholder="Notes / provenance"></textarea><label>Add to benchmark set<select id="builder-question-set"></select></label><button class="primary">Save question</button></form><div class="bulk-actions"><a class="secondary" href="/api/arena/questions/import/template.csv">Download CSV template</a><label class="secondary">Preview CSV / JSON<input id="question-import-input" type="file" accept=".csv,.json,text/csv,application/json" hidden></label></div><pre id="question-import-preview">No bulk import loaded.</pre><div id="arena-question-bank"></div></section>
+          </div>
+          <section class="panel builder-card"><p class="eyebrow">STEPS 3–6</p><h3>Guided benchmark wizard</h3><p>Coverage suggestions are deterministic metadata checks only: no model, network, or image analysis is used.</p><form id="benchmark-set-create-form" class="inline-builder-form"><input id="benchmark-set-name" maxlength="120" placeholder="New benchmark set name" required><input id="benchmark-set-version" maxlength="80" value="1.0.0-draft" required><button class="secondary">Create mutable set</button></form><div id="arena-benchmark-sets"></div></section>
+          <section class="panel builder-card"><p class="eyebrow">BATCH REVIEW QUEUE</p><h3>Blind human review</h3><p id="review-progress">0/0 rounds judged</p><div class="bulk-actions"><button id="review-prev" class="secondary">Previous</button><button id="review-next" class="secondary">Next</button><button id="review-export" class="secondary">Export blind review template</button><label class="secondary">Import completed review<input id="review-import-input" type="file" accept="application/json,.json" hidden></label></div><pre id="review-import-preview">No external review loaded.</pre><div id="arena-review-queue"></div></section>
+        </section>
+        <section class="arena-dashboard panel"><div class="panel-title"><div><p class="eyebrow">LIVE EVIDENCE</p><h3>Quality evidence dashboard</h3></div></div><div class="arena-filters"><select id="arena-filter-tier"><option value="QUICK_CHECK">Quick Check</option><option value="EXPLORATORY">Exploratory</option><option value="PRELIMINARY">Preliminary</option><option value="RANKING_ELIGIBLE" selected>Ranking Eligible</option></select><select id="arena-filter-dataset"><option value="all">All datasets</option></select><select id="arena-filter-category"><option value="all">All categories</option></select><select id="arena-filter-provider"><option value="all">All providers</option></select><select id="arena-filter-judge"><option value="all">All judges</option></select></div><p id="arena-ranking-note" class="screening-note"></p><div id="arena-kpis" class="arena-kpis"></div><h3>Resource and runtime telemetry</h3><p class="screening-note">Latency, cold start, timeouts and failures are diagnostics; they do not alter the manual quality verdict.</p><div id="arena-head-to-head" class="arena-head-to-head"></div></section>
+      </section>
+      <div id="legacy-vqa" class="vqa-layout">
+        <aside class="vqa-setup panel">
+          <label>Dataset<select id="vqa-dataset"></select></label>
+          <label class="secondary vqa-import">Add images to this dataset<input id="vqa-file-input" type="file" accept="image/jpeg,image/png,image/heic,image/webp" multiple hidden></label>
+          <div><span class="field-label">Images · maximum 10</span><div id="vqa-photo-picker" class="vqa-photo-picker"></div></div>
+          <label class="reuse-question"><input id="vqa-reuse-question" type="checkbox"> Reuse the first question across selected images</label>
+          <div id="vqa-provider-picker" class="vqa-provider-picker"></div>
+          <div class="future-provider"><b>LFM2.5-VL-450M</b><span>Integrated Q8_0 primary peer · use Fair Arena for controlled comparison</span></div>
+          <button id="create-vqa-run" class="primary" disabled>Create test draft</button>
+          <button id="start-vqa-run" class="primary hidden">Run selected models</button>
+          <button id="cancel-vqa-run" class="danger hidden">Cancel Run</button>
+          <p class="vqa-safety">Questions are always user-authored. No hidden examples, generated ground truth, or silent provider fallback.</p>
+        </aside>
+        <div>
+          <div id="vqa-question-list" class="vqa-question-list"></div>
+          <section id="vqa-results" class="vqa-results hidden"><div class="panel-title"><div><p class="eyebrow">SIDE-BY-SIDE EVIDENCE</p><h3>Answers and manual review</h3></div></div><div id="vqa-metrics" class="metric-grid"></div><div id="vqa-result-list"></div><label class="shareable-finding">Shareable finding<textarea id="shareable-finding" maxlength="500" placeholder="A concise, evidence-backed finding for this run"></textarea><button id="save-finding" class="secondary">Save finding</button></label></section>
+        </div>
+      </div>
+      <section class="dataset-register panel"><div class="panel-title"><div><p class="eyebrow">DATASETS &amp; PROVENANCE</p><h3>Reusable local evaluation sets</h3></div></div><div id="dataset-grid" class="dataset-grid"></div></section>
+      <section class="dataset-register panel"><div class="panel-title"><div><p class="eyebrow">CROSS-EXPERIMENT EVIDENCE</p><h3>Success &amp; failure gallery</h3></div></div><div class="evidence-filters"><select id="evidence-kind"><option value="all">All reviewed</option><option value="success">Successes</option><option value="failure">Failures</option></select><select id="evidence-experiment"><option value="all">All experiments</option></select><select id="evidence-provider"><option value="all">All providers</option></select><select id="evidence-judge"><option value="all">All judges</option><option value="USER">User</option><option value="CODEX_ASSISTED">Codex-assisted</option><option value="LOCAL_MODEL">Local model</option></select></div><div id="evidence-gallery" class="evidence-gallery"></div></section>
+    </section>
+
+    <section class="hero">
+      <div>
+        <p class="eyebrow">EXPERIMENT 01 · COMPLETED</p>
+        <h1>PawVault<br><em>historical workspace.</em></h1>
+        <p class="lede">The original private pet-photo search experiment, preserved with its runs, prompts, reviews, diagnostics, and findings.</p>
+      </div>
+      <div class="hero-status panel">
+        <div class="signal"><i></i><span>QVAC LOCAL RUNTIME</span></div>
+        <h2 id="photo-count">0 photos</h2>
+        <p id="provider-note">Checking provider…</p>
+      </div>
+    </section>
+
+    <section id="photos" class="workspace">
+      <div class="section-heading"><div><p class="eyebrow">01 · CURRENT RUN</p><h2>Photo workspace</h2></div><p>New imports become the active set immediately. Earlier photos and results remain hidden until you open Previous Runs or the photo archive.</p></div>
+      <div class="run-toolbar" aria-label="Current run controls">
+        <div class="run-identity"><span class="run-kicker">CURRENT RUN</span><b id="current-run-id">No active run</b><small id="current-run-meta">Start a run or import new photos.</small></div>
+        <nav class="run-actions" aria-label="Global run actions"><button id="start-new-run" class="secondary toolbar-primary">New Run</button><a id="ground-truth-shortcut" class="secondary ground-truth-shortcut hidden" href="#quick-ground-truth">Review Results</a><button id="show-archive" class="secondary">View old photos</button><details class="export-menu"><summary>Export</summary><div><a id="export-json" class="secondary disabled" href="#">Diagnostic Run</a><a id="export-bundle" class="secondary disabled" href="#">Diagnostic Bundle</a></div></details></nav>
+      </div>
+      <section class="preset-selector" aria-labelledby="preset-selector-title">
+        <div class="preset-selector-heading"><div><p class="eyebrow">BENCHMARKS</p><h3 id="preset-selector-title">Choose an evaluation</h3></div><p>Start with a focused workflow. Advanced provider and task controls remain available below.</p></div>
+        <div class="preset-options">
+          <article class="preset-picker"><div><p class="eyebrow">CLOSED LABELS</p><h3>Focused Standard Benchmark v1</h3><p>Tests a small set of simple visual concepts using VisionPsy-Nano-460M. Designed to identify which semantic tags are reliable enough for PawVault.</p></div><button id="start-focused-base" class="preset-button">Select</button></article>
+          <article class="preset-picker semantic-picker"><div><p class="eyebrow">SEMANTIC EXTRACTION</p><h3>Semantic Extraction Benchmark v1</h3><p>Tests short factual descriptions instead of closed-label classification. VisionPsy-Nano-460M only.</p></div><button id="choose-semantic" class="preset-button">Select</button></article>
+          <article class="preset-picker minimal-picker"><div><p class="eyebrow">NEW · 10-PHOTO MICRO-BENCHMARK</p><h3>Minimal Smart Semantic Test v2</h3><p>Three short natural prompts with no examples, taxonomies, suggested labels, or semantic priming.</p></div><button id="choose-minimal-semantic" class="preset-button">Select</button></article>
+        </div>
+      </section>
+      <section id="benchmark-confirmation" class="benchmark-confirmation panel hidden">
+        <div class="benchmark-confirm-head"><div><p class="eyebrow">FOCUSED STANDARD BENCHMARK V1</p><h3>Ready to benchmark</h3></div><span class="preset-lock">STANDARD SELECTED</span></div>
+        <div class="benchmark-facts"><div><span>Provider</span><b>VisionPsy-Nano-460M</b></div><div><span>Photos</span><b id="benchmark-photo-ready">0 ready</b></div><div><span>Enabled tasks</span><b id="benchmark-task-count">6</b></div><div><span>Estimated predictions</span><b id="benchmark-predictions">0</b></div></div>
+        <div class="benchmark-task-summary"><div><b>Tasks</b><ul id="benchmark-core-tasks"></ul></div><div><b>Experimental</b><label><input id="benchmark-experimental" type="checkbox"> Dog with toy</label></div></div>
+        <fieldset class="scope-options"><legend>Run scope</legend><label><input type="radio" name="benchmark-scope" value="quick" checked> <span><b>Quick validation</b><small>First 10 photos, deterministic working-set order</small></span></label><label><input type="radio" name="benchmark-scope" value="full"> <span><b>Full benchmark</b><small id="full-scope-label">All current photos</small></span></label></fieldset>
+        <p id="benchmark-estimate" class="benchmark-estimate"></p>
+        <button id="start-benchmark" class="primary" disabled><span>Start Benchmark</span><small>VisionPsy-Nano-460M · no automatic fallback</small></button>
+        <p id="quick-success" class="quick-success hidden">Quick validation completed successfully. Ready for full benchmark.</p>
+        <button id="start-full-after-quick" class="primary hidden"><span>Start Full Benchmark</span><small>Quick validation completed successfully</small></button>
+      </section>
+      <section id="semantic-confirmation" class="benchmark-confirmation semantic-confirmation panel hidden">
+        <div class="benchmark-confirm-head"><div><p class="eyebrow">SEMANTIC EXTRACTION BENCHMARK V1</p><h3>Ready for semantic extraction</h3></div><span class="preset-lock">STANDARD · METAL</span></div>
+        <div class="benchmark-facts"><div><span>Provider</span><b>VisionPsy-Nano-460M</b></div><div><span>Photos</span><b id="semantic-photo-count">20 selected</b></div><div><span>Predictions</span><b id="semantic-predictions">60</b></div></div>
+        <div class="benchmark-task-summary"><div><b>Tasks</b><ul><li>✓ Physical context</li><li>✓ Associated objects</li><li>✓ Visible posture</li></ul></div></div>
+        <fieldset class="scope-options"><legend>Run scope</legend><label><input type="radio" name="semantic-scope" value="quick" checked> <span><b>Quick semantic test — 20 photos</b><small>Deterministic varied subset using existing ground truth</small></span></label><label><input type="radio" name="semantic-scope" value="full"> <span><b>Full semantic test</b><small id="semantic-full-label">All current photos</small></span></label></fieldset>
+        <details><summary>Selected Quick 20 photo IDs</summary><code id="semantic-photo-ids" class="semantic-photo-ids"></code></details>
+        <button id="start-semantic-benchmark" class="primary" disabled><span>Start Semantic Benchmark</span><small>VisionPsy-Nano-460M · 3 factual extraction tasks</small></button>
+      </section>
+      <section id="minimal-semantic-confirmation" class="benchmark-confirmation minimal-semantic-confirmation panel hidden">
+        <div class="benchmark-confirm-head"><div><p class="eyebrow">MINIMAL SMART SEMANTIC TEST V2</p><h3>Ready for the 10-photo micro-benchmark</h3></div><span class="preset-lock">STANDARD · METAL ON</span></div>
+        <div class="benchmark-facts"><div><span>Provider</span><b>VisionPsy-Nano-460M</b></div><div><span>Photos</span><b id="minimal-photo-count">10 selected</b></div><div><span>Tasks</span><b>3 natural prompts</b></div><div><span>Predictions</span><b id="minimal-predictions">30</b></div></div>
+        <div class="benchmark-task-summary"><div><b>Tasks</b><ul><li>✓ Physical support / context</li><li>✓ Directly associated objects</li><li>✓ Visible posture</li></ul></div><div><b>Scope lock</b><p>Exactly 10 deterministic, varied photos. Full dataset is unavailable for this preset.</p></div></div>
+        <div><p class="eyebrow minimal-selection-label">SELECTED 10 PHOTOS</p><div id="minimal-photo-strip" class="minimal-photo-strip"></div></div>
+        <details class="minimal-prompts"><summary>Inspect the exact prompts — no examples or suggested labels</summary><div id="minimal-prompt-list"></div></details>
+        <button id="start-minimal-semantic" class="primary" disabled><span>Start Minimal Smart Semantic Test</span><small>10 photos · VisionPsy-Nano-460M · Metal · 30 predictions</small></button>
+      </section>
+      <label id="drop-zone" class="drop-zone">
+        <input id="file-input" type="file" accept="image/jpeg,image/png,image/heic,image/webp" multiple hidden>
+        <span class="drop-icon">＋</span>
+        <strong>Drop dog photos here</strong>
+        <small>or click to choose · JPEG, PNG, HEIC, WebP · up to 40 MB each</small>
+      </label>
+      <div id="import-progress" class="progress hidden"><i></i><span></span></div>
+      <div id="import-summary" class="import-summary hidden"></div>
+
+      <div class="lab-grid">
+        <aside class="task-panel panel">
+          <details id="advanced-controls"><summary>Advanced / Custom Benchmark</summary><p>Optional provider, task and technical controls.</p><div class="provider-panel"><p class="eyebrow">VISION PROVIDER</p><div id="provider-list" class="provider-list"></div><p id="preset-provider-warning" class="provider-warning hidden">This benchmark preset is designed for VisionPsy-Nano-460M.</p></div><div class="panel-title"><div><p class="eyebrow">CANDIDATE TASKS</p><h3>Choose what to test</h3></div><button id="select-core" class="text-button">Core only</button></div><div id="task-list" class="task-list"></div><button id="analyze-button" class="primary" disabled><span>Start Custom Benchmark</span><small>No automatic fallback</small></button></details>
+          <button id="cancel-run" class="danger hidden">Cancel Run</button>
+          <div id="run-status" class="run-status" aria-live="polite"></div>
+          <div id="brain-status" class="brain-status hidden" aria-live="polite"></div>
+        </aside>
+        <section class="photo-area">
+          <div class="photo-toolbar"><span id="selection-count">0 selected</span><button id="select-all" class="text-button">Select all</button></div>
+          <div id="ground-truth-banner" class="ground-truth-banner">
+            <div><p class="eyebrow">CURRENT RUN RESULTS</p><b>Review Ground Truth</b></div>
+            <span id="ground-truth-progress">0 / 0 confirmed</span>
+          </div>
+          <section id="quick-ground-truth" class="quick-ground-truth panel hidden">
+            <div class="panel-title"><div><p class="eyebrow">QUICK GROUND TRUTH REVIEW</p><h3>Review one task across every current photo</h3></div><span id="quick-truth-progress" class="count-badge">0/0</span></div>
+            <p>Choose the human-correct label. Each click saves immediately; the model prediction is shown only for comparison.</p>
+            <div class="quick-truth-filters"><label>Show <select id="quick-truth-status"><option value="all">All</option><option value="needs-review">Only incorrect / unreviewed</option></select></label><label>Prediction <select id="quick-truth-label"><option value="all">All labels</option></select></label></div>
+            <div id="quick-truth-tabs" class="quick-truth-tabs"></div>
+            <div id="quick-truth-grid" class="quick-truth-grid"></div>
+          </section>
+          <section id="semantic-results" class="quick-ground-truth semantic-results panel hidden">
+            <div class="panel-title"><div><p id="semantic-review-eyebrow" class="eyebrow">QUICK SEMANTIC REVIEW</p><h3 id="semantic-review-title">Semantic fingerprint quality</h3></div><span id="semantic-review-progress" class="count-badge">0/0</span></div>
+            <div id="minimal-diagnostic-issues" class="diagnostic-warnings hidden"></div>
+            <div id="semantic-metrics" class="metric-grid"></div>
+            <div id="semantic-review-grid" class="semantic-review-grid"></div>
+            <div class="semantic-split"><div><h3>Most useful outputs</h3><div id="semantic-useful"></div></div><div><h3>Hallucinations / failures</h3><div id="semantic-failures"></div></div></div>
+            <details><summary>Conservative search-token dictionary</summary><div id="semantic-token-rules" class="token-rules"></div></details>
+            <details><summary>Comparison with closed-label benchmark</summary><div id="semantic-comparison"></div></details>
+          </section>
+          <div id="empty-state" class="empty-state"><span>⌁</span><p class="eyebrow">NEW RUN</p><h3>No photos loaded yet.</h3><p>1. Add photos<br>2. Choose a benchmark preset<br>3. Start analysis</p></div>
+          <div id="photo-grid" class="photo-grid"></div>
+          <section id="archive-section" class="archive-section hidden"><div class="panel-title"><div><p class="eyebrow">PHOTO ARCHIVE</p><h3>Photos from earlier runs</h3></div><button id="hide-archive" class="text-button">Close</button></div><p>Archive photos are visible for reference only and are not part of the current run.</p><div id="archive-grid" class="photo-grid archive-grid"></div></section>
+        </section>
+      </div>
+    </section>
+
+    <section id="evaluation" class="evaluation-section">
+      <div class="section-heading"><div><p class="eyebrow">02 · HUMAN REVIEW</p><h2>Measure, don’t assume.</h2></div><p>Accuracy uses only explicit human confirmations. Model output never authors ground truth.</p></div>
+      <div id="metric-grid" class="metric-grid"></div>
+      <div id="diagnostic-warnings" class="diagnostic-warnings"></div>
+      <div class="failures panel">
+        <div class="panel-title"><div><p class="eyebrow">FAILURE GALLERY</p><h3>What the model got wrong</h3></div><span id="failure-count" class="count-badge">0</span></div>
+        <div id="failure-gallery" class="failure-gallery"></div>
+      </div>
+      <div class="previous-runs panel">
+        <div class="panel-title"><div><p class="eyebrow">PREVIOUS RUNS</p><h3>Diagnostic history</h3></div></div>
+        <div id="previous-runs-list" class="previous-runs-list"></div>
+      </div>
+      <div id="dog-benchmark" class="benchmark-panel panel">
+        <div class="panel-title"><div><p class="eyebrow">VISIONPSY CEILING · HUMAN TRUTH</p><h3>Dog-count benchmark</h3></div><span id="benchmark-progress" class="count-badge">0/12</span></div>
+        <p class="benchmark-note">Dog-count truth is entered once in the main 12-photo grid above and reused here. The images are not repeated.</p>
+        <div id="benchmark-metrics" class="benchmark-metrics"></div>
+      </div>
+    </section>
+  </main>
+
+  <div id="toast" class="toast" role="status"></div>
+  <script type="module" src="/showcase.js"></script>
+  <script type="module" src="/app.js"></script>
+</body>
+</html>

@@ -1,0 +1,2974 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-08-31T14:59:32.849Z",
+  "title": "VisionPsy · RealWorldQA 765 · unified QVAC audit",
+  "statisticalVerdict": "NO_CLEAR_WINNER_AFTER_HOLM",
+  "realPairwise": [
+    {
+      "leftId": "qvac-visionpsy-standard-q8",
+      "rightId": "qvac-visionpsy",
+      "leftLabel": "VisionPsy Standard Q8 (QVAC SDK)",
+      "rightLabel": "VisionPsy Flash Q8 (QVAC SDK)",
+      "leftOnly": 89,
+      "rightOnly": 83,
+      "exactMcNemarP": 0.7031386893685866,
+      "disagreementExamples": [
+        {
+          "caseId": "realworldqa-5",
+          "sourceIndex": 5,
+          "capability": "Relative size",
+          "leftPass": false,
+          "rightPass": true,
+          "expected": "A",
+          "leftPrediction": "B",
+          "rightPrediction": "A"
+        },
+        {
+          "caseId": "realworldqa-39",
+          "sourceIndex": 39,
+          "capability": "Relative size",
+          "leftPass": true,
+          "rightPass": false,
+          "expected": "B",
+          "leftPrediction": "B",
+          "rightPrediction": "A"
+        },
+        {
+          "caseId": "realworldqa-152",
+          "sourceIndex": 152,
+          "capability": "Vertical relation",
+          "leftPass": false,
+          "rightPass": true,
+          "expected": "A",
+          "leftPrediction": "B",
+          "rightPrediction": "A"
+        },
+        {
+          "caseId": "realworldqa-159",
+          "sourceIndex": 159,
+          "capability": "Left/right relation",
+          "leftPass": false,
+          "rightPass": true,
+          "expected": "A",
+          "leftPrediction": "B",
+          "rightPrediction": "A"
+        },
+        {
+          "caseId": "realworldqa-170",
+          "sourceIndex": 170,
+          "capability": "Action + relation",
+          "leftPass": true,
+          "rightPass": false,
+          "expected": "A",
+          "leftPrediction": "A",
+          "rightPrediction": "B"
+        },
+        {
+          "caseId": "realworldqa-validation-23",
+          "sourceIndex": 23,
+          "capability": "Spatial relation",
+          "leftPass": true,
+          "rightPass": false,
+          "expected": "A",
+          "leftPrediction": "A",
+          "rightPrediction": "B"
+        },
+        {
+          "caseId": "realworldqa-validation-25",
+          "sourceIndex": 25,
+          "capability": "Counting",
+          "leftPass": true,
+          "rightPass": false,
+          "expected": "B",
+          "leftPrediction": "B",
+          "rightPrediction": "A"
+        },
+        {
+          "caseId": "realworldqa-validation-327",
+          "sourceIndex": 327,
+          "capability": "Binary visual reasoning",
+          "leftPass": false,
+          "rightPass": true,
+          "expected": "A",
+          "leftPrediction": "B",
+          "rightPrediction": "A"
+        },
+        {
+          "caseId": "realworldqa-validation-458",
+          "sourceIndex": 458,
+          "capability": "Counting",
+          "leftPass": true,
+          "rightPass": false,
+          "expected": "C",
+          "leftPrediction": "C",
+          "rightPrediction": "B"
+        },
+        {
+          "caseId": "realworldqa-validation-598",
+          "sourceIndex": 598,
+          "capability": "Counting",
+          "leftPass": false,
+          "rightPass": true,
+          "expected": "B",
+          "leftPrediction": "C",
+          "rightPrediction": "B"
+        },
+        {
+          "caseId": "realworldqa-validation-b-140",
+          "sourceIndex": 140,
+          "capability": "Counting",
+          "leftPass": false,
+          "rightPass": true,
+          "expected": "A",
+          "leftPrediction": "C",
+          "rightPrediction": "A"
+        },
+        {
+          "caseId": "realworldqa-validation-b-271",
+          "sourceIndex": 271,
+          "capability": "Spatial relation",
+          "leftPass": true,
+          "rightPass": false,
+          "expected": "B",
+          "leftPrediction": "B",
+          "rightPrediction": "A"
+        },
+        {
+          "caseId": "realworldqa-validation-b-311",
+          "sourceIndex": 311,
+          "capability": "Spatial relation",
+          "leftPass": true,
+          "rightPass": false,
+          "expected": "A",
+          "leftPrediction": "A",
+          "rightPrediction": "B"
+        },
+        {
+          "caseId": "realworldqa-validation-b-316",
+          "sourceIndex": 316,
+          "capability": "Object and scene understanding",
+          "leftPass": false,
+          "rightPass": true,
+          "expected": "B",
+          "leftPrediction": "A",
+          "rightPrediction": "B"
+        },
+        {
+          "caseId": "realworldqa-validation-b-385",
+          "sourceIndex": 385,
+          "capability": "Spatial relation",
+          "leftPass": true,
+          "rightPass": false,
+          "expected": "C",
+          "leftPrediction": "C",
+          "rightPrediction": "A"
+        },
+        {
+          "caseId": "realworldqa-validation-b-474",
+          "sourceIndex": 474,
+          "capability": "Object and scene understanding",
+          "leftPass": false,
+          "rightPass": true,
+          "expected": "C",
+          "leftPrediction": "A",
+          "rightPrediction": "C"
+        },
+        {
+          "caseId": "realworldqa-validation-b-561",
+          "sourceIndex": 561,
+          "capability": "Spatial relation",
+          "leftPass": false,
+          "rightPass": true,
+          "expected": "A",
+          "leftPrediction": "B",
+          "rightPrediction": "A"
+        },
+        {
+          "caseId": "realworldqa-validation-b-741",
+          "sourceIndex": 741,
+          "capability": "Counting",
+          "leftPass": true,
+          "rightPass": false,
+          "expected": "B",
+          "leftPrediction": "B",
+          "rightPrediction": "C"
+        },
+        {
+          "caseId": "realworldqa-validation-b-742",
+          "sourceIndex": 742,
+          "capability": "Counting",
+          "leftPass": true,
+          "rightPass": false,
+          "expected": "C",
+          "leftPrediction": "C",
+          "rightPrediction": "A"
+        },
+        {
+          "caseId": "realworldqa-validation-c-9",
+          "sourceIndex": 9,
+          "capability": "Object and scene understanding",
+          "leftPass": false,
+          "rightPass": true,
+          "expected": "A",
+          "leftPrediction": "B",
+          "rightPrediction": "A"
+        },
+        {
+          "caseId": "realworldqa-validation-c-24",
+          "sourceIndex": 24,
+          "capability": "Attribute recognition",
+          "leftPass": false,
+          "rightPass": true,
+          "expected": "A",
+          "leftPrediction": "B",
+          "rightPrediction": "A"
+        },
+        {
+          "caseId": "realworldqa-validation-c-46",
+          "sourceIndex": 46,
+          "capability": "Spatial relation",
+          "leftPass": false,
+          "rightPass": true,
+          "expected": "C",
+          "leftPrediction": "B",
+          "rightPrediction": "C"
+        },
+        {
+          "caseId": "realworldqa-validation-c-83",
+          "sourceIndex": 83,
+          "capability": "Counting",
+          "leftPass": true,
+          "rightPass": false,
+          "expected": "B",
+          "leftPrediction": "B",
+          "rightPrediction": "A"
+        },
+        {
+          "caseId": "realworldqa-validation-c-130",
+          "sourceIndex": 130,
+          "capability": "Binary visual reasoning",
+          "leftPass": false,
+          "rightPass": true,
+          "expected": "A",
+          "leftPrediction": "B",
+          "rightPrediction": "A"
+        },
+        {
+          "caseId": "realworldqa-validation-c-188",
+          "sourceIndex": 188,
+          "capability": "Visual selection",
+          "leftPass": false,
+          "rightPass": true,
+          "expected": "A",
+          "leftPrediction": "B",
+          "rightPrediction": "A"
+        },
+        {
+          "caseId": "realworldqa-validation-c-213",
+          "sourceIndex": 213,
+          "capability": "Object and scene understanding",
+          "leftPass": true,
+          "rightPass": false,
+          "expected": "C",
+          "leftPrediction": "C",
+          "rightPrediction": "A"
+        },
+        {
+          "caseId": "realworldqa-validation-c-233",
+          "sourceIndex": 233,
+          "capability": "Binary visual reasoning",
+          "leftPass": true,
+          "rightPass": false,
+          "expected": "B",
+          "leftPrediction": "B",
+          "rightPrediction": "A"
+        },
+        {
+          "caseId": "realworldqa-validation-c-237",
+          "sourceIndex": 237,
+          "capability": "Visual selection",
+          "leftPass": true,
+          "rightPass": false,
+          "expected": "C",
+          "leftPrediction": "C",
+          "rightPrediction": "A"
+        },
+        {
+          "caseId": "realworldqa-validation-c-284",
+          "sourceIndex": 284,
+          "capability": "Counting",
+          "leftPass": true,
+          "rightPass": false,
+          "expected": "C",
+          "leftPrediction": "C",
+          "rightPrediction": "B"
+        },
+        {
+          "caseId": "realworldqa-validation-c-296",
+          "sourceIndex": 296,
+          "capability": "Counting",
+          "leftPass": false,
+          "rightPass": true,
+          "expected": "B",
+          "leftPrediction": "C",
+          "rightPrediction": "B"
+        }
+      ],
+      "holmAdjustedP": 1
+    },
+    {
+      "leftId": "qvac-visionpsy-standard-q8",
+      "rightId": "qvac-visionpsy-flash-q4",
+      "leftLabel": "VisionPsy Standard Q8 (QVAC SDK)",
+      "rightLabel": "VisionPsy Flash Q4 imatrix (QVAC SDK)",
+      "leftOnly": 87,
+      "rightOnly": 81,
+      "exactMcNemarP": 0.6997974882614125,
+      "disagreementExamples": [
+        {
+          "caseId": "realworldqa-5",
+          "sourceIndex": 5,
+          "capability": "Relative size",
+          "leftPass": false,
+          "rightPass": true,
+          "expected": "A",
+          "leftPrediction": "B",
+          "rightPrediction": "A"
+        },
+        {
+          "caseId": "realworldqa-39",
+          "sourceIndex": 39,
+          "capability": "Relative size",
+          "leftPass": true,
+          "rightPass": false,
+          "expected": "B",
+          "leftPrediction": "B",
+          "rightPrediction": "A"
+        },
+        {
+          "caseId": "realworldqa-159",
+          "sourceIndex": 159,
+          "capability": "Left/right relation",
+          "leftPass": false,
+          "rightPass": true,
+          "expected": "A",
+          "leftPrediction": "B",
+          "rightPrediction": "A"
+        },
+        {
+          "caseId": "realworldqa-170",
+          "sourceIndex": 170,
+          "capability": "Action + relation",
+          "leftPass": true,
+          "rightPass": false,
+          "expected": "A",
+          "leftPrediction": "A",
+          "rightPrediction": "B"
+        },
+        {
+          "caseId": "realworldqa-validation-23",
+          "sourceIndex": 23,
+          "capability": "Spatial relation",
+          "leftPass": true,
+          "rightPass": false,
+          "expected": "A",
+          "leftPrediction": "A",
+          "rightPrediction": "B"
+        },
+        {
+          "caseId": "realworldqa-validation-25",
+          "sourceIndex": 25,
+          "capability": "Counting",
+          "leftPass": true,
+          "rightPass": false,
+          "expected": "B",
+          "leftPrediction": "B",
+          "rightPrediction": "A"
+        },
+        {
+          "caseId": "realworldqa-validation-108",
+          "sourceIndex": 108,
+          "capability": "Visual selection",
+          "leftPass": false,
+          "rightPass": true,
+          "expected": "A",
+          "leftPrediction": "B",
+          "rightPrediction": "A"
+        },
+        {
+          "caseId": "realworldqa-validation-148",
+          "sourceIndex": 148,
+          "capability": "Visual selection",
+          "leftPass": false,
+          "rightPass": true,
+          "expected": "A",
+          "leftPrediction": "B",
+          "rightPrediction": "A"
+        },
+        {
+          "caseId": "realworldqa-validation-327",
+          "sourceIndex": 327,
+          "capability": "Binary visual reasoning",
+          "leftPass": false,
+          "rightPass": true,
+          "expected": "A",
+          "leftPrediction": "B",
+          "rightPrediction": "A"
+        },
+        {
+          "caseId": "realworldqa-validation-348",
+          "sourceIndex": 348,
+          "capability": "Counting",
+          "leftPass": false,
+          "rightPass": true,
+          "expected": "B",
+          "leftPrediction": "A",
+          "rightPrediction": "B"
+        },
+        {
+          "caseId": "realworldqa-validation-458",
+          "sourceIndex": 458,
+          "capability": "Counting",
+          "leftPass": true,
+          "rightPass": false,
+          "expected": "C",
+          "leftPrediction": "C",
+          "rightPrediction": "B"
+        },
+        {
+          "caseId": "realworldqa-validation-514",
+          "sourceIndex": 514,
+          "capability": "Object and scene understanding",
+          "leftPass": false,
+          "rightPass": true,
+          "expected": "C",
+          "leftPrediction": "A",
+          "rightPrediction": "C"
+        },
+        {
+          "caseId": "realworldqa-validation-598",
+          "sourceIndex": 598,
+          "capability": "Counting",
+          "leftPass": false,
+          "rightPass": true,
+          "expected": "B",
+          "leftPrediction": "C",
+          "rightPrediction": "B"
+        },
+        {
+          "caseId": "realworldqa-validation-614",
+          "sourceIndex": 614,
+          "capability": "Spatial relation",
+          "leftPass": true,
+          "rightPass": false,
+          "expected": "C",
+          "leftPrediction": "C",
+          "rightPrediction": "A"
+        },
+        {
+          "caseId": "realworldqa-validation-642",
+          "sourceIndex": 642,
+          "capability": "Counting",
+          "leftPass": false,
+          "rightPass": true,
+          "expected": "B",
+          "leftPrediction": "C",
+          "rightPrediction": "B"
+        },
+        {
+          "caseId": "realworldqa-validation-b-140",
+          "sourceIndex": 140,
+          "capability": "Counting",
+          "leftPass": false,
+          "rightPass": true,
+          "expected": "A",
+          "leftPrediction": "C",
+          "rightPrediction": "A"
+        },
+        {
+          "caseId": "realworldqa-validation-b-271",
+          "sourceIndex": 271,
+          "capability": "Spatial relation",
+          "leftPass": true,
+          "rightPass": false,
+          "expected": "B",
+          "leftPrediction": "B",
+          "rightPrediction": "A"
+        },
+        {
+          "caseId": "realworldqa-validation-b-311",
+          "sourceIndex": 311,
+          "capability": "Spatial relation",
+          "leftPass": true,
+          "rightPass": false,
+          "expected": "A",
+          "leftPrediction": "A",
+          "rightPrediction": "B"
+        },
+        {
+          "caseId": "realworldqa-validation-b-385",
+          "sourceIndex": 385,
+          "capability": "Spatial relation",
+          "leftPass": true,
+          "rightPass": false,
+          "expected": "C",
+          "leftPrediction": "C",
+          "rightPrediction": "A"
+        },
+        {
+          "caseId": "realworldqa-validation-b-561",
+          "sourceIndex": 561,
+          "capability": "Spatial relation",
+          "leftPass": false,
+          "rightPass": true,
+          "expected": "A",
+          "leftPrediction": "B",
+          "rightPrediction": "A"
+        },
+        {
+          "caseId": "realworldqa-validation-b-695",
+          "sourceIndex": 695,
+          "capability": "Visual selection",
+          "leftPass": true,
+          "rightPass": false,
+          "expected": "B",
+          "leftPrediction": "B",
+          "rightPrediction": "C"
+        },
+        {
+          "caseId": "realworldqa-validation-b-702",
+          "sourceIndex": 702,
+          "capability": "Spatial relation",
+          "leftPass": true,
+          "rightPass": false,
+          "expected": "A",
+          "leftPrediction": "A",
+          "rightPrediction": "C"
+        },
+        {
+          "caseId": "realworldqa-validation-b-741",
+          "sourceIndex": 741,
+          "capability": "Counting",
+          "leftPass": true,
+          "rightPass": false,
+          "expected": "B",
+          "leftPrediction": "B",
+          "rightPrediction": "C"
+        },
+        {
+          "caseId": "realworldqa-validation-b-742",
+          "sourceIndex": 742,
+          "capability": "Counting",
+          "leftPass": true,
+          "rightPass": false,
+          "expected": "C",
+          "leftPrediction": "C",
+          "rightPrediction": "A"
+        },
+        {
+          "caseId": "realworldqa-validation-c-24",
+          "sourceIndex": 24,
+          "capability": "Attribute recognition",
+          "leftPass": false,
+          "rightPass": true,
+          "expected": "A",
+          "leftPrediction": "B",
+          "rightPrediction": "A"
+        },
+        {
+          "caseId": "realworldqa-validation-c-46",
+          "sourceIndex": 46,
+          "capability": "Spatial relation",
+          "leftPass": false,
+          "rightPass": true,
+          "expected": "C",
+          "leftPrediction": "B",
+          "rightPrediction": "C"
+        },
+        {
+          "caseId": "realworldqa-validation-c-130",
+          "sourceIndex": 130,
+          "capability": "Binary visual reasoning",
+          "leftPass": false,
+          "rightPass": true,
+          "expected": "A",
+          "leftPrediction": "B",
+          "rightPrediction": "A"
+        },
+        {
+          "caseId": "realworldqa-validation-c-188",
+          "sourceIndex": 188,
+          "capability": "Visual selection",
+          "leftPass": false,
+          "rightPass": true,
+          "expected": "A",
+          "leftPrediction": "B",
+          "rightPrediction": "A"
+        },
+        {
+          "caseId": "realworldqa-validation-c-213",
+          "sourceIndex": 213,
+          "capability": "Object and scene understanding",
+          "leftPass": true,
+          "rightPass": false,
+          "expected": "C",
+          "leftPrediction": "C",
+          "rightPrediction": "A"
+        },
+        {
+          "caseId": "realworldqa-validation-c-233",
+          "sourceIndex": 233,
+          "capability": "Binary visual reasoning",
+          "leftPass": true,
+          "rightPass": false,
+          "expected": "B",
+          "leftPrediction": "B",
+          "rightPrediction": "A"
+        }
+      ],
+      "holmAdjustedP": 1
+    },
+    {
+      "leftId": "qvac-visionpsy",
+      "rightId": "qvac-visionpsy-flash-q4",
+      "leftLabel": "VisionPsy Flash Q8 (QVAC SDK)",
+      "rightLabel": "VisionPsy Flash Q4 imatrix (QVAC SDK)",
+      "leftOnly": 35,
+      "rightOnly": 35,
+      "exactMcNemarP": 1,
+      "disagreementExamples": [
+        {
+          "caseId": "realworldqa-152",
+          "sourceIndex": 152,
+          "capability": "Vertical relation",
+          "leftPass": true,
+          "rightPass": false,
+          "expected": "A",
+          "leftPrediction": "A",
+          "rightPrediction": "B"
+        },
+        {
+          "caseId": "realworldqa-validation-108",
+          "sourceIndex": 108,
+          "capability": "Visual selection",
+          "leftPass": false,
+          "rightPass": true,
+          "expected": "A",
+          "leftPrediction": "B",
+          "rightPrediction": "A"
+        },
+        {
+          "caseId": "realworldqa-validation-148",
+          "sourceIndex": 148,
+          "capability": "Visual selection",
+          "leftPass": false,
+          "rightPass": true,
+          "expected": "A",
+          "leftPrediction": "B",
+          "rightPrediction": "A"
+        },
+        {
+          "caseId": "realworldqa-validation-348",
+          "sourceIndex": 348,
+          "capability": "Counting",
+          "leftPass": false,
+          "rightPass": true,
+          "expected": "B",
+          "leftPrediction": "A",
+          "rightPrediction": "B"
+        },
+        {
+          "caseId": "realworldqa-validation-514",
+          "sourceIndex": 514,
+          "capability": "Object and scene understanding",
+          "leftPass": false,
+          "rightPass": true,
+          "expected": "C",
+          "leftPrediction": "B",
+          "rightPrediction": "C"
+        },
+        {
+          "caseId": "realworldqa-validation-614",
+          "sourceIndex": 614,
+          "capability": "Spatial relation",
+          "leftPass": true,
+          "rightPass": false,
+          "expected": "C",
+          "leftPrediction": "C",
+          "rightPrediction": "A"
+        },
+        {
+          "caseId": "realworldqa-validation-642",
+          "sourceIndex": 642,
+          "capability": "Counting",
+          "leftPass": false,
+          "rightPass": true,
+          "expected": "B",
+          "leftPrediction": "C",
+          "rightPrediction": "B"
+        },
+        {
+          "caseId": "realworldqa-validation-b-316",
+          "sourceIndex": 316,
+          "capability": "Object and scene understanding",
+          "leftPass": true,
+          "rightPass": false,
+          "expected": "B",
+          "leftPrediction": "B",
+          "rightPrediction": "A"
+        },
+        {
+          "caseId": "realworldqa-validation-b-474",
+          "sourceIndex": 474,
+          "capability": "Object and scene understanding",
+          "leftPass": true,
+          "rightPass": false,
+          "expected": "C",
+          "leftPrediction": "C",
+          "rightPrediction": "A"
+        },
+        {
+          "caseId": "realworldqa-validation-b-695",
+          "sourceIndex": 695,
+          "capability": "Visual selection",
+          "leftPass": true,
+          "rightPass": false,
+          "expected": "B",
+          "leftPrediction": "B",
+          "rightPrediction": "C"
+        },
+        {
+          "caseId": "realworldqa-validation-b-702",
+          "sourceIndex": 702,
+          "capability": "Spatial relation",
+          "leftPass": true,
+          "rightPass": false,
+          "expected": "A",
+          "leftPrediction": "A",
+          "rightPrediction": "C"
+        },
+        {
+          "caseId": "realworldqa-validation-c-9",
+          "sourceIndex": 9,
+          "capability": "Object and scene understanding",
+          "leftPass": true,
+          "rightPass": false,
+          "expected": "A",
+          "leftPrediction": "A",
+          "rightPrediction": "C"
+        },
+        {
+          "caseId": "realworldqa-validation-c-83",
+          "sourceIndex": 83,
+          "capability": "Counting",
+          "leftPass": false,
+          "rightPass": true,
+          "expected": "B",
+          "leftPrediction": "A",
+          "rightPrediction": "B"
+        },
+        {
+          "caseId": "realworldqa-validation-c-465",
+          "sourceIndex": 465,
+          "capability": "Binary visual reasoning",
+          "leftPass": true,
+          "rightPass": false,
+          "expected": "A",
+          "leftPrediction": "A",
+          "rightPrediction": "B"
+        },
+        {
+          "caseId": "realworldqa-validation-c-499",
+          "sourceIndex": 499,
+          "capability": "Counting",
+          "leftPass": true,
+          "rightPass": false,
+          "expected": "B",
+          "leftPrediction": "B",
+          "rightPrediction": "A"
+        },
+        {
+          "caseId": "realworldqa-validation-c-527",
+          "sourceIndex": 527,
+          "capability": "Spatial relation",
+          "leftPass": false,
+          "rightPass": true,
+          "expected": "A",
+          "leftPrediction": "C",
+          "rightPrediction": "A"
+        },
+        {
+          "caseId": "realworldqa-validation-c-592",
+          "sourceIndex": 592,
+          "capability": "Counting",
+          "leftPass": true,
+          "rightPass": false,
+          "expected": "A",
+          "leftPrediction": "A",
+          "rightPrediction": "B"
+        },
+        {
+          "caseId": "realworldqa-validation-c-631",
+          "sourceIndex": 631,
+          "capability": "Attribute recognition",
+          "leftPass": true,
+          "rightPass": false,
+          "expected": "C",
+          "leftPrediction": "C",
+          "rightPrediction": "A"
+        },
+        {
+          "caseId": "realworldqa-validation-c-634",
+          "sourceIndex": 634,
+          "capability": "Visual selection",
+          "leftPass": false,
+          "rightPass": true,
+          "expected": "B",
+          "leftPrediction": "A",
+          "rightPrediction": "B"
+        },
+        {
+          "caseId": "realworldqa-validation-c-684",
+          "sourceIndex": 684,
+          "capability": "Visual selection",
+          "leftPass": false,
+          "rightPass": true,
+          "expected": "A",
+          "leftPrediction": "B",
+          "rightPrediction": "A"
+        },
+        {
+          "caseId": "realworldqa-validation-c-708",
+          "sourceIndex": 708,
+          "capability": "Object and scene understanding",
+          "leftPass": false,
+          "rightPass": true,
+          "expected": "C",
+          "leftPrediction": "A",
+          "rightPrediction": "C"
+        },
+        {
+          "caseId": "realworldqa-validation-c-715",
+          "sourceIndex": 715,
+          "capability": "Visual selection",
+          "leftPass": true,
+          "rightPass": false,
+          "expected": "C",
+          "leftPrediction": "C",
+          "rightPrediction": "B"
+        },
+        {
+          "caseId": "realworldqa-validation-c-718",
+          "sourceIndex": 718,
+          "capability": "Binary visual reasoning",
+          "leftPass": true,
+          "rightPass": false,
+          "expected": "A",
+          "leftPrediction": "A",
+          "rightPrediction": "B"
+        },
+        {
+          "caseId": "realworldqa-remainder-29",
+          "sourceIndex": 29,
+          "capability": "Visual selection",
+          "leftPass": true,
+          "rightPass": false,
+          "expected": "B",
+          "leftPrediction": "B",
+          "rightPrediction": "A"
+        },
+        {
+          "caseId": "realworldqa-remainder-30",
+          "sourceIndex": 30,
+          "capability": "Attribute recognition",
+          "leftPass": true,
+          "rightPass": false,
+          "expected": "B",
+          "leftPrediction": "B",
+          "rightPrediction": "A"
+        },
+        {
+          "caseId": "realworldqa-remainder-47",
+          "sourceIndex": 47,
+          "capability": "Counting",
+          "leftPass": false,
+          "rightPass": true,
+          "expected": "B",
+          "leftPrediction": "C",
+          "rightPrediction": "B"
+        },
+        {
+          "caseId": "realworldqa-remainder-49",
+          "sourceIndex": 49,
+          "capability": "Attribute recognition",
+          "leftPass": true,
+          "rightPass": false,
+          "expected": "A",
+          "leftPrediction": "A",
+          "rightPrediction": "B"
+        },
+        {
+          "caseId": "realworldqa-remainder-84",
+          "sourceIndex": 84,
+          "capability": "Spatial relation",
+          "leftPass": true,
+          "rightPass": false,
+          "expected": "B",
+          "leftPrediction": "B",
+          "rightPrediction": "A"
+        },
+        {
+          "caseId": "realworldqa-remainder-120",
+          "sourceIndex": 120,
+          "capability": "Binary visual reasoning",
+          "leftPass": true,
+          "rightPass": false,
+          "expected": "A",
+          "leftPrediction": "A",
+          "rightPrediction": "B"
+        },
+        {
+          "caseId": "realworldqa-remainder-132",
+          "sourceIndex": 132,
+          "capability": "Object and scene understanding",
+          "leftPass": false,
+          "rightPass": true,
+          "expected": "B",
+          "leftPrediction": "A",
+          "rightPrediction": "B"
+        }
+      ],
+      "holmAdjustedP": 1
+    }
+  ],
+  "verdict": {
+    "ranking": [
+      "qvac-visionpsy-standard-q8",
+      "qvac-visionpsy",
+      "qvac-visionpsy-flash-q4"
+    ],
+    "statisticalVerdict": "NO_CLEAR_WINNER_AFTER_HOLM",
+    "summary": "Standard Q8 finishes first by six answers, but the paired differences are not statistically significant. Treat the ordering as a local corroboration of the official direction, not proof that Standard is categorically better.",
+    "qualityConclusion": "The three variants are statistically tied on this local run; Standard trades substantially higher TTFT for a small, uncertain quality edge.",
+    "publicationSafeClaim": "On the complete 765-question RealWorldQA set, using the same local QVAC SDK/backend and exact option scoring, Standard Q8 scored 57.3% and both Flash variants 56.5%. Standard ranked first, but paired tests found no significant winner."
+  },
+  "methodology": {
+    "dataset": "RealWorldQA",
+    "questions": 765,
+    "uniqueRealImages": 762,
+    "sourceMd5": "4de008f55dc4fd008ca9e15321dc44b7",
+    "scoring": "Exact multiple-choice option accuracy; one point per question; no cross-suite aggregation.",
+    "prompt": "official question and options with answer-letter suffix",
+    "providerOrder": "provider order rotates by case index",
+    "warmup": "one excluded warm-up per provider",
+    "runtime": "@qvac/sdk 0.18.2",
+    "backend": "@qvac/llm-llamacpp 0.47.0 · qvac-fabric-llm.cpp · Metal GPU",
+    "sameRuntimeAndBackend": true,
+    "modelSpecificPreprocessing": {
+      "qvac-visionpsy-standard-q8": "official-standard-tiled-upscale",
+      "qvac-visionpsy": "native-resolution-no-upscale",
+      "qvac-visionpsy-flash-q4": "native-resolution-no-upscale"
+    },
+    "scorerParity": {
+      "implementation": "VLMEvalKit-compatible deterministic can_infer audit",
+      "extractionDifferences": 0,
+      "passVerdictChanges": 0
+    },
+    "officialDifference": "Tether reports a single VLMEvalKit harness and official benchmark metrics. This run matches the public dataset, checksum, option scoring, model quantizations and QVAC-native serving stack, but does not establish bit-for-bit parity of VLMEvalKit version, generation parameters, prompt template, image decoder/resize path, or hardware."
+  },
+  "officialReferences": {
+    "standardGguf": "https://huggingface.co/qvac/VisionPsy-Nano-460M-GGUFs",
+    "flashGguf": "https://huggingface.co/qvac/VisionPsy-Nano-460M-Flash-GGUFs",
+    "researchRepository": "https://github.com/tether-ai-research/qvac-visionpsy-nano",
+    "announcement": "https://qvac.tether.io/blog/visionpsy-nano-state-of-the-art-vision-ai-in-its-weight-class-small-enough-to-run-on-your-phone/"
+  },
+  "officialWeaknesses": [
+    {
+      "claim": "Misread prices and licence plates",
+      "localFinding": "Not directly measurable: RealWorldQA has no reliable label isolating price/plate OCR.",
+      "status": "NOT_TESTED"
+    },
+    {
+      "claim": "Correct chart reading but incorrect aggregation",
+      "localFinding": "Not directly measurable in this scene-heavy RealWorldQA slice.",
+      "status": "NOT_TESTED"
+    },
+    {
+      "claim": "Left/right confusion",
+      "localFinding": "Observed directionally: only 3 explicitly labelled left/right cases; Standard passed 1 and each Flash passed 2. The sample is too small for a conclusion.",
+      "status": "OBSERVED_BUT_UNDERPOWERED"
+    },
+    {
+      "claim": "Degenerate repetition loops",
+      "localFinding": "Not observable under one-letter constrained decoding; all 2,295 answers were parseable.",
+      "status": "MASKED_BY_PROTOCOL"
+    },
+    {
+      "claim": "Flash sensitivity on high-resolution OCR",
+      "localFinding": "Not isolated by RealWorldQA capability labels; requires OCRBench/DocVQA/InfoVQA or a dedicated high-resolution OCR slice.",
+      "status": "NOT_TESTED"
+    },
+    {
+      "claim": "Quality degradation at lower quantization",
+      "localFinding": "Not visible in aggregate here: Flash Q8 and Flash Q4 both scored 432/765, but each uniquely won 35 cases, so equal totals hide different errors.",
+      "status": "NOT_OBSERVED_IN_AGGREGATE"
+    }
+  ],
+  "promptAblation": {
+    "cases": 120,
+    "uniqueImages": 120,
+    "decision": "KEEP_CURRENT_765_NO_FULL_RERUN",
+    "conclusion": "The VLMEvalKit prompt changes individual answers but produces no significant aggregate improvement on the controlled 120-case sample.",
+    "providers": {
+      "qvac-visionpsy-standard-q8": {
+        "current": {
+          "passed": 71,
+          "accuracy": 0.5916666666666667
+        },
+        "vlmeval": {
+          "passed": 67,
+          "accuracy": 0.5583333333333333
+        },
+        "deltaAnswers": -4,
+        "gained": 4,
+        "lost": 8,
+        "exactMcNemarP": 0.3876953125
+      },
+      "qvac-visionpsy": {
+        "current": {
+          "passed": 64,
+          "accuracy": 0.5333333333333333
+        },
+        "vlmeval": {
+          "passed": 65,
+          "accuracy": 0.5416666666666666
+        },
+        "deltaAnswers": 1,
+        "gained": 8,
+        "lost": 7,
+        "exactMcNemarP": 1
+      },
+      "qvac-visionpsy-flash-q4": {
+        "current": {
+          "passed": 61,
+          "accuracy": 0.5083333333333333
+        },
+        "vlmeval": {
+          "passed": 61,
+          "accuracy": 0.5083333333333333
+        },
+        "deltaAnswers": 0,
+        "gained": 10,
+        "lost": 10,
+        "exactMcNemarP": 1
+      }
+    }
+  },
+  "criticalities": [
+    {
+      "id": 1,
+      "title": "Prompt and generation parity are not bit-for-bit proven",
+      "severity": "High",
+      "risk": "Small models can flip answers with formatting, option punctuation, image/text ordering, stop tokens and decoding settings.",
+      "solutionA": "Freeze and publish the exact local prompt/runtime configuration.",
+      "solutionB": "Run an A/B parity replication using the pinned upstream VLMEvalKit prompt and generation config.",
+      "recommended": "B",
+      "consequence": "Without this, compare direction and distance cautiously; do not call the run an exact reproduction."
+    },
+    {
+      "id": 2,
+      "title": "Preprocessing differs intentionally between Standard and Flash",
+      "severity": "High",
+      "risk": "Standard consumes tiled/upscaled views while Flash consumes the native view; this is part of the model design but prevents attributing every difference to weights alone.",
+      "solutionA": "Keep official per-model preprocessing for product-realistic comparison.",
+      "solutionB": "Add a preprocessing ablation while retaining the official run as primary.",
+      "recommended": "A+B",
+      "consequence": "Official preprocessing is the fair headline; the ablation explains whether tiling helps or hurts particular cases."
+    },
+    {
+      "id": 3,
+      "title": "RealWorldQA is compositionally imbalanced",
+      "severity": "High",
+      "risk": "Counting, spatial relation and binary reasoning contribute 518/765 questions, while several named capabilities have 1–3 cases.",
+      "solutionA": "Report only the overall official metric.",
+      "solutionB": "Report overall plus category denominators and suppress strong claims for tiny groups.",
+      "recommended": "B",
+      "consequence": "Category percentages without denominators would look precise but be misleading."
+    },
+    {
+      "id": 4,
+      "title": "A single benchmark cannot validate all advertised capabilities",
+      "severity": "High",
+      "risk": "OCR, documents, charts, hallucination, instruction following and open-ended reasoning are weakly represented or absent.",
+      "solutionA": "Keep the claim strictly scoped to RealWorldQA.",
+      "solutionB": "Add official OCRBench, ChartQA, POPE and MM-IFEval replications later.",
+      "recommended": "A now; B next",
+      "consequence": "The X post must not generalize this score to overall VisionPsy quality."
+    },
+    {
+      "id": 5,
+      "title": "Exact one-letter scoring masks answer quality",
+      "severity": "Medium",
+      "risk": "It measures option selection, not explanations, calibration, hallucination or repetition.",
+      "solutionA": "Use exact scoring because that is the benchmark metric.",
+      "solutionB": "Add a separate open-answer qualitative audit with a frozen rubric.",
+      "recommended": "A for benchmark; B as separate evidence",
+      "consequence": "Do not mix qualitative grades into the official accuracy denominator."
+    },
+    {
+      "id": 6,
+      "title": "The score gaps are statistically weak",
+      "severity": "High",
+      "risk": "Standard leads each Flash by 6/765, while paired exact McNemar p-values are about 0.70.",
+      "solutionA": "Publish the raw ranking only.",
+      "solutionB": "Publish counts, confidence intervals and paired tests together.",
+      "recommended": "B",
+      "consequence": "The defensible conclusion is “no clear local winner”, despite the rank order."
+    },
+    {
+      "id": 7,
+      "title": "System resource KPIs are not model-isolated",
+      "severity": "Medium",
+      "risk": "macOS GPU counters are system-wide and unified memory/process RSS does not fully represent model footprint.",
+      "solutionA": "Show them as live operational telemetry.",
+      "solutionB": "Label their scope and avoid cross-machine claims; use isolated device profiling for publication-grade memory data.",
+      "recommended": "B",
+      "consequence": "Latency is reliable for this machine/run; GPU/RAM comparisons need narrower claims."
+    },
+    {
+      "id": 8,
+      "title": "Equal aggregate scores can hide different failure sets",
+      "severity": "Medium",
+      "risk": "Flash Q8 and Q4 tie overall but disagree on 70 questions.",
+      "solutionA": "Rank by total accuracy only.",
+      "solutionB": "Publish paired disagreement counts and inspect recurrent clusters.",
+      "recommended": "B",
+      "consequence": "The Q4 result does not prove quantization is lossless on individual cases."
+    },
+    {
+      "id": 9,
+      "title": "Official-number provenance changes with precision and table revision",
+      "severity": "Medium",
+      "risk": "FP32/model-card headlines and matching GGUF rows are not interchangeable.",
+      "solutionA": "Compare against the family headline.",
+      "solutionB": "Compare each local file only against its matching GGUF column and record source URLs/date.",
+      "recommended": "B",
+      "consequence": "This avoids claiming a gain or loss against the wrong precision."
+    },
+    {
+      "id": 10,
+      "title": "No repeated-seed variance estimate",
+      "severity": "Medium",
+      "risk": "A deterministic run reveals paired case differences but not sensitivity to stochastic decoding or implementation nondeterminism.",
+      "solutionA": "Use temperature-zero once.",
+      "solutionB": "Repeat a stratified subset and hash outputs/configuration.",
+      "recommended": "A for this exact benchmark; B for robustness audit",
+      "consequence": "One deterministic run is valid for the fixed protocol, not a universal variance estimate."
+    },
+    {
+      "id": 11,
+      "title": "Execution order is balanced but deterministically tied to case order",
+      "severity": "Medium",
+      "risk": "Each provider runs first, second and third exactly 255 times, but cyclic assignment can correlate with dataset ordering and case difficulty.",
+      "solutionA": "Keep cyclic rotation and report it.",
+      "solutionB": "Shuffle cases with a published seed, then apply a balanced Latin-square provider order.",
+      "recommended": "B for the next replication",
+      "consequence": "This run controls unequal position counts, but cannot cleanly estimate a causal cache/order effect from the position subsets."
+    }
+  ],
+  "questionInventory": {
+    "questions": 765,
+    "uniqueImageHashes": 762,
+    "answerLetters": {
+      "A": 280,
+      "B": 337,
+      "C": 145,
+      "D": 3
+    },
+    "optionCounts": {
+      "2": 210,
+      "3": 536,
+      "4": 19
+    },
+    "capabilities": {
+      "Action + relation": 1,
+      "Attribute recognition": 46,
+      "Binary visual reasoning": 132,
+      "Counting": 220,
+      "Fine spatial relation": 2,
+      "Food relation": 1,
+      "Functional relation": 1,
+      "Gaze direction": 1,
+      "Left/right relation": 3,
+      "Object and scene understanding": 99,
+      "Object localization": 1,
+      "Object-between relation": 2,
+      "Orientation": 1,
+      "Relative size": 3,
+      "Spatial grounding": 1,
+      "Spatial relation": 166,
+      "Vertical relation": 1,
+      "Visual selection": 84
+    }
+  },
+  "agreement": {
+    "allCorrect": 328,
+    "allWrong": 232,
+    "exactlyOneCorrect": 92,
+    "exactlyTwoCorrect": 113
+  },
+  "pairwise": [
+    {
+      "leftId": "qvac-visionpsy-standard-q8",
+      "rightId": "qvac-visionpsy",
+      "leftLabel": "VisionPsy Standard Q8 (QVAC SDK)",
+      "rightLabel": "VisionPsy Flash Q8 (QVAC SDK)",
+      "leftOnly": 89,
+      "rightOnly": 83,
+      "exactMcNemarP": 0.7031386893685866,
+      "disagreementExamples": [
+        {
+          "caseId": "realworldqa-5",
+          "sourceIndex": 5,
+          "capability": "Relative size",
+          "leftPass": false,
+          "rightPass": true,
+          "expected": "A",
+          "leftPrediction": "B",
+          "rightPrediction": "A"
+        },
+        {
+          "caseId": "realworldqa-39",
+          "sourceIndex": 39,
+          "capability": "Relative size",
+          "leftPass": true,
+          "rightPass": false,
+          "expected": "B",
+          "leftPrediction": "B",
+          "rightPrediction": "A"
+        },
+        {
+          "caseId": "realworldqa-152",
+          "sourceIndex": 152,
+          "capability": "Vertical relation",
+          "leftPass": false,
+          "rightPass": true,
+          "expected": "A",
+          "leftPrediction": "B",
+          "rightPrediction": "A"
+        },
+        {
+          "caseId": "realworldqa-159",
+          "sourceIndex": 159,
+          "capability": "Left/right relation",
+          "leftPass": false,
+          "rightPass": true,
+          "expected": "A",
+          "leftPrediction": "B",
+          "rightPrediction": "A"
+        },
+        {
+          "caseId": "realworldqa-170",
+          "sourceIndex": 170,
+          "capability": "Action + relation",
+          "leftPass": true,
+          "rightPass": false,
+          "expected": "A",
+          "leftPrediction": "A",
+          "rightPrediction": "B"
+        },
+        {
+          "caseId": "realworldqa-validation-23",
+          "sourceIndex": 23,
+          "capability": "Spatial relation",
+          "leftPass": true,
+          "rightPass": false,
+          "expected": "A",
+          "leftPrediction": "A",
+          "rightPrediction": "B"
+        },
+        {
+          "caseId": "realworldqa-validation-25",
+          "sourceIndex": 25,
+          "capability": "Counting",
+          "leftPass": true,
+          "rightPass": false,
+          "expected": "B",
+          "leftPrediction": "B",
+          "rightPrediction": "A"
+        },
+        {
+          "caseId": "realworldqa-validation-327",
+          "sourceIndex": 327,
+          "capability": "Binary visual reasoning",
+          "leftPass": false,
+          "rightPass": true,
+          "expected": "A",
+          "leftPrediction": "B",
+          "rightPrediction": "A"
+        },
+        {
+          "caseId": "realworldqa-validation-458",
+          "sourceIndex": 458,
+          "capability": "Counting",
+          "leftPass": true,
+          "rightPass": false,
+          "expected": "C",
+          "leftPrediction": "C",
+          "rightPrediction": "B"
+        },
+        {
+          "caseId": "realworldqa-validation-598",
+          "sourceIndex": 598,
+          "capability": "Counting",
+          "leftPass": false,
+          "rightPass": true,
+          "expected": "B",
+          "leftPrediction": "C",
+          "rightPrediction": "B"
+        },
+        {
+          "caseId": "realworldqa-validation-b-140",
+          "sourceIndex": 140,
+          "capability": "Counting",
+          "leftPass": false,
+          "rightPass": true,
+          "expected": "A",
+          "leftPrediction": "C",
+          "rightPrediction": "A"
+        },
+        {
+          "caseId": "realworldqa-validation-b-271",
+          "sourceIndex": 271,
+          "capability": "Spatial relation",
+          "leftPass": true,
+          "rightPass": false,
+          "expected": "B",
+          "leftPrediction": "B",
+          "rightPrediction": "A"
+        },
+        {
+          "caseId": "realworldqa-validation-b-311",
+          "sourceIndex": 311,
+          "capability": "Spatial relation",
+          "leftPass": true,
+          "rightPass": false,
+          "expected": "A",
+          "leftPrediction": "A",
+          "rightPrediction": "B"
+        },
+        {
+          "caseId": "realworldqa-validation-b-316",
+          "sourceIndex": 316,
+          "capability": "Object and scene understanding",
+          "leftPass": false,
+          "rightPass": true,
+          "expected": "B",
+          "leftPrediction": "A",
+          "rightPrediction": "B"
+        },
+        {
+          "caseId": "realworldqa-validation-b-385",
+          "sourceIndex": 385,
+          "capability": "Spatial relation",
+          "leftPass": true,
+          "rightPass": false,
+          "expected": "C",
+          "leftPrediction": "C",
+          "rightPrediction": "A"
+        },
+        {
+          "caseId": "realworldqa-validation-b-474",
+          "sourceIndex": 474,
+          "capability": "Object and scene understanding",
+          "leftPass": false,
+          "rightPass": true,
+          "expected": "C",
+          "leftPrediction": "A",
+          "rightPrediction": "C"
+        },
+        {
+          "caseId": "realworldqa-validation-b-561",
+          "sourceIndex": 561,
+          "capability": "Spatial relation",
+          "leftPass": false,
+          "rightPass": true,
+          "expected": "A",
+          "leftPrediction": "B",
+          "rightPrediction": "A"
+        },
+        {
+          "caseId": "realworldqa-validation-b-741",
+          "sourceIndex": 741,
+          "capability": "Counting",
+          "leftPass": true,
+          "rightPass": false,
+          "expected": "B",
+          "leftPrediction": "B",
+          "rightPrediction": "C"
+        },
+        {
+          "caseId": "realworldqa-validation-b-742",
+          "sourceIndex": 742,
+          "capability": "Counting",
+          "leftPass": true,
+          "rightPass": false,
+          "expected": "C",
+          "leftPrediction": "C",
+          "rightPrediction": "A"
+        },
+        {
+          "caseId": "realworldqa-validation-c-9",
+          "sourceIndex": 9,
+          "capability": "Object and scene understanding",
+          "leftPass": false,
+          "rightPass": true,
+          "expected": "A",
+          "leftPrediction": "B",
+          "rightPrediction": "A"
+        },
+        {
+          "caseId": "realworldqa-validation-c-24",
+          "sourceIndex": 24,
+          "capability": "Attribute recognition",
+          "leftPass": false,
+          "rightPass": true,
+          "expected": "A",
+          "leftPrediction": "B",
+          "rightPrediction": "A"
+        },
+        {
+          "caseId": "realworldqa-validation-c-46",
+          "sourceIndex": 46,
+          "capability": "Spatial relation",
+          "leftPass": false,
+          "rightPass": true,
+          "expected": "C",
+          "leftPrediction": "B",
+          "rightPrediction": "C"
+        },
+        {
+          "caseId": "realworldqa-validation-c-83",
+          "sourceIndex": 83,
+          "capability": "Counting",
+          "leftPass": true,
+          "rightPass": false,
+          "expected": "B",
+          "leftPrediction": "B",
+          "rightPrediction": "A"
+        },
+        {
+          "caseId": "realworldqa-validation-c-130",
+          "sourceIndex": 130,
+          "capability": "Binary visual reasoning",
+          "leftPass": false,
+          "rightPass": true,
+          "expected": "A",
+          "leftPrediction": "B",
+          "rightPrediction": "A"
+        },
+        {
+          "caseId": "realworldqa-validation-c-188",
+          "sourceIndex": 188,
+          "capability": "Visual selection",
+          "leftPass": false,
+          "rightPass": true,
+          "expected": "A",
+          "leftPrediction": "B",
+          "rightPrediction": "A"
+        },
+        {
+          "caseId": "realworldqa-validation-c-213",
+          "sourceIndex": 213,
+          "capability": "Object and scene understanding",
+          "leftPass": true,
+          "rightPass": false,
+          "expected": "C",
+          "leftPrediction": "C",
+          "rightPrediction": "A"
+        },
+        {
+          "caseId": "realworldqa-validation-c-233",
+          "sourceIndex": 233,
+          "capability": "Binary visual reasoning",
+          "leftPass": true,
+          "rightPass": false,
+          "expected": "B",
+          "leftPrediction": "B",
+          "rightPrediction": "A"
+        },
+        {
+          "caseId": "realworldqa-validation-c-237",
+          "sourceIndex": 237,
+          "capability": "Visual selection",
+          "leftPass": true,
+          "rightPass": false,
+          "expected": "C",
+          "leftPrediction": "C",
+          "rightPrediction": "A"
+        },
+        {
+          "caseId": "realworldqa-validation-c-284",
+          "sourceIndex": 284,
+          "capability": "Counting",
+          "leftPass": true,
+          "rightPass": false,
+          "expected": "C",
+          "leftPrediction": "C",
+          "rightPrediction": "B"
+        },
+        {
+          "caseId": "realworldqa-validation-c-296",
+          "sourceIndex": 296,
+          "capability": "Counting",
+          "leftPass": false,
+          "rightPass": true,
+          "expected": "B",
+          "leftPrediction": "C",
+          "rightPrediction": "B"
+        }
+      ],
+      "holmAdjustedP": 1
+    },
+    {
+      "leftId": "qvac-visionpsy-standard-q8",
+      "rightId": "qvac-visionpsy-flash-q4",
+      "leftLabel": "VisionPsy Standard Q8 (QVAC SDK)",
+      "rightLabel": "VisionPsy Flash Q4 imatrix (QVAC SDK)",
+      "leftOnly": 87,
+      "rightOnly": 81,
+      "exactMcNemarP": 0.6997974882614125,
+      "disagreementExamples": [
+        {
+          "caseId": "realworldqa-5",
+          "sourceIndex": 5,
+          "capability": "Relative size",
+          "leftPass": false,
+          "rightPass": true,
+          "expected": "A",
+          "leftPrediction": "B",
+          "rightPrediction": "A"
+        },
+        {
+          "caseId": "realworldqa-39",
+          "sourceIndex": 39,
+          "capability": "Relative size",
+          "leftPass": true,
+          "rightPass": false,
+          "expected": "B",
+          "leftPrediction": "B",
+          "rightPrediction": "A"
+        },
+        {
+          "caseId": "realworldqa-159",
+          "sourceIndex": 159,
+          "capability": "Left/right relation",
+          "leftPass": false,
+          "rightPass": true,
+          "expected": "A",
+          "leftPrediction": "B",
+          "rightPrediction": "A"
+        },
+        {
+          "caseId": "realworldqa-170",
+          "sourceIndex": 170,
+          "capability": "Action + relation",
+          "leftPass": true,
+          "rightPass": false,
+          "expected": "A",
+          "leftPrediction": "A",
+          "rightPrediction": "B"
+        },
+        {
+          "caseId": "realworldqa-validation-23",
+          "sourceIndex": 23,
+          "capability": "Spatial relation",
+          "leftPass": true,
+          "rightPass": false,
+          "expected": "A",
+          "leftPrediction": "A",
+          "rightPrediction": "B"
+        },
+        {
+          "caseId": "realworldqa-validation-25",
+          "sourceIndex": 25,
+          "capability": "Counting",
+          "leftPass": true,
+          "rightPass": false,
+          "expected": "B",
+          "leftPrediction": "B",
+          "rightPrediction": "A"
+        },
+        {
+          "caseId": "realworldqa-validation-108",
+          "sourceIndex": 108,
+          "capability": "Visual selection",
+          "leftPass": false,
+          "rightPass": true,
+          "expected": "A",
+          "leftPrediction": "B",
+          "rightPrediction": "A"
+        },
+        {
+          "caseId": "realworldqa-validation-148",
+          "sourceIndex": 148,
+          "capability": "Visual selection",
+          "leftPass": false,
+          "rightPass": true,
+          "expected": "A",
+          "leftPrediction": "B",
+          "rightPrediction": "A"
+        },
+        {
+          "caseId": "realworldqa-validation-327",
+          "sourceIndex": 327,
+          "capability": "Binary visual reasoning",
+          "leftPass": false,
+          "rightPass": true,
+          "expected": "A",
+          "leftPrediction": "B",
+          "rightPrediction": "A"
+        },
+        {
+          "caseId": "realworldqa-validation-348",
+          "sourceIndex": 348,
+          "capability": "Counting",
+          "leftPass": false,
+          "rightPass": true,
+          "expected": "B",
+          "leftPrediction": "A",
+          "rightPrediction": "B"
+        },
+        {
+          "caseId": "realworldqa-validation-458",
+          "sourceIndex": 458,
+          "capability": "Counting",
+          "leftPass": true,
+          "rightPass": false,
+          "expected": "C",
+          "leftPrediction": "C",
+          "rightPrediction": "B"
+        },
+        {
+          "caseId": "realworldqa-validation-514",
+          "sourceIndex": 514,
+          "capability": "Object and scene understanding",
+          "leftPass": false,
+          "rightPass": true,
+          "expected": "C",
+          "leftPrediction": "A",
+          "rightPrediction": "C"
+        },
+        {
+          "caseId": "realworldqa-validation-598",
+          "sourceIndex": 598,
+          "capability": "Counting",
+          "leftPass": false,
+          "rightPass": true,
+          "expected": "B",
+          "leftPrediction": "C",
+          "rightPrediction": "B"
+        },
+        {
+          "caseId": "realworldqa-validation-614",
+          "sourceIndex": 614,
+          "capability": "Spatial relation",
+          "leftPass": true,
+          "rightPass": false,
+          "expected": "C",
+          "leftPrediction": "C",
+          "rightPrediction": "A"
+        },
+        {
+          "caseId": "realworldqa-validation-642",
+          "sourceIndex": 642,
+          "capability": "Counting",
+          "leftPass": false,
+          "rightPass": true,
+          "expected": "B",
+          "leftPrediction": "C",
+          "rightPrediction": "B"
+        },
+        {
+          "caseId": "realworldqa-validation-b-140",
+          "sourceIndex": 140,
+          "capability": "Counting",
+          "leftPass": false,
+          "rightPass": true,
+          "expected": "A",
+          "leftPrediction": "C",
+          "rightPrediction": "A"
+        },
+        {
+          "caseId": "realworldqa-validation-b-271",
+          "sourceIndex": 271,
+          "capability": "Spatial relation",
+          "leftPass": true,
+          "rightPass": false,
+          "expected": "B",
+          "leftPrediction": "B",
+          "rightPrediction": "A"
+        },
+        {
+          "caseId": "realworldqa-validation-b-311",
+          "sourceIndex": 311,
+          "capability": "Spatial relation",
+          "leftPass": true,
+          "rightPass": false,
+          "expected": "A",
+          "leftPrediction": "A",
+          "rightPrediction": "B"
+        },
+        {
+          "caseId": "realworldqa-validation-b-385",
+          "sourceIndex": 385,
+          "capability": "Spatial relation",
+          "leftPass": true,
+          "rightPass": false,
+          "expected": "C",
+          "leftPrediction": "C",
+          "rightPrediction": "A"
+        },
+        {
+          "caseId": "realworldqa-validation-b-561",
+          "sourceIndex": 561,
+          "capability": "Spatial relation",
+          "leftPass": false,
+          "rightPass": true,
+          "expected": "A",
+          "leftPrediction": "B",
+          "rightPrediction": "A"
+        },
+        {
+          "caseId": "realworldqa-validation-b-695",
+          "sourceIndex": 695,
+          "capability": "Visual selection",
+          "leftPass": true,
+          "rightPass": false,
+          "expected": "B",
+          "leftPrediction": "B",
+          "rightPrediction": "C"
+        },
+        {
+          "caseId": "realworldqa-validation-b-702",
+          "sourceIndex": 702,
+          "capability": "Spatial relation",
+          "leftPass": true,
+          "rightPass": false,
+          "expected": "A",
+          "leftPrediction": "A",
+          "rightPrediction": "C"
+        },
+        {
+          "caseId": "realworldqa-validation-b-741",
+          "sourceIndex": 741,
+          "capability": "Counting",
+          "leftPass": true,
+          "rightPass": false,
+          "expected": "B",
+          "leftPrediction": "B",
+          "rightPrediction": "C"
+        },
+        {
+          "caseId": "realworldqa-validation-b-742",
+          "sourceIndex": 742,
+          "capability": "Counting",
+          "leftPass": true,
+          "rightPass": false,
+          "expected": "C",
+          "leftPrediction": "C",
+          "rightPrediction": "A"
+        },
+        {
+          "caseId": "realworldqa-validation-c-24",
+          "sourceIndex": 24,
+          "capability": "Attribute recognition",
+          "leftPass": false,
+          "rightPass": true,
+          "expected": "A",
+          "leftPrediction": "B",
+          "rightPrediction": "A"
+        },
+        {
+          "caseId": "realworldqa-validation-c-46",
+          "sourceIndex": 46,
+          "capability": "Spatial relation",
+          "leftPass": false,
+          "rightPass": true,
+          "expected": "C",
+          "leftPrediction": "B",
+          "rightPrediction": "C"
+        },
+        {
+          "caseId": "realworldqa-validation-c-130",
+          "sourceIndex": 130,
+          "capability": "Binary visual reasoning",
+          "leftPass": false,
+          "rightPass": true,
+          "expected": "A",
+          "leftPrediction": "B",
+          "rightPrediction": "A"
+        },
+        {
+          "caseId": "realworldqa-validation-c-188",
+          "sourceIndex": 188,
+          "capability": "Visual selection",
+          "leftPass": false,
+          "rightPass": true,
+          "expected": "A",
+          "leftPrediction": "B",
+          "rightPrediction": "A"
+        },
+        {
+          "caseId": "realworldqa-validation-c-213",
+          "sourceIndex": 213,
+          "capability": "Object and scene understanding",
+          "leftPass": true,
+          "rightPass": false,
+          "expected": "C",
+          "leftPrediction": "C",
+          "rightPrediction": "A"
+        },
+        {
+          "caseId": "realworldqa-validation-c-233",
+          "sourceIndex": 233,
+          "capability": "Binary visual reasoning",
+          "leftPass": true,
+          "rightPass": false,
+          "expected": "B",
+          "leftPrediction": "B",
+          "rightPrediction": "A"
+        }
+      ],
+      "holmAdjustedP": 1
+    },
+    {
+      "leftId": "qvac-visionpsy",
+      "rightId": "qvac-visionpsy-flash-q4",
+      "leftLabel": "VisionPsy Flash Q8 (QVAC SDK)",
+      "rightLabel": "VisionPsy Flash Q4 imatrix (QVAC SDK)",
+      "leftOnly": 35,
+      "rightOnly": 35,
+      "exactMcNemarP": 1,
+      "disagreementExamples": [
+        {
+          "caseId": "realworldqa-152",
+          "sourceIndex": 152,
+          "capability": "Vertical relation",
+          "leftPass": true,
+          "rightPass": false,
+          "expected": "A",
+          "leftPrediction": "A",
+          "rightPrediction": "B"
+        },
+        {
+          "caseId": "realworldqa-validation-108",
+          "sourceIndex": 108,
+          "capability": "Visual selection",
+          "leftPass": false,
+          "rightPass": true,
+          "expected": "A",
+          "leftPrediction": "B",
+          "rightPrediction": "A"
+        },
+        {
+          "caseId": "realworldqa-validation-148",
+          "sourceIndex": 148,
+          "capability": "Visual selection",
+          "leftPass": false,
+          "rightPass": true,
+          "expected": "A",
+          "leftPrediction": "B",
+          "rightPrediction": "A"
+        },
+        {
+          "caseId": "realworldqa-validation-348",
+          "sourceIndex": 348,
+          "capability": "Counting",
+          "leftPass": false,
+          "rightPass": true,
+          "expected": "B",
+          "leftPrediction": "A",
+          "rightPrediction": "B"
+        },
+        {
+          "caseId": "realworldqa-validation-514",
+          "sourceIndex": 514,
+          "capability": "Object and scene understanding",
+          "leftPass": false,
+          "rightPass": true,
+          "expected": "C",
+          "leftPrediction": "B",
+          "rightPrediction": "C"
+        },
+        {
+          "caseId": "realworldqa-validation-614",
+          "sourceIndex": 614,
+          "capability": "Spatial relation",
+          "leftPass": true,
+          "rightPass": false,
+          "expected": "C",
+          "leftPrediction": "C",
+          "rightPrediction": "A"
+        },
+        {
+          "caseId": "realworldqa-validation-642",
+          "sourceIndex": 642,
+          "capability": "Counting",
+          "leftPass": false,
+          "rightPass": true,
+          "expected": "B",
+          "leftPrediction": "C",
+          "rightPrediction": "B"
+        },
+        {
+          "caseId": "realworldqa-validation-b-316",
+          "sourceIndex": 316,
+          "capability": "Object and scene understanding",
+          "leftPass": true,
+          "rightPass": false,
+          "expected": "B",
+          "leftPrediction": "B",
+          "rightPrediction": "A"
+        },
+        {
+          "caseId": "realworldqa-validation-b-474",
+          "sourceIndex": 474,
+          "capability": "Object and scene understanding",
+          "leftPass": true,
+          "rightPass": false,
+          "expected": "C",
+          "leftPrediction": "C",
+          "rightPrediction": "A"
+        },
+        {
+          "caseId": "realworldqa-validation-b-695",
+          "sourceIndex": 695,
+          "capability": "Visual selection",
+          "leftPass": true,
+          "rightPass": false,
+          "expected": "B",
+          "leftPrediction": "B",
+          "rightPrediction": "C"
+        },
+        {
+          "caseId": "realworldqa-validation-b-702",
+          "sourceIndex": 702,
+          "capability": "Spatial relation",
+          "leftPass": true,
+          "rightPass": false,
+          "expected": "A",
+          "leftPrediction": "A",
+          "rightPrediction": "C"
+        },
+        {
+          "caseId": "realworldqa-validation-c-9",
+          "sourceIndex": 9,
+          "capability": "Object and scene understanding",
+          "leftPass": true,
+          "rightPass": false,
+          "expected": "A",
+          "leftPrediction": "A",
+          "rightPrediction": "C"
+        },
+        {
+          "caseId": "realworldqa-validation-c-83",
+          "sourceIndex": 83,
+          "capability": "Counting",
+          "leftPass": false,
+          "rightPass": true,
+          "expected": "B",
+          "leftPrediction": "A",
+          "rightPrediction": "B"
+        },
+        {
+          "caseId": "realworldqa-validation-c-465",
+          "sourceIndex": 465,
+          "capability": "Binary visual reasoning",
+          "leftPass": true,
+          "rightPass": false,
+          "expected": "A",
+          "leftPrediction": "A",
+          "rightPrediction": "B"
+        },
+        {
+          "caseId": "realworldqa-validation-c-499",
+          "sourceIndex": 499,
+          "capability": "Counting",
+          "leftPass": true,
+          "rightPass": false,
+          "expected": "B",
+          "leftPrediction": "B",
+          "rightPrediction": "A"
+        },
+        {
+          "caseId": "realworldqa-validation-c-527",
+          "sourceIndex": 527,
+          "capability": "Spatial relation",
+          "leftPass": false,
+          "rightPass": true,
+          "expected": "A",
+          "leftPrediction": "C",
+          "rightPrediction": "A"
+        },
+        {
+          "caseId": "realworldqa-validation-c-592",
+          "sourceIndex": 592,
+          "capability": "Counting",
+          "leftPass": true,
+          "rightPass": false,
+          "expected": "A",
+          "leftPrediction": "A",
+          "rightPrediction": "B"
+        },
+        {
+          "caseId": "realworldqa-validation-c-631",
+          "sourceIndex": 631,
+          "capability": "Attribute recognition",
+          "leftPass": true,
+          "rightPass": false,
+          "expected": "C",
+          "leftPrediction": "C",
+          "rightPrediction": "A"
+        },
+        {
+          "caseId": "realworldqa-validation-c-634",
+          "sourceIndex": 634,
+          "capability": "Visual selection",
+          "leftPass": false,
+          "rightPass": true,
+          "expected": "B",
+          "leftPrediction": "A",
+          "rightPrediction": "B"
+        },
+        {
+          "caseId": "realworldqa-validation-c-684",
+          "sourceIndex": 684,
+          "capability": "Visual selection",
+          "leftPass": false,
+          "rightPass": true,
+          "expected": "A",
+          "leftPrediction": "B",
+          "rightPrediction": "A"
+        },
+        {
+          "caseId": "realworldqa-validation-c-708",
+          "sourceIndex": 708,
+          "capability": "Object and scene understanding",
+          "leftPass": false,
+          "rightPass": true,
+          "expected": "C",
+          "leftPrediction": "A",
+          "rightPrediction": "C"
+        },
+        {
+          "caseId": "realworldqa-validation-c-715",
+          "sourceIndex": 715,
+          "capability": "Visual selection",
+          "leftPass": true,
+          "rightPass": false,
+          "expected": "C",
+          "leftPrediction": "C",
+          "rightPrediction": "B"
+        },
+        {
+          "caseId": "realworldqa-validation-c-718",
+          "sourceIndex": 718,
+          "capability": "Binary visual reasoning",
+          "leftPass": true,
+          "rightPass": false,
+          "expected": "A",
+          "leftPrediction": "A",
+          "rightPrediction": "B"
+        },
+        {
+          "caseId": "realworldqa-remainder-29",
+          "sourceIndex": 29,
+          "capability": "Visual selection",
+          "leftPass": true,
+          "rightPass": false,
+          "expected": "B",
+          "leftPrediction": "B",
+          "rightPrediction": "A"
+        },
+        {
+          "caseId": "realworldqa-remainder-30",
+          "sourceIndex": 30,
+          "capability": "Attribute recognition",
+          "leftPass": true,
+          "rightPass": false,
+          "expected": "B",
+          "leftPrediction": "B",
+          "rightPrediction": "A"
+        },
+        {
+          "caseId": "realworldqa-remainder-47",
+          "sourceIndex": 47,
+          "capability": "Counting",
+          "leftPass": false,
+          "rightPass": true,
+          "expected": "B",
+          "leftPrediction": "C",
+          "rightPrediction": "B"
+        },
+        {
+          "caseId": "realworldqa-remainder-49",
+          "sourceIndex": 49,
+          "capability": "Attribute recognition",
+          "leftPass": true,
+          "rightPass": false,
+          "expected": "A",
+          "leftPrediction": "A",
+          "rightPrediction": "B"
+        },
+        {
+          "caseId": "realworldqa-remainder-84",
+          "sourceIndex": 84,
+          "capability": "Spatial relation",
+          "leftPass": true,
+          "rightPass": false,
+          "expected": "B",
+          "leftPrediction": "B",
+          "rightPrediction": "A"
+        },
+        {
+          "caseId": "realworldqa-remainder-120",
+          "sourceIndex": 120,
+          "capability": "Binary visual reasoning",
+          "leftPass": true,
+          "rightPass": false,
+          "expected": "A",
+          "leftPrediction": "A",
+          "rightPrediction": "B"
+        },
+        {
+          "caseId": "realworldqa-remainder-132",
+          "sourceIndex": 132,
+          "capability": "Object and scene understanding",
+          "leftPass": false,
+          "rightPass": true,
+          "expected": "B",
+          "leftPrediction": "A",
+          "rightPrediction": "B"
+        }
+      ],
+      "holmAdjustedP": 1
+    }
+  ],
+  "providers": [
+    {
+      "providerId": "qvac-visionpsy-standard-q8",
+      "label": "VisionPsy Standard Q8 (QVAC SDK)",
+      "family": "VisionPsy-Nano-460M",
+      "real": {
+        "passed": 438,
+        "failed": 327,
+        "cases": 765,
+        "accuracy": 0.5725490196078431,
+        "interval": [
+          53.72159790442218,
+          60.715708867543526
+        ]
+      },
+      "officialRealWorldQaAccuracy": 0.591,
+      "officialFp32RealWorldQaAccuracy": 0.597,
+      "deviationFromOfficial": -0.018450980392156868,
+      "officialRemainder": {
+        "passed": 288,
+        "failed": 207,
+        "cases": 495,
+        "accuracy": 0.5818181818181818
+      },
+      "priorReal": {
+        "passed": 150,
+        "failed": 120,
+        "cases": 270,
+        "accuracy": 0.5555555555555556
+      },
+      "performance": {
+        "ttftMs": {
+          "count": 765,
+          "mean": 5584.177777777778,
+          "median": 5890,
+          "p95": 6901.599999999999,
+          "min": 2218,
+          "max": 11255,
+          "sum": 4271896
+        },
+        "latencyMs": {
+          "count": 765,
+          "mean": 5605.954248366013,
+          "median": 5912,
+          "p95": 6983.199999999998,
+          "min": 2230,
+          "max": 11427,
+          "sum": 4288555
+        },
+        "tokensPerSecond": {
+          "count": 765,
+          "mean": 51.5932750809897,
+          "median": 48.33720030935808,
+          "p95": 88.86206522489472,
+          "min": 4.706568958295093,
+          "max": 113.23745895142113,
+          "sum": 39468.85543695712
+        },
+        "promptTokens": {
+          "count": 765,
+          "mean": 896.1647058823529,
+          "median": 890,
+          "p95": 933.5999999999999,
+          "min": 632,
+          "max": 1200,
+          "sum": 685566
+        },
+        "processRssPeakBytes": {
+          "count": 765,
+          "mean": 163288855.09019607,
+          "median": 147423232,
+          "p95": 252870656,
+          "min": 95551488,
+          "max": 256819200,
+          "sum": 124915974144
+        },
+        "processCpuPeakPercent": {
+          "count": 765,
+          "mean": 68.24941176470587,
+          "median": 72.4,
+          "p95": 83.5,
+          "min": 22.7,
+          "max": 125.9,
+          "sum": 52210.79999999999
+        },
+        "gpuUtilizationPeakPercent": {
+          "count": 765,
+          "mean": 99.97516339869281,
+          "median": 100,
+          "p95": 100,
+          "min": 91,
+          "max": 100,
+          "sum": 76481
+        }
+      },
+      "errorAnalysis": {
+        "capabilityAccuracy": {
+          "Action + relation": {
+            "passed": 1,
+            "cases": 1,
+            "failed": 0,
+            "accuracy": 1
+          },
+          "Attribute recognition": {
+            "passed": 29,
+            "cases": 46,
+            "failed": 17,
+            "accuracy": 0.6304347826086957
+          },
+          "Binary visual reasoning": {
+            "passed": 78,
+            "cases": 132,
+            "failed": 54,
+            "accuracy": 0.5909090909090909
+          },
+          "Counting": {
+            "passed": 118,
+            "cases": 220,
+            "failed": 102,
+            "accuracy": 0.5363636363636364
+          },
+          "Fine spatial relation": {
+            "passed": 2,
+            "cases": 2,
+            "failed": 0,
+            "accuracy": 1
+          },
+          "Food relation": {
+            "passed": 0,
+            "cases": 1,
+            "failed": 1,
+            "accuracy": 0
+          },
+          "Functional relation": {
+            "passed": 0,
+            "cases": 1,
+            "failed": 1,
+            "accuracy": 0
+          },
+          "Gaze direction": {
+            "passed": 0,
+            "cases": 1,
+            "failed": 1,
+            "accuracy": 0
+          },
+          "Left/right relation": {
+            "passed": 1,
+            "cases": 3,
+            "failed": 2,
+            "accuracy": 0.3333333333333333
+          },
+          "Object and scene understanding": {
+            "passed": 58,
+            "cases": 99,
+            "failed": 41,
+            "accuracy": 0.5858585858585859
+          },
+          "Object localization": {
+            "passed": 1,
+            "cases": 1,
+            "failed": 0,
+            "accuracy": 1
+          },
+          "Object-between relation": {
+            "passed": 1,
+            "cases": 2,
+            "failed": 1,
+            "accuracy": 0.5
+          },
+          "Orientation": {
+            "passed": 0,
+            "cases": 1,
+            "failed": 1,
+            "accuracy": 0
+          },
+          "Relative size": {
+            "passed": 2,
+            "cases": 3,
+            "failed": 1,
+            "accuracy": 0.6666666666666666
+          },
+          "Spatial grounding": {
+            "passed": 1,
+            "cases": 1,
+            "failed": 0,
+            "accuracy": 1
+          },
+          "Spatial relation": {
+            "passed": 99,
+            "cases": 166,
+            "failed": 67,
+            "accuracy": 0.5963855421686747
+          },
+          "Vertical relation": {
+            "passed": 0,
+            "cases": 1,
+            "failed": 1,
+            "accuracy": 0
+          },
+          "Visual selection": {
+            "passed": 47,
+            "cases": 84,
+            "failed": 37,
+            "accuracy": 0.5595238095238095
+          }
+        },
+        "expectedLetterAccuracy": {
+          "A": {
+            "passed": 154,
+            "cases": 280,
+            "failed": 126,
+            "accuracy": 0.55
+          },
+          "B": {
+            "passed": 206,
+            "cases": 337,
+            "failed": 131,
+            "accuracy": 0.6112759643916914
+          },
+          "C": {
+            "passed": 76,
+            "cases": 145,
+            "failed": 69,
+            "accuracy": 0.5241379310344828
+          },
+          "D": {
+            "passed": 2,
+            "cases": 3,
+            "failed": 1,
+            "accuracy": 0.6666666666666666
+          }
+        },
+        "executionPositionAccuracy": {
+          "1": {
+            "passed": 135,
+            "cases": 255,
+            "failed": 120,
+            "accuracy": 0.5294117647058824
+          },
+          "2": {
+            "passed": 157,
+            "cases": 255,
+            "failed": 98,
+            "accuracy": 0.615686274509804
+          },
+          "3": {
+            "passed": 146,
+            "cases": 255,
+            "failed": 109,
+            "accuracy": 0.5725490196078431
+          }
+        },
+        "predictionBias": {
+          "A": 254,
+          "B": 350,
+          "C": 158,
+          "D": 3
+        },
+        "failureTypes": {
+          "wrongOption": 327,
+          "unparseable": 0
+        }
+      }
+    },
+    {
+      "providerId": "qvac-visionpsy",
+      "label": "VisionPsy Flash Q8 (QVAC SDK)",
+      "family": "VisionPsy-Nano-460M-Flash",
+      "real": {
+        "passed": 432,
+        "failed": 333,
+        "cases": 765,
+        "accuracy": 0.5647058823529412,
+        "interval": [
+          52.93355939874487,
+          59.942957451927235
+        ]
+      },
+      "officialRealWorldQaAccuracy": 0.567,
+      "officialFp32RealWorldQaAccuracy": 0.567,
+      "deviationFromOfficial": -0.00229411764705878,
+      "officialRemainder": {
+        "passed": 281,
+        "failed": 214,
+        "cases": 495,
+        "accuracy": 0.5676767676767677
+      },
+      "priorReal": {
+        "passed": 151,
+        "failed": 119,
+        "cases": 270,
+        "accuracy": 0.5592592592592592
+      },
+      "performance": {
+        "ttftMs": {
+          "count": 765,
+          "mean": 3130.7764705882355,
+          "median": 3131,
+          "p95": 4750.4,
+          "min": 825,
+          "max": 10192,
+          "sum": 2395044
+        },
+        "latencyMs": {
+          "count": 765,
+          "mean": 3154.4875816993463,
+          "median": 3156,
+          "p95": 4775.6,
+          "min": 837,
+          "max": 10219,
+          "sum": 2413183
+        },
+        "tokensPerSecond": {
+          "count": 765,
+          "mean": 49.7334241207394,
+          "median": 46.20218074293106,
+          "p95": 90.3930968698489,
+          "min": 3.3076658463655364,
+          "max": 127.8118609406953,
+          "sum": 38046.06945236564
+        },
+        "promptTokens": {
+          "count": 765,
+          "mean": 528.3411764705883,
+          "median": 500,
+          "p95": 721,
+          "min": 256,
+          "max": 769,
+          "sum": 404181
+        },
+        "processRssPeakBytes": {
+          "count": 765,
+          "mean": 151715390.24313724,
+          "median": 137216000,
+          "p95": 252759244.79999998,
+          "min": 89440256,
+          "max": 256753664,
+          "sum": 116062273536
+        },
+        "processCpuPeakPercent": {
+          "count": 765,
+          "mean": 53.114901960784266,
+          "median": 57.1,
+          "p95": 74.88,
+          "min": 4.9,
+          "max": 83.1,
+          "sum": 40632.899999999965
+        },
+        "gpuUtilizationPeakPercent": {
+          "count": 765,
+          "mean": 99.87058823529412,
+          "median": 100,
+          "p95": 100,
+          "min": 89,
+          "max": 100,
+          "sum": 76401
+        }
+      },
+      "errorAnalysis": {
+        "capabilityAccuracy": {
+          "Action + relation": {
+            "passed": 0,
+            "cases": 1,
+            "failed": 1,
+            "accuracy": 0
+          },
+          "Attribute recognition": {
+            "passed": 32,
+            "cases": 46,
+            "failed": 14,
+            "accuracy": 0.6956521739130435
+          },
+          "Binary visual reasoning": {
+            "passed": 76,
+            "cases": 132,
+            "failed": 56,
+            "accuracy": 0.5757575757575758
+          },
+          "Counting": {
+            "passed": 117,
+            "cases": 220,
+            "failed": 103,
+            "accuracy": 0.5318181818181819
+          },
+          "Fine spatial relation": {
+            "passed": 2,
+            "cases": 2,
+            "failed": 0,
+            "accuracy": 1
+          },
+          "Food relation": {
+            "passed": 0,
+            "cases": 1,
+            "failed": 1,
+            "accuracy": 0
+          },
+          "Functional relation": {
+            "passed": 0,
+            "cases": 1,
+            "failed": 1,
+            "accuracy": 0
+          },
+          "Gaze direction": {
+            "passed": 0,
+            "cases": 1,
+            "failed": 1,
+            "accuracy": 0
+          },
+          "Left/right relation": {
+            "passed": 2,
+            "cases": 3,
+            "failed": 1,
+            "accuracy": 0.6666666666666666
+          },
+          "Object and scene understanding": {
+            "passed": 52,
+            "cases": 99,
+            "failed": 47,
+            "accuracy": 0.5252525252525253
+          },
+          "Object localization": {
+            "passed": 1,
+            "cases": 1,
+            "failed": 0,
+            "accuracy": 1
+          },
+          "Object-between relation": {
+            "passed": 1,
+            "cases": 2,
+            "failed": 1,
+            "accuracy": 0.5
+          },
+          "Orientation": {
+            "passed": 0,
+            "cases": 1,
+            "failed": 1,
+            "accuracy": 0
+          },
+          "Relative size": {
+            "passed": 2,
+            "cases": 3,
+            "failed": 1,
+            "accuracy": 0.6666666666666666
+          },
+          "Spatial grounding": {
+            "passed": 1,
+            "cases": 1,
+            "failed": 0,
+            "accuracy": 1
+          },
+          "Spatial relation": {
+            "passed": 98,
+            "cases": 166,
+            "failed": 68,
+            "accuracy": 0.5903614457831325
+          },
+          "Vertical relation": {
+            "passed": 1,
+            "cases": 1,
+            "failed": 0,
+            "accuracy": 1
+          },
+          "Visual selection": {
+            "passed": 47,
+            "cases": 84,
+            "failed": 37,
+            "accuracy": 0.5595238095238095
+          }
+        },
+        "expectedLetterAccuracy": {
+          "A": {
+            "passed": 182,
+            "cases": 280,
+            "failed": 98,
+            "accuracy": 0.65
+          },
+          "B": {
+            "passed": 181,
+            "cases": 337,
+            "failed": 156,
+            "accuracy": 0.5370919881305638
+          },
+          "C": {
+            "passed": 67,
+            "cases": 145,
+            "failed": 78,
+            "accuracy": 0.46206896551724136
+          },
+          "D": {
+            "passed": 2,
+            "cases": 3,
+            "failed": 1,
+            "accuracy": 0.6666666666666666
+          }
+        },
+        "executionPositionAccuracy": {
+          "1": {
+            "passed": 149,
+            "cases": 255,
+            "failed": 106,
+            "accuracy": 0.5843137254901961
+          },
+          "2": {
+            "passed": 136,
+            "cases": 255,
+            "failed": 119,
+            "accuracy": 0.5333333333333333
+          },
+          "3": {
+            "passed": 147,
+            "cases": 255,
+            "failed": 108,
+            "accuracy": 0.5764705882352941
+          }
+        },
+        "predictionBias": {
+          "A": 329,
+          "B": 295,
+          "C": 134,
+          "D": 7
+        },
+        "failureTypes": {
+          "wrongOption": 333,
+          "unparseable": 0
+        }
+      }
+    },
+    {
+      "providerId": "qvac-visionpsy-flash-q4",
+      "label": "VisionPsy Flash Q4 imatrix (QVAC SDK)",
+      "family": "VisionPsy-Nano-460M-Flash",
+      "real": {
+        "passed": 432,
+        "failed": 333,
+        "cases": 765,
+        "accuracy": 0.5647058823529412,
+        "interval": [
+          52.93355939874487,
+          59.942957451927235
+        ]
+      },
+      "officialRealWorldQaAccuracy": 0.549,
+      "officialFp32RealWorldQaAccuracy": 0.567,
+      "deviationFromOfficial": 0.015705882352941125,
+      "officialRemainder": {
+        "passed": 284,
+        "failed": 211,
+        "cases": 495,
+        "accuracy": 0.5737373737373738
+      },
+      "priorReal": {
+        "passed": 148,
+        "failed": 122,
+        "cases": 270,
+        "accuracy": 0.5481481481481482
+      },
+      "performance": {
+        "ttftMs": {
+          "count": 765,
+          "mean": 3134.453594771242,
+          "median": 3151,
+          "p95": 4792.599999999999,
+          "min": 801,
+          "max": 9972,
+          "sum": 2397857
+        },
+        "latencyMs": {
+          "count": 765,
+          "mean": 3157.6954248366014,
+          "median": 3178,
+          "p95": 4821,
+          "min": 813,
+          "max": 9976,
+          "sum": 2415637
+        },
+        "tokensPerSecond": {
+          "count": 765,
+          "mean": 53.35876456552078,
+          "median": 49.32425766992206,
+          "p95": 96.7495186611084,
+          "min": 4.395739649132062,
+          "max": 120.61998673180146,
+          "sum": 40819.4548926234
+        },
+        "promptTokens": {
+          "count": 765,
+          "mean": 528.3411764705883,
+          "median": 500,
+          "p95": 721,
+          "min": 256,
+          "max": 769,
+          "sum": 404181
+        },
+        "processRssPeakBytes": {
+          "count": 765,
+          "mean": 151097509.98169935,
+          "median": 135806976,
+          "p95": 252837888,
+          "min": 93356032,
+          "max": 257114112,
+          "sum": 115589595136
+        },
+        "processCpuPeakPercent": {
+          "count": 765,
+          "mean": 53.28209150326794,
+          "median": 57.9,
+          "p95": 73.53999999999998,
+          "min": 5.5,
+          "max": 84.8,
+          "sum": 40760.799999999974
+        },
+        "gpuUtilizationPeakPercent": {
+          "count": 765,
+          "mean": 99.85620915032679,
+          "median": 100,
+          "p95": 100,
+          "min": 86,
+          "max": 100,
+          "sum": 76390
+        }
+      },
+      "errorAnalysis": {
+        "capabilityAccuracy": {
+          "Action + relation": {
+            "passed": 0,
+            "cases": 1,
+            "failed": 1,
+            "accuracy": 0
+          },
+          "Attribute recognition": {
+            "passed": 29,
+            "cases": 46,
+            "failed": 17,
+            "accuracy": 0.6304347826086957
+          },
+          "Binary visual reasoning": {
+            "passed": 74,
+            "cases": 132,
+            "failed": 58,
+            "accuracy": 0.5606060606060606
+          },
+          "Counting": {
+            "passed": 119,
+            "cases": 220,
+            "failed": 101,
+            "accuracy": 0.5409090909090909
+          },
+          "Fine spatial relation": {
+            "passed": 2,
+            "cases": 2,
+            "failed": 0,
+            "accuracy": 1
+          },
+          "Food relation": {
+            "passed": 0,
+            "cases": 1,
+            "failed": 1,
+            "accuracy": 0
+          },
+          "Functional relation": {
+            "passed": 0,
+            "cases": 1,
+            "failed": 1,
+            "accuracy": 0
+          },
+          "Gaze direction": {
+            "passed": 0,
+            "cases": 1,
+            "failed": 1,
+            "accuracy": 0
+          },
+          "Left/right relation": {
+            "passed": 2,
+            "cases": 3,
+            "failed": 1,
+            "accuracy": 0.6666666666666666
+          },
+          "Object and scene understanding": {
+            "passed": 56,
+            "cases": 99,
+            "failed": 43,
+            "accuracy": 0.5656565656565656
+          },
+          "Object localization": {
+            "passed": 1,
+            "cases": 1,
+            "failed": 0,
+            "accuracy": 1
+          },
+          "Object-between relation": {
+            "passed": 1,
+            "cases": 2,
+            "failed": 1,
+            "accuracy": 0.5
+          },
+          "Orientation": {
+            "passed": 0,
+            "cases": 1,
+            "failed": 1,
+            "accuracy": 0
+          },
+          "Relative size": {
+            "passed": 2,
+            "cases": 3,
+            "failed": 1,
+            "accuracy": 0.6666666666666666
+          },
+          "Spatial grounding": {
+            "passed": 1,
+            "cases": 1,
+            "failed": 0,
+            "accuracy": 1
+          },
+          "Spatial relation": {
+            "passed": 100,
+            "cases": 166,
+            "failed": 66,
+            "accuracy": 0.6024096385542169
+          },
+          "Vertical relation": {
+            "passed": 0,
+            "cases": 1,
+            "failed": 1,
+            "accuracy": 0
+          },
+          "Visual selection": {
+            "passed": 45,
+            "cases": 84,
+            "failed": 39,
+            "accuracy": 0.5357142857142857
+          }
+        },
+        "expectedLetterAccuracy": {
+          "A": {
+            "passed": 179,
+            "cases": 280,
+            "failed": 101,
+            "accuracy": 0.6392857142857142
+          },
+          "B": {
+            "passed": 185,
+            "cases": 337,
+            "failed": 152,
+            "accuracy": 0.5489614243323442
+          },
+          "C": {
+            "passed": 66,
+            "cases": 145,
+            "failed": 79,
+            "accuracy": 0.45517241379310347
+          },
+          "D": {
+            "passed": 2,
+            "cases": 3,
+            "failed": 1,
+            "accuracy": 0.6666666666666666
+          }
+        },
+        "executionPositionAccuracy": {
+          "1": {
+            "passed": 149,
+            "cases": 255,
+            "failed": 106,
+            "accuracy": 0.5843137254901961
+          },
+          "2": {
+            "passed": 144,
+            "cases": 255,
+            "failed": 111,
+            "accuracy": 0.5647058823529412
+          },
+          "3": {
+            "passed": 139,
+            "cases": 255,
+            "failed": 116,
+            "accuracy": 0.5450980392156862
+          }
+        },
+        "predictionBias": {
+          "A": 335,
+          "B": 299,
+          "C": 124,
+          "D": 7
+        },
+        "failureTypes": {
+          "wrongOption": 333,
+          "unparseable": 0
+        }
+      }
+    }
+  ],
+  "migrationComparison": [
+    {
+      "providerId": "qvac-visionpsy-standard-q8",
+      "previousMixedRuntimePassed": 451,
+      "unifiedQvacPassed": 438,
+      "deltaAnswers": -13
+    },
+    {
+      "providerId": "qvac-visionpsy",
+      "previousMixedRuntimePassed": 432,
+      "unifiedQvacPassed": 432,
+      "deltaAnswers": 0
+    },
+    {
+      "providerId": "qvac-visionpsy-flash-q4",
+      "previousMixedRuntimePassed": 421,
+      "unifiedQvacPassed": 432,
+      "deltaAnswers": 11
+    }
+  ],
+  "artifacts": {
+    "rawRun": "visionpsy-three-way-realworldqa-765-qvac-sdk-unified-0182.json",
+    "scorerParity": "visionpsy-realworldqa-vlmeval-parity-qvac-sdk-unified-0182.json",
+    "checkpoint": ".visionpsy-three-way-realworldqa-765-qvac-sdk-unified-0182.checkpoint.ndjson"
+  }
+}

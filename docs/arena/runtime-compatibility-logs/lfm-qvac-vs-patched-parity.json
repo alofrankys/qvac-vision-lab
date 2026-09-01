@@ -1,0 +1,719 @@
+{
+  "generatedAt": "2026-08-15T18:26:08.839Z",
+  "purpose": "Disposable runtime parity only; not benchmark or ranking data.",
+  "images": [
+    "<REPOSITORY_ROOT>/data/inference-images/eacf9234-414a-4cff-a62d-f0e6120607c9.jpg",
+    "<REPOSITORY_ROOT>/data/inference-images/9a894466-0176-45ce-afb1-82199183a31f.jpg"
+  ],
+  "questions": [
+    "What color is the most visible dog?",
+    "What is the most visible dog physically resting on?",
+    "Is this photo indoors or outdoors?"
+  ],
+  "passCount": 12,
+  "total": 12,
+  "results": [
+    {
+      "provider": "qvac",
+      "imagePath": "<REPOSITORY_ROOT>/data/inference-images/eacf9234-414a-4cff-a62d-f0e6120607c9.jpg",
+      "prompt": "What color is the most visible dog?",
+      "status": "PASS",
+      "rawOutput": "The most visible dog in the image is the brown and white dog on the right. This dog has a predominantly brown coat with white markings on its face, chest",
+      "latencyMs": 1625,
+      "runtimeStats": {
+        "timeToFirstToken": 1353.085,
+        "tokensPerSecond": 194.42604822981156,
+        "cacheTokens": 0,
+        "promptTokens": 1796,
+        "generatedTokens": 32,
+        "emittedTokens": 32,
+        "avgConcurrentSeq": 1,
+        "backendDevice": "gpu",
+        "lifecycle": "persistent QVAC model reused across predictions",
+        "coldStartMs": 1198,
+        "warmInferenceMs": null,
+        "modelReused": false,
+        "timeoutMs": 60000,
+        "requestId": "d280bdc8-dfc5-4baa-bf08-42da9590dc0b",
+        "generation": {
+          "temp": 0,
+          "top_p": 1,
+          "top_k": 40,
+          "seed": 42,
+          "predict": 32
+        }
+      }
+    },
+    {
+      "provider": "qvac",
+      "imagePath": "<REPOSITORY_ROOT>/data/inference-images/eacf9234-414a-4cff-a62d-f0e6120607c9.jpg",
+      "prompt": "What is the most visible dog physically resting on?",
+      "status": "PASS",
+      "rawOutput": "The most visible dog in the image is the brown and white dog on the right. This dog is lying on its side on a white, fluffy dog bed",
+      "latencyMs": 1519,
+      "runtimeStats": {
+        "timeToFirstToken": 1220.079,
+        "tokensPerSecond": 175.68324311266784,
+        "cacheTokens": 0,
+        "promptTokens": 1798,
+        "generatedTokens": 32,
+        "emittedTokens": 32,
+        "avgConcurrentSeq": 1,
+        "backendDevice": "gpu",
+        "lifecycle": "persistent QVAC model reused across predictions",
+        "coldStartMs": null,
+        "warmInferenceMs": 1519,
+        "modelReused": true,
+        "timeoutMs": 60000,
+        "requestId": "ebd098be-fd31-424a-a97b-a03e5bb1a25c",
+        "generation": {
+          "temp": 0,
+          "top_p": 1,
+          "top_k": 40,
+          "seed": 42,
+          "predict": 32
+        }
+      }
+    },
+    {
+      "provider": "qvac",
+      "imagePath": "<REPOSITORY_ROOT>/data/inference-images/eacf9234-414a-4cff-a62d-f0e6120607c9.jpg",
+      "prompt": "Is this photo indoors or outdoors?",
+      "status": "PASS",
+      "rawOutput": "This photo is clearly indoors. The scene shows a cozy indoor setting with a wooden floor and a white rug. The presence of a white object in the corner",
+      "latencyMs": 1520,
+      "runtimeStats": {
+        "timeToFirstToken": 1225.825,
+        "tokensPerSecond": 176.78092975720241,
+        "cacheTokens": 0,
+        "promptTokens": 1795,
+        "generatedTokens": 32,
+        "emittedTokens": 32,
+        "avgConcurrentSeq": 1,
+        "backendDevice": "gpu",
+        "lifecycle": "persistent QVAC model reused across predictions",
+        "coldStartMs": null,
+        "warmInferenceMs": 1520,
+        "modelReused": true,
+        "timeoutMs": 60000,
+        "requestId": "f793f213-1573-4f32-bfe2-f178f705cd6c",
+        "generation": {
+          "temp": 0,
+          "top_p": 1,
+          "top_k": 40,
+          "seed": 42,
+          "predict": 32
+        }
+      }
+    },
+    {
+      "provider": "qvac",
+      "imagePath": "<REPOSITORY_ROOT>/data/inference-images/9a894466-0176-45ce-afb1-82199183a31f.jpg",
+      "prompt": "What color is the most visible dog?",
+      "status": "PASS",
+      "rawOutput": "The most visible dog in the image is the puppy. It has a predominantly white coat with brown patches, particularly around its ears and head. The puppy's face",
+      "latencyMs": 1517,
+      "runtimeStats": {
+        "timeToFirstToken": 1229.089,
+        "tokensPerSecond": 179.8813907080019,
+        "cacheTokens": 0,
+        "promptTokens": 1796,
+        "generatedTokens": 32,
+        "emittedTokens": 32,
+        "avgConcurrentSeq": 1,
+        "backendDevice": "gpu",
+        "lifecycle": "persistent QVAC model reused across predictions",
+        "coldStartMs": null,
+        "warmInferenceMs": 1517,
+        "modelReused": true,
+        "timeoutMs": 60000,
+        "requestId": "f7b5cebf-2a2c-4fe8-b6c1-3a98bd606973",
+        "generation": {
+          "temp": 0,
+          "top_p": 1,
+          "top_k": 40,
+          "seed": 42,
+          "predict": 32
+        }
+      }
+    },
+    {
+      "provider": "qvac",
+      "imagePath": "<REPOSITORY_ROOT>/data/inference-images/9a894466-0176-45ce-afb1-82199183a31f.jpg",
+      "prompt": "What is the most visible dog physically resting on?",
+      "status": "PASS",
+      "rawOutput": "The most visible dog physically resting on is a white towel. The puppy is sitting on top of this white towel, which is placed on a tiled floor.",
+      "latencyMs": 1519,
+      "runtimeStats": {
+        "timeToFirstToken": 1227.786,
+        "tokensPerSecond": 172.77311650307212,
+        "cacheTokens": 0,
+        "promptTokens": 1798,
+        "generatedTokens": 32,
+        "emittedTokens": 32,
+        "avgConcurrentSeq": 1,
+        "backendDevice": "gpu",
+        "lifecycle": "persistent QVAC model reused across predictions",
+        "coldStartMs": null,
+        "warmInferenceMs": 1519,
+        "modelReused": true,
+        "timeoutMs": 60000,
+        "requestId": "d433e3bd-df59-4932-9ac6-e74922cdbd52",
+        "generation": {
+          "temp": 0,
+          "top_p": 1,
+          "top_k": 40,
+          "seed": 42,
+          "predict": 32
+        }
+      }
+    },
+    {
+      "provider": "qvac",
+      "imagePath": "<REPOSITORY_ROOT>/data/inference-images/9a894466-0176-45ce-afb1-82199183a31f.jpg",
+      "prompt": "Is this photo indoors or outdoors?",
+      "status": "PASS",
+      "rawOutput": "This photo is clearly indoors. The scene shows a cozy indoor setting with a wooden cabinet, tiled floor, and a white towel on the floor. The",
+      "latencyMs": 1520,
+      "runtimeStats": {
+        "timeToFirstToken": 1230.809,
+        "tokensPerSecond": 173.41823601138057,
+        "cacheTokens": 0,
+        "promptTokens": 1795,
+        "generatedTokens": 32,
+        "emittedTokens": 32,
+        "avgConcurrentSeq": 1,
+        "backendDevice": "gpu",
+        "lifecycle": "persistent QVAC model reused across predictions",
+        "coldStartMs": null,
+        "warmInferenceMs": 1520,
+        "modelReused": true,
+        "timeoutMs": 60000,
+        "requestId": "0984bb96-ef02-4c35-a350-f6017aedc295",
+        "generation": {
+          "temp": 0,
+          "top_p": 1,
+          "top_k": 40,
+          "seed": 42,
+          "predict": 32
+        }
+      }
+    },
+    {
+      "provider": "patched_llamacpp",
+      "imagePath": "<REPOSITORY_ROOT>/data/inference-images/eacf9234-414a-4cff-a62d-f0e6120607c9.jpg",
+      "prompt": "What color is the most visible dog?",
+      "status": "PASS",
+      "rawOutput": "The most visible dog in the image is the brown and white Cavalier King Charles Spaniel. This dog is lying on its side in a circular dog bed,",
+      "latencyMs": 1939,
+      "runtimeStats": {
+        "backend": "metal",
+        "gpuLayers": 99,
+        "lifecycle": "persistent llama-server reused across predictions",
+        "pid": 38523,
+        "coldStartMs": 438,
+        "warmInferenceMs": null,
+        "serverReused": false,
+        "timeoutMs": 60000,
+        "nativeTimings": {
+          "promptEvalMs": 1251.49,
+          "promptTokens": 1796,
+          "generationMs": 176.25,
+          "generationTokens": 32,
+          "totalMs": 1427.74
+        },
+        "trace": [
+          {
+            "at": "2026-08-15T18:25:59.854Z",
+            "elapsedMs": 0,
+            "stage": "provider_invocation_start"
+          },
+          {
+            "at": "2026-08-15T18:25:59.883Z",
+            "elapsedMs": 29,
+            "stage": "runtime_process_start",
+            "pid": 38523
+          },
+          {
+            "at": "2026-08-15T18:26:00.293Z",
+            "elapsedMs": 439,
+            "stage": "model_ready",
+            "pid": 38523,
+            "coldStartMs": 438,
+            "reused": false
+          },
+          {
+            "at": "2026-08-15T18:26:00.293Z",
+            "elapsedMs": 439,
+            "stage": "inference_image_read_start",
+            "pid": 38523
+          },
+          {
+            "at": "2026-08-15T18:26:00.293Z",
+            "elapsedMs": 439,
+            "stage": "inference_image_read_end",
+            "pid": 38523,
+            "durationMs": 0,
+            "byteLength": 837501
+          },
+          {
+            "at": "2026-08-15T18:26:00.293Z",
+            "elapsedMs": 439,
+            "stage": "prompt_sent",
+            "pid": 38523
+          },
+          {
+            "at": "2026-08-15T18:26:01.791Z",
+            "elapsedMs": 1938,
+            "stage": "first_output_byte",
+            "pid": 38523
+          },
+          {
+            "at": "2026-08-15T18:26:01.814Z",
+            "elapsedMs": 1960,
+            "stage": "provider_invocation_end",
+            "pid": 38523
+          }
+        ],
+        "stderrTail": "0.00.054.473 I log_info: verbosity = 3 (adjust with the `-lv N` CLI arg)\n0.00.054.476 I device_info:\n0.00.054.479 I   - MTL0    : Apple M4 (12124 MiB, 12123 MiB free)\n0.00.054.479 I   - BLAS    : Accelerate (0 MiB, 0 MiB free)\n0.00.054.484 I   - CPU     : Apple M4 (16384 MiB, 16384 MiB free)\n0.00.054.501 I system_info: n_threads = 4 (n_threads_batch = 4) / 10 | MTL : EMBED_LIBRARY = 1 | CPU : NEON = 1 | ARM_FMA = 1 | FP16_VA = 1 | MATMUL_INT8 = 1 | DOTPROD = 1 | SME = 1 | ACCELERATE = 1 | REPACK = 1 | \n0.00.054.733 I srv          init: running without SSL\n0.00.055.035 I srv          init: using 9 threads for HTTP server\n0.00.055.302 I srv         start: binding port with default address family\n0.00.056.639 I srv  llama_server: loading model\n0.00.056.653 I srv    load_model: loading model '<QVAC_HOME>/models/fair_lfm2.5-vl-450m-q8_0.gguf'\n0.00.083.680 I srv    load_model: [mtmd] estimated worst-case memory usage of mmproj is 105.07 MiB\n0.00.083.961 I common_init_result: fitting params to device memory ...\n0.00.083.962 I common_init_result: (for bugs during this step try to reproduce them with -fit off, or provide --verbose logs if the bug only occurs with -fit on)\n0.00.190.888 W llama_context: n_ctx_seq (8192) < n_ctx_train (128000) -- the full capacity of the model will not be utilized\n0.00.199.351 I common_init_from_params: warming up the model with an empty run - please wait ... (--no-warmup to disable)\n0.00.235.767 I srv    load_model: loaded multimodal model, '<QVAC_HOME>/models/fair_mmproj-lfm2.5-vl-450m-q8_0.gguf'\n0.00.235.773 I srv    load_model: initializing slots, n_slots = 1\n0.00.242.879 W srv    load_model: speculative decoding will use checkpoints\n0.00.242.882 W common_speculative_init: no implementations specified for speculative decoding\n0.00.242.882 I slot   load_model: id  0 | task -1 | new slot, n_ctx = 8192\n0.00.242.935 I srv    load_model: prompt cache is enabled, size limit: 8192 MiB\n0.00.242.937 I srv    load_model: use `--cache-ram 0` to disable the prompt cache\n0.00.242.937 I srv    load_model: for more info see https://github.com/ggml-org/llama.cpp/pull/16391\n0.00.242.937 I srv    load_model: context checkpoints enabled, max = 32, min spacing = 256\n0.00.243.181 I srv          init: idle slots will be saved to prompt cache upon starting a new task\n0.00.253.232 I init: chat template, example_format: '<|im_start|>system\nYou are a helpful assistant<|im_end|>\n<|im_start|>user\nHello<|im_end|>\n<|im_start|>assistant\nHi there<|im_end|>\n<|im_start|>user\nHow are you?<|im_end|>\n<|im_start|>assistant\n'\n0.00.258.910 I srv          init: init: chat template, thinking = 0\n0.00.258.941 I srv  llama_server: model loaded\n0.00.258.945 I srv  llama_server: server is listening on http://127.0.0.1:8796\n0.00.258.949 I srv  update_slots: all slots are idle\n0.00.453.966 I srv  params_from_: Chat format: peg-native\n0.00.454.171 I slot get_availabl: id  0 | task -1 | selected slot by LRU, t_last = -1\n0.00.454.172 I srv  get_availabl: updating prompt cache\n0.00.454.175 I srv          load:  - looking for better prompt, base f_keep = -1.000, sim = 0.000\n0.00.454.177 I srv        update:  - cache state: 0 prompts, 0.000 MiB (limits: 8192.000 MiB, 8192 tokens, 8589934592 est)\n0.00.454.177 I srv  get_availabl: prompt cache update took 0.01 ms\n0.00.454.194 I slot launch_slot_: id  0 | task 0 | processing task, is_child = 0\n0.00.460.219 I slot create_check: id  0 | task 0 | created context checkpoint 1 of 32 (pos_min = 0, pos_max = 0, n_tokens = 1, size = 0.078 MiB)\n0.00.461.476 I slot process_mtmd: id  0 | task 0 | encoding mtmd batch from idx = 14, n_chunks = 1\n0.00.664.970 I slot process_mtmd: id  0 | task 0 | encoding mtmd batch from idx = 271, n_chunks = 1\n0.00.835.398 I slot process_mtmd: id  0 | task 0 | encoding mtmd batch from idx = 528, n_chunks = 1\n0.01.004.271 I slot process_mtmd: id  0 | task 0 | encoding mtmd batch from idx = 785, n_chunks = 1\n0.01.175.960 I slot process_mtmd: id  0 | task 0 | encoding mtmd batch from idx = 1042, n_chunks = 1\n0.01.352.221 I slot process_mtmd: id  0 | task 0 | encoding mtmd batch from idx = 1299, n_chunks = 1\n0.01.526.386 I slot process_mtmd: id  0 | task 0 | encoding mtmd batch from idx = 1556, n_chunks = 1\n0.01.695.882 I slot create_check: id  0 | task 0 | created context checkpoint 2 of 32 (pos_min = 1791, pos_max = 1791, n_tokens = 1792, size = 0.078 MiB)\n0.01.881.948 I slot print_timing: id  0 | task 0 | prompt eval time =    1251.49 ms /  1796 tokens (    0.70 ms per token,  1435.08 tokens per second)\n0.01.881.953 I slot print_timing: id  0 | task 0 |        eval time =     176.25 ms /    32 tokens (    5.51 ms per token,   181.56 tokens per second)\n0.01.881.953 I slot print_timing: id  0 | task 0 |       total time =    1427.74 ms /  1828 tokens\n0.01.881.954 I slot print_timing: id  0 | task 0 |    graphs reused =         31\n0.01.881.971 I slot      release: id  0 | task 0 | stop processing: n_tokens = 1827, truncated = 0\n0.01.881.975 I srv  update_slots: all slots are idle\n",
+        "server_pid": 38523,
+        "server_started_at": "2026-08-15T18:25:59.883Z",
+        "server_restart_count": 0,
+        "request_started_at": "2026-08-15T18:25:59.854Z",
+        "request_finished_at": "2026-08-15T18:26:01.814Z",
+        "timeout_triggered": false,
+        "retry_count": 0
+      }
+    },
+    {
+      "provider": "patched_llamacpp",
+      "imagePath": "<REPOSITORY_ROOT>/data/inference-images/eacf9234-414a-4cff-a62d-f0e6120607c9.jpg",
+      "prompt": "What is the most visible dog physically resting on?",
+      "status": "PASS",
+      "rawOutput": "The most visible dog is the brown and white dog lying on the bed.",
+      "latencyMs": 1369,
+      "runtimeStats": {
+        "backend": "metal",
+        "gpuLayers": 99,
+        "lifecycle": "persistent llama-server reused across predictions",
+        "pid": 38523,
+        "coldStartMs": null,
+        "warmInferenceMs": 1369,
+        "serverReused": true,
+        "timeoutMs": 60000,
+        "nativeTimings": {
+          "promptEvalMs": 1210.07,
+          "promptTokens": 1797,
+          "generationMs": 93.92,
+          "generationTokens": 16,
+          "totalMs": 1303.98
+        },
+        "trace": [
+          {
+            "at": "2026-08-15T18:26:01.814Z",
+            "elapsedMs": 0,
+            "stage": "provider_invocation_start"
+          },
+          {
+            "at": "2026-08-15T18:26:01.815Z",
+            "elapsedMs": 1,
+            "stage": "runtime_process_reuse",
+            "pid": 38523
+          },
+          {
+            "at": "2026-08-15T18:26:01.815Z",
+            "elapsedMs": 1,
+            "stage": "model_ready",
+            "pid": 38523,
+            "coldStartMs": 438,
+            "reused": true
+          },
+          {
+            "at": "2026-08-15T18:26:01.815Z",
+            "elapsedMs": 1,
+            "stage": "inference_image_read_start",
+            "pid": 38523
+          },
+          {
+            "at": "2026-08-15T18:26:01.815Z",
+            "elapsedMs": 1,
+            "stage": "inference_image_read_end",
+            "pid": 38523,
+            "durationMs": 0,
+            "byteLength": 837501
+          },
+          {
+            "at": "2026-08-15T18:26:01.815Z",
+            "elapsedMs": 1,
+            "stage": "prompt_sent",
+            "pid": 38523
+          },
+          {
+            "at": "2026-08-15T18:26:03.183Z",
+            "elapsedMs": 1369,
+            "stage": "first_output_byte",
+            "pid": 38523
+          },
+          {
+            "at": "2026-08-15T18:26:03.205Z",
+            "elapsedMs": 1391,
+            "stage": "provider_invocation_end",
+            "pid": 38523
+          }
+        ],
+        "stderrTail": "0.00.054.473 I log_info: verbosity = 3 (adjust with the `-lv N` CLI arg)\n0.00.054.476 I device_info:\n0.00.054.479 I   - MTL0    : Apple M4 (12124 MiB, 12123 MiB free)\n0.00.054.479 I   - BLAS    : Accelerate (0 MiB, 0 MiB free)\n0.00.054.484 I   - CPU     : Apple M4 (16384 MiB, 16384 MiB free)\n0.00.054.501 I system_info: n_threads = 4 (n_threads_batch = 4) / 10 | MTL : EMBED_LIBRARY = 1 | CPU : NEON = 1 | ARM_FMA = 1 | FP16_VA = 1 | MATMUL_INT8 = 1 | DOTPROD = 1 | SME = 1 | ACCELERATE = 1 | REPACK = 1 | \n0.00.054.733 I srv          init: running without SSL\n0.00.055.035 I srv          init: using 9 threads for HTTP server\n0.00.055.302 I srv         start: binding port with default address family\n0.00.056.639 I srv  llama_server: loading model\n0.00.056.653 I srv    load_model: loading model '<QVAC_HOME>/models/fair_lfm2.5-vl-450m-q8_0.gguf'\n0.00.083.680 I srv    load_model: [mtmd] estimated worst-case memory usage of mmproj is 105.07 MiB\n0.00.083.961 I common_init_result: fitting params to device memory ...\n0.00.083.962 I common_init_result: (for bugs during this step try to reproduce them with -fit off, or provide --verbose logs if the bug only occurs with -fit on)\n0.00.190.888 W llama_context: n_ctx_seq (8192) < n_ctx_train (128000) -- the full capacity of the model will not be utilized\n0.00.199.351 I common_init_from_params: warming up the model with an empty run - please wait ... (--no-warmup to disable)\n0.00.235.767 I srv    load_model: loaded multimodal model, '<QVAC_HOME>/models/fair_mmproj-lfm2.5-vl-450m-q8_0.gguf'\n0.00.235.773 I srv    load_model: initializing slots, n_slots = 1\n0.00.242.879 W srv    load_model: speculative decoding will use checkpoints\n0.00.242.882 W common_speculative_init: no implementations specified for speculative decoding\n0.00.242.882 I slot   load_model: id  0 | task -1 | new slot, n_ctx = 8192\n0.00.242.935 I srv    load_model: prompt cache is enabled, size limit: 8192 MiB\n0.00.242.937 I srv    load_model: use `--cache-ram 0` to disable the prompt cache\n0.00.242.937 I srv    load_model: for more info see https://github.com/ggml-org/llama.cpp/pull/16391\n0.00.242.937 I srv    load_model: context checkpoints enabled, max = 32, min spacing = 256\n0.00.243.181 I srv          init: idle slots will be saved to prompt cache upon starting a new task\n0.00.253.232 I init: chat template, example_format: '<|im_start|>system\nYou are a helpful assistant<|im_end|>\n<|im_start|>user\nHello<|im_end|>\n<|im_start|>assistant\nHi there<|im_end|>\n<|im_start|>user\nHow are you?<|im_end|>\n<|im_start|>assistant\n'\n0.00.258.910 I srv          init: init: chat template, thinking = 0\n0.00.258.941 I srv  llama_server: model loaded\n0.00.258.945 I srv  llama_server: server is listening on http://127.0.0.1:8796\n0.00.258.949 I srv  update_slots: all slots are idle\n0.00.453.966 I srv  params_from_: Chat format: peg-native\n0.00.454.171 I slot get_availabl: id  0 | task -1 | selected slot by LRU, t_last = -1\n0.00.454.172 I srv  get_availabl: updating prompt cache\n0.00.454.175 I srv          load:  - looking for better prompt, base f_keep = -1.000, sim = 0.000\n0.00.454.177 I srv        update:  - cache state: 0 prompts, 0.000 MiB (limits: 8192.000 MiB, 8192 tokens, 8589934592 est)\n0.00.454.177 I srv  get_availabl: prompt cache update took 0.01 ms\n0.00.454.194 I slot launch_slot_: id  0 | task 0 | processing task, is_child = 0\n0.00.460.219 I slot create_check: id  0 | task 0 | created context checkpoint 1 of 32 (pos_min = 0, pos_max = 0, n_tokens = 1, size = 0.078 MiB)\n0.00.461.476 I slot process_mtmd: id  0 | task 0 | encoding mtmd batch from idx = 14, n_chunks = 1\n0.00.664.970 I slot process_mtmd: id  0 | task 0 | encoding mtmd batch from idx = 271, n_chunks = 1\n0.00.835.398 I slot process_mtmd: id  0 | task 0 | encoding mtmd batch from idx = 528, n_chunks = 1\n0.01.004.271 I slot process_mtmd: id  0 | task 0 | encoding mtmd batch from idx = 785, n_chunks = 1\n0.01.175.960 I slot process_mtmd: id  0 | task 0 | encoding mtmd batch from idx = 1042, n_chunks = 1\n0.01.352.221 I slot process_mtmd: id  0 | task 0 | encoding mtmd batch from idx = 1299, n_chunks = 1\n0.01.526.386 I slot process_mtmd: id  0 | task 0 | encoding mtmd batch from idx = 1556, n_chunks = 1\n0.01.695.882 I slot create_check: id  0 | task 0 | created context checkpoint 2 of 32 (pos_min = 1791, pos_max = 1791, n_tokens = 1792, size = 0.078 MiB)\n0.01.881.948 I slot print_timing: id  0 | task 0 | prompt eval time =    1251.49 ms /  1796 tokens (    0.70 ms per token,  1435.08 tokens per second)\n0.01.881.953 I slot print_timing: id  0 | task 0 |        eval time =     176.25 ms /    32 tokens (    5.51 ms per token,   181.56 tokens per second)\n0.01.881.953 I slot print_timing: id  0 | task 0 |       total time =    1427.74 ms /  1828 tokens\n0.01.881.954 I slot print_timing: id  0 | task 0 |    graphs reused =         31\n0.01.881.971 I slot      release: id  0 | task 0 | stop processing: n_tokens = 1827, truncated = 0\n0.01.881.975 I srv  update_slots: all slots are idle\n0.01.967.824 I srv  params_from_: Chat format: peg-native\n0.01.967.921 I slot get_availabl: id  0 | task -1 | selected slot by LRU, t_last = 761898550878\n0.01.967.922 I srv  get_availabl: updating prompt cache\n0.01.967.981 W srv   prompt_save:  - saving prompt with length 1827, total state size = 21.510 MiB (draft: 0.000 MiB)\n0.01.970.523 I srv          load:  - looking for better prompt, base f_keep = 0.003, sim = 0.003\n0.01.970.525 I srv        update:  - cache state: 1 prompts, 21.666 MiB (limits: 8192.000 MiB, 8192 tokens, 690784 est)\n0.01.970.526 I srv        update:    - prompt 0x7c8ce0330:    1827 tokens, checkpoints:  2,    21.666 MiB\n0.01.970.527 I srv  get_availabl: prompt cache update took 2.60 ms\n0.01.970.547 I slot launch_slot_: id  0 | task 42 | processing task, is_child = 0\n0.01.970.552 I slot update_slots: id  0 | task 42 | Checking checkpoint with [1791, 1791] against 5...\n0.01.970.552 I slot update_slots: id  0 | task 42 | Checking checkpoint with [0, 0] against 5...\n0.01.970.574 W slot update_slots: id  0 | task 42 | restored context checkpoint (pos_min = 0, pos_max = 0, n_tokens = 1, n_past = 1, size = 0.078 MiB)\n0.01.970.575 W slot update_slots: id  0 | task 42 | erased invalidated context checkpoint (pos_min = 1791, pos_max = 1791, n_tokens = 1792, n_swa = 0, pos_next = 1, size = 0.078 MiB)\n0.01.971.280 I slot process_mtmd: id  0 | task 42 | encoding mtmd batch from idx = 16, n_chunks = 1\n0.02.139.368 I slot process_mtmd: id  0 | task 42 | encoding mtmd batch from idx = 273, n_chunks = 1\n0.02.312.175 I slot process_mtmd: id  0 | task 42 | encoding mtmd batch from idx = 530, n_chunks = 1\n0.02.482.741 I slot process_mtmd: id  0 | task 42 | encoding mtmd batch from idx = 787, n_chunks = 1\n0.02.655.620 I slot process_mtmd: id  0 | task 42 | encoding mtmd batch from idx = 1044, n_chunks = 1\n0.02.828.989 I slot process_mtmd: id  0 | task 42 | encoding mtmd batch from idx = 1301, n_chunks = 1\n0.03.003.058 I slot process_mtmd: id  0 | task 42 | encoding mtmd batch from idx = 1558, n_chunks = 1\n0.03.172.482 I slot create_check: id  0 | task 42 | created context checkpoint 2 of 32 (pos_min = 1793, pos_max = 1793, n_tokens = 1794, size = 0.078 MiB)\n0.03.274.551 I slot print_timing: id  0 | task 42 | prompt eval time =    1210.07 ms /  1797 tokens (    0.67 ms per token,  1485.04 tokens per second)\n0.03.274.558 I slot print_timing: id  0 | task 42 |        eval time =      93.92 ms /    16 tokens (    5.87 ms per token,   170.36 tokens per second)\n0.03.274.560 I slot print_timing: id  0 | task 42 |       total time =    1303.98 ms /  1813 tokens\n0.03.274.561 I slot print_timing: id  0 | task 42 |    graphs reused =         45\n0.03.274.602 I slot      release: id  0 | task 42 | stop processing: n_tokens = 1813, truncated = 0\n0.03.274.621 I srv  update_slots: all slots are idle\n",
+        "server_pid": 38523,
+        "server_started_at": "2026-08-15T18:25:59.883Z",
+        "server_restart_count": 0,
+        "request_started_at": "2026-08-15T18:26:01.814Z",
+        "request_finished_at": "2026-08-15T18:26:03.205Z",
+        "timeout_triggered": false,
+        "retry_count": 0
+      }
+    },
+    {
+      "provider": "patched_llamacpp",
+      "imagePath": "<REPOSITORY_ROOT>/data/inference-images/eacf9234-414a-4cff-a62d-f0e6120607c9.jpg",
+      "prompt": "Is this photo indoors or outdoors?",
+      "status": "PASS",
+      "rawOutput": "Indoors",
+      "latencyMs": 1324,
+      "runtimeStats": {
+        "backend": "metal",
+        "gpuLayers": 99,
+        "lifecycle": "persistent llama-server reused across predictions",
+        "pid": 38523,
+        "coldStartMs": null,
+        "warmInferenceMs": 1324,
+        "serverReused": true,
+        "timeoutMs": 60000,
+        "nativeTimings": {
+          "promptEvalMs": 1216.48,
+          "promptTokens": 1794,
+          "generationMs": 16.71,
+          "generationTokens": 4,
+          "totalMs": 1233.19
+        },
+        "trace": [
+          {
+            "at": "2026-08-15T18:26:03.205Z",
+            "elapsedMs": 0,
+            "stage": "provider_invocation_start"
+          },
+          {
+            "at": "2026-08-15T18:26:03.206Z",
+            "elapsedMs": 1,
+            "stage": "runtime_process_reuse",
+            "pid": 38523
+          },
+          {
+            "at": "2026-08-15T18:26:03.206Z",
+            "elapsedMs": 1,
+            "stage": "model_ready",
+            "pid": 38523,
+            "coldStartMs": 438,
+            "reused": true
+          },
+          {
+            "at": "2026-08-15T18:26:03.206Z",
+            "elapsedMs": 1,
+            "stage": "inference_image_read_start",
+            "pid": 38523
+          },
+          {
+            "at": "2026-08-15T18:26:03.207Z",
+            "elapsedMs": 2,
+            "stage": "inference_image_read_end",
+            "pid": 38523,
+            "durationMs": 1,
+            "byteLength": 837501
+          },
+          {
+            "at": "2026-08-15T18:26:03.207Z",
+            "elapsedMs": 2,
+            "stage": "prompt_sent",
+            "pid": 38523
+          },
+          {
+            "at": "2026-08-15T18:26:04.528Z",
+            "elapsedMs": 1323,
+            "stage": "first_output_byte",
+            "pid": 38523
+          },
+          {
+            "at": "2026-08-15T18:26:04.550Z",
+            "elapsedMs": 1344,
+            "stage": "provider_invocation_end",
+            "pid": 38523
+          }
+        ],
+        "stderrTail": " slots are idle\n0.00.453.966 I srv  params_from_: Chat format: peg-native\n0.00.454.171 I slot get_availabl: id  0 | task -1 | selected slot by LRU, t_last = -1\n0.00.454.172 I srv  get_availabl: updating prompt cache\n0.00.454.175 I srv          load:  - looking for better prompt, base f_keep = -1.000, sim = 0.000\n0.00.454.177 I srv        update:  - cache state: 0 prompts, 0.000 MiB (limits: 8192.000 MiB, 8192 tokens, 8589934592 est)\n0.00.454.177 I srv  get_availabl: prompt cache update took 0.01 ms\n0.00.454.194 I slot launch_slot_: id  0 | task 0 | processing task, is_child = 0\n0.00.460.219 I slot create_check: id  0 | task 0 | created context checkpoint 1 of 32 (pos_min = 0, pos_max = 0, n_tokens = 1, size = 0.078 MiB)\n0.00.461.476 I slot process_mtmd: id  0 | task 0 | encoding mtmd batch from idx = 14, n_chunks = 1\n0.00.664.970 I slot process_mtmd: id  0 | task 0 | encoding mtmd batch from idx = 271, n_chunks = 1\n0.00.835.398 I slot process_mtmd: id  0 | task 0 | encoding mtmd batch from idx = 528, n_chunks = 1\n0.01.004.271 I slot process_mtmd: id  0 | task 0 | encoding mtmd batch from idx = 785, n_chunks = 1\n0.01.175.960 I slot process_mtmd: id  0 | task 0 | encoding mtmd batch from idx = 1042, n_chunks = 1\n0.01.352.221 I slot process_mtmd: id  0 | task 0 | encoding mtmd batch from idx = 1299, n_chunks = 1\n0.01.526.386 I slot process_mtmd: id  0 | task 0 | encoding mtmd batch from idx = 1556, n_chunks = 1\n0.01.695.882 I slot create_check: id  0 | task 0 | created context checkpoint 2 of 32 (pos_min = 1791, pos_max = 1791, n_tokens = 1792, size = 0.078 MiB)\n0.01.881.948 I slot print_timing: id  0 | task 0 | prompt eval time =    1251.49 ms /  1796 tokens (    0.70 ms per token,  1435.08 tokens per second)\n0.01.881.953 I slot print_timing: id  0 | task 0 |        eval time =     176.25 ms /    32 tokens (    5.51 ms per token,   181.56 tokens per second)\n0.01.881.953 I slot print_timing: id  0 | task 0 |       total time =    1427.74 ms /  1828 tokens\n0.01.881.954 I slot print_timing: id  0 | task 0 |    graphs reused =         31\n0.01.881.971 I slot      release: id  0 | task 0 | stop processing: n_tokens = 1827, truncated = 0\n0.01.881.975 I srv  update_slots: all slots are idle\n0.01.967.824 I srv  params_from_: Chat format: peg-native\n0.01.967.921 I slot get_availabl: id  0 | task -1 | selected slot by LRU, t_last = 761898550878\n0.01.967.922 I srv  get_availabl: updating prompt cache\n0.01.967.981 W srv   prompt_save:  - saving prompt with length 1827, total state size = 21.510 MiB (draft: 0.000 MiB)\n0.01.970.523 I srv          load:  - looking for better prompt, base f_keep = 0.003, sim = 0.003\n0.01.970.525 I srv        update:  - cache state: 1 prompts, 21.666 MiB (limits: 8192.000 MiB, 8192 tokens, 690784 est)\n0.01.970.526 I srv        update:    - prompt 0x7c8ce0330:    1827 tokens, checkpoints:  2,    21.666 MiB\n0.01.970.527 I srv  get_availabl: prompt cache update took 2.60 ms\n0.01.970.547 I slot launch_slot_: id  0 | task 42 | processing task, is_child = 0\n0.01.970.552 I slot update_slots: id  0 | task 42 | Checking checkpoint with [1791, 1791] against 5...\n0.01.970.552 I slot update_slots: id  0 | task 42 | Checking checkpoint with [0, 0] against 5...\n0.01.970.574 W slot update_slots: id  0 | task 42 | restored context checkpoint (pos_min = 0, pos_max = 0, n_tokens = 1, n_past = 1, size = 0.078 MiB)\n0.01.970.575 W slot update_slots: id  0 | task 42 | erased invalidated context checkpoint (pos_min = 1791, pos_max = 1791, n_tokens = 1792, n_swa = 0, pos_next = 1, size = 0.078 MiB)\n0.01.971.280 I slot process_mtmd: id  0 | task 42 | encoding mtmd batch from idx = 16, n_chunks = 1\n0.02.139.368 I slot process_mtmd: id  0 | task 42 | encoding mtmd batch from idx = 273, n_chunks = 1\n0.02.312.175 I slot process_mtmd: id  0 | task 42 | encoding mtmd batch from idx = 530, n_chunks = 1\n0.02.482.741 I slot process_mtmd: id  0 | task 42 | encoding mtmd batch from idx = 787, n_chunks = 1\n0.02.655.620 I slot process_mtmd: id  0 | task 42 | encoding mtmd batch from idx = 1044, n_chunks = 1\n0.02.828.989 I slot process_mtmd: id  0 | task 42 | encoding mtmd batch from idx = 1301, n_chunks = 1\n0.03.003.058 I slot process_mtmd: id  0 | task 42 | encoding mtmd batch from idx = 1558, n_chunks = 1\n0.03.172.482 I slot create_check: id  0 | task 42 | created context checkpoint 2 of 32 (pos_min = 1793, pos_max = 1793, n_tokens = 1794, size = 0.078 MiB)\n0.03.274.551 I slot print_timing: id  0 | task 42 | prompt eval time =    1210.07 ms /  1797 tokens (    0.67 ms per token,  1485.04 tokens per second)\n0.03.274.558 I slot print_timing: id  0 | task 42 |        eval time =      93.92 ms /    16 tokens (    5.87 ms per token,   170.36 tokens per second)\n0.03.274.560 I slot print_timing: id  0 | task 42 |       total time =    1303.98 ms /  1813 tokens\n0.03.274.561 I slot print_timing: id  0 | task 42 |    graphs reused =         45\n0.03.274.602 I slot      release: id  0 | task 42 | stop processing: n_tokens = 1813, truncated = 0\n0.03.274.621 I srv  update_slots: all slots are idle\n0.03.382.731 I srv  params_from_: Chat format: peg-native\n0.03.382.822 I slot get_availabl: id  0 | task -1 | selected slot by LRU, t_last = 761899943509\n0.03.382.822 I srv  get_availabl: updating prompt cache\n0.03.382.881 W srv   prompt_save:  - saving prompt with length 1813, total state size = 21.345 MiB (draft: 0.000 MiB)\n0.03.385.029 I srv          load:  - looking for better prompt, base f_keep = 0.002, sim = 0.002\n0.03.385.032 I srv        update:  - cache state: 2 prompts, 43.168 MiB (limits: 8192.000 MiB, 8192 tokens, 690755 est)\n0.03.385.032 I srv        update:    - prompt 0x7c8ce0330:    1827 tokens, checkpoints:  2,    21.666 MiB\n0.03.385.033 I srv        update:    - prompt 0x7c8ce0470:    1813 tokens, checkpoints:  2,    21.502 MiB\n0.03.385.033 I srv  get_availabl: prompt cache update took 2.21 ms\n0.03.385.054 I slot launch_slot_: id  0 | task 67 | processing task, is_child = 0\n0.03.385.059 I slot update_slots: id  0 | task 67 | Checking checkpoint with [1793, 1793] against 4...\n0.03.385.059 I slot update_slots: id  0 | task 67 | Checking checkpoint with [0, 0] against 4...\n0.03.385.082 W slot update_slots: id  0 | task 67 | restored context checkpoint (pos_min = 0, pos_max = 0, n_tokens = 1, n_past = 1, size = 0.078 MiB)\n0.03.385.083 W slot update_slots: id  0 | task 67 | erased invalidated context checkpoint (pos_min = 1793, pos_max = 1793, n_tokens = 1794, n_swa = 0, pos_next = 1, size = 0.078 MiB)\n0.03.385.777 I slot process_mtmd: id  0 | task 67 | encoding mtmd batch from idx = 13, n_chunks = 1\n0.03.555.377 I slot process_mtmd: id  0 | task 67 | encoding mtmd batch from idx = 270, n_chunks = 1\n0.03.723.670 I slot process_mtmd: id  0 | task 67 | encoding mtmd batch from idx = 527, n_chunks = 1\n0.03.898.215 I slot process_mtmd: id  0 | task 67 | encoding mtmd batch from idx = 784, n_chunks = 1\n0.04.072.230 I slot process_mtmd: id  0 | task 67 | encoding mtmd batch from idx = 1041, n_chunks = 1\n0.04.245.977 I slot process_mtmd: id  0 | task 67 | encoding mtmd batch from idx = 1298, n_chunks = 1\n0.04.424.400 I slot process_mtmd: id  0 | task 67 | encoding mtmd batch from idx = 1555, n_chunks = 1\n0.04.593.495 I slot create_check: id  0 | task 67 | created context checkpoint 2 of 32 (pos_min = 1790, pos_max = 1790, n_tokens = 1791, size = 0.078 MiB)\n0.04.618.258 I slot print_timing: id  0 | task 67 | prompt eval time =    1216.48 ms /  1794 tokens (    0.68 ms per token,  1474.75 tokens per second)\n0.04.618.267 I slot print_timing: id  0 | task 67 |        eval time =      16.71 ms /     4 tokens (    4.18 ms per token,   239.33 tokens per second)\n0.04.618.269 I slot print_timing: id  0 | task 67 |       total time =    1233.19 ms /  1798 tokens\n0.04.618.270 I slot print_timing: id  0 | task 67 |    graphs reused =         47\n0.04.618.305 I slot      release: id  0 | task 67 | stop processing: n_tokens = 1798, truncated = 0\n0.04.618.327 I srv  update_slots: all slots are idle\n",
+        "server_pid": 38523,
+        "server_started_at": "2026-08-15T18:25:59.883Z",
+        "server_restart_count": 0,
+        "request_started_at": "2026-08-15T18:26:03.205Z",
+        "request_finished_at": "2026-08-15T18:26:04.550Z",
+        "timeout_triggered": false,
+        "retry_count": 0
+      }
+    },
+    {
+      "provider": "patched_llamacpp",
+      "imagePath": "<REPOSITORY_ROOT>/data/inference-images/9a894466-0176-45ce-afb1-82199183a31f.jpg",
+      "prompt": "What color is the most visible dog?",
+      "status": "PASS",
+      "rawOutput": "The most visible dog in the image is a Cavalier King Charles Spaniel. This adorable puppy has a distinctive coat pattern with a white stripe running down",
+      "latencyMs": 1496,
+      "runtimeStats": {
+        "backend": "metal",
+        "gpuLayers": 99,
+        "lifecycle": "persistent llama-server reused across predictions",
+        "pid": 38523,
+        "coldStartMs": null,
+        "warmInferenceMs": 1496,
+        "serverReused": true,
+        "timeoutMs": 60000,
+        "nativeTimings": {
+          "promptEvalMs": 1221.96,
+          "promptTokens": 1795,
+          "generationMs": 181.63,
+          "generationTokens": 32,
+          "totalMs": 1403.59
+        },
+        "trace": [
+          {
+            "at": "2026-08-15T18:26:04.550Z",
+            "elapsedMs": 0,
+            "stage": "provider_invocation_start"
+          },
+          {
+            "at": "2026-08-15T18:26:04.553Z",
+            "elapsedMs": 3,
+            "stage": "runtime_process_reuse",
+            "pid": 38523
+          },
+          {
+            "at": "2026-08-15T18:26:04.553Z",
+            "elapsedMs": 3,
+            "stage": "model_ready",
+            "pid": 38523,
+            "coldStartMs": 438,
+            "reused": true
+          },
+          {
+            "at": "2026-08-15T18:26:04.553Z",
+            "elapsedMs": 3,
+            "stage": "inference_image_read_start",
+            "pid": 38523
+          },
+          {
+            "at": "2026-08-15T18:26:04.554Z",
+            "elapsedMs": 3,
+            "stage": "inference_image_read_end",
+            "pid": 38523,
+            "durationMs": 1,
+            "byteLength": 884574
+          },
+          {
+            "at": "2026-08-15T18:26:04.554Z",
+            "elapsedMs": 4,
+            "stage": "prompt_sent",
+            "pid": 38523
+          },
+          {
+            "at": "2026-08-15T18:26:06.045Z",
+            "elapsedMs": 1495,
+            "stage": "first_output_byte",
+            "pid": 38523
+          },
+          {
+            "at": "2026-08-15T18:26:06.067Z",
+            "elapsedMs": 1517,
+            "stage": "provider_invocation_end",
+            "pid": 38523
+          }
+        ],
+        "stderrTail": "ots: id  0 | task 42 | Checking checkpoint with [1791, 1791] against 5...\n0.01.970.552 I slot update_slots: id  0 | task 42 | Checking checkpoint with [0, 0] against 5...\n0.01.970.574 W slot update_slots: id  0 | task 42 | restored context checkpoint (pos_min = 0, pos_max = 0, n_tokens = 1, n_past = 1, size = 0.078 MiB)\n0.01.970.575 W slot update_slots: id  0 | task 42 | erased invalidated context checkpoint (pos_min = 1791, pos_max = 1791, n_tokens = 1792, n_swa = 0, pos_next = 1, size = 0.078 MiB)\n0.01.971.280 I slot process_mtmd: id  0 | task 42 | encoding mtmd batch from idx = 16, n_chunks = 1\n0.02.139.368 I slot process_mtmd: id  0 | task 42 | encoding mtmd batch from idx = 273, n_chunks = 1\n0.02.312.175 I slot process_mtmd: id  0 | task 42 | encoding mtmd batch from idx = 530, n_chunks = 1\n0.02.482.741 I slot process_mtmd: id  0 | task 42 | encoding mtmd batch from idx = 787, n_chunks = 1\n0.02.655.620 I slot process_mtmd: id  0 | task 42 | encoding mtmd batch from idx = 1044, n_chunks = 1\n0.02.828.989 I slot process_mtmd: id  0 | task 42 | encoding mtmd batch from idx = 1301, n_chunks = 1\n0.03.003.058 I slot process_mtmd: id  0 | task 42 | encoding mtmd batch from idx = 1558, n_chunks = 1\n0.03.172.482 I slot create_check: id  0 | task 42 | created context checkpoint 2 of 32 (pos_min = 1793, pos_max = 1793, n_tokens = 1794, size = 0.078 MiB)\n0.03.274.551 I slot print_timing: id  0 | task 42 | prompt eval time =    1210.07 ms /  1797 tokens (    0.67 ms per token,  1485.04 tokens per second)\n0.03.274.558 I slot print_timing: id  0 | task 42 |        eval time =      93.92 ms /    16 tokens (    5.87 ms per token,   170.36 tokens per second)\n0.03.274.560 I slot print_timing: id  0 | task 42 |       total time =    1303.98 ms /  1813 tokens\n0.03.274.561 I slot print_timing: id  0 | task 42 |    graphs reused =         45\n0.03.274.602 I slot      release: id  0 | task 42 | stop processing: n_tokens = 1813, truncated = 0\n0.03.274.621 I srv  update_slots: all slots are idle\n0.03.382.731 I srv  params_from_: Chat format: peg-native\n0.03.382.822 I slot get_availabl: id  0 | task -1 | selected slot by LRU, t_last = 761899943509\n0.03.382.822 I srv  get_availabl: updating prompt cache\n0.03.382.881 W srv   prompt_save:  - saving prompt with length 1813, total state size = 21.345 MiB (draft: 0.000 MiB)\n0.03.385.029 I srv          load:  - looking for better prompt, base f_keep = 0.002, sim = 0.002\n0.03.385.032 I srv        update:  - cache state: 2 prompts, 43.168 MiB (limits: 8192.000 MiB, 8192 tokens, 690755 est)\n0.03.385.032 I srv        update:    - prompt 0x7c8ce0330:    1827 tokens, checkpoints:  2,    21.666 MiB\n0.03.385.033 I srv        update:    - prompt 0x7c8ce0470:    1813 tokens, checkpoints:  2,    21.502 MiB\n0.03.385.033 I srv  get_availabl: prompt cache update took 2.21 ms\n0.03.385.054 I slot launch_slot_: id  0 | task 67 | processing task, is_child = 0\n0.03.385.059 I slot update_slots: id  0 | task 67 | Checking checkpoint with [1793, 1793] against 4...\n0.03.385.059 I slot update_slots: id  0 | task 67 | Checking checkpoint with [0, 0] against 4...\n0.03.385.082 W slot update_slots: id  0 | task 67 | restored context checkpoint (pos_min = 0, pos_max = 0, n_tokens = 1, n_past = 1, size = 0.078 MiB)\n0.03.385.083 W slot update_slots: id  0 | task 67 | erased invalidated context checkpoint (pos_min = 1793, pos_max = 1793, n_tokens = 1794, n_swa = 0, pos_next = 1, size = 0.078 MiB)\n0.03.385.777 I slot process_mtmd: id  0 | task 67 | encoding mtmd batch from idx = 13, n_chunks = 1\n0.03.555.377 I slot process_mtmd: id  0 | task 67 | encoding mtmd batch from idx = 270, n_chunks = 1\n0.03.723.670 I slot process_mtmd: id  0 | task 67 | encoding mtmd batch from idx = 527, n_chunks = 1\n0.03.898.215 I slot process_mtmd: id  0 | task 67 | encoding mtmd batch from idx = 784, n_chunks = 1\n0.04.072.230 I slot process_mtmd: id  0 | task 67 | encoding mtmd batch from idx = 1041, n_chunks = 1\n0.04.245.977 I slot process_mtmd: id  0 | task 67 | encoding mtmd batch from idx = 1298, n_chunks = 1\n0.04.424.400 I slot process_mtmd: id  0 | task 67 | encoding mtmd batch from idx = 1555, n_chunks = 1\n0.04.593.495 I slot create_check: id  0 | task 67 | created context checkpoint 2 of 32 (pos_min = 1790, pos_max = 1790, n_tokens = 1791, size = 0.078 MiB)\n0.04.618.258 I slot print_timing: id  0 | task 67 | prompt eval time =    1216.48 ms /  1794 tokens (    0.68 ms per token,  1474.75 tokens per second)\n0.04.618.267 I slot print_timing: id  0 | task 67 |        eval time =      16.71 ms /     4 tokens (    4.18 ms per token,   239.33 tokens per second)\n0.04.618.269 I slot print_timing: id  0 | task 67 |       total time =    1233.19 ms /  1798 tokens\n0.04.618.270 I slot print_timing: id  0 | task 67 |    graphs reused =         47\n0.04.618.305 I slot      release: id  0 | task 67 | stop processing: n_tokens = 1798, truncated = 0\n0.04.618.327 I srv  update_slots: all slots are idle\n0.04.730.214 I srv  params_from_: Chat format: peg-native\n0.04.730.303 I slot get_availabl: id  0 | task -1 | selected slot by LRU, t_last = 761901287213\n0.04.730.305 I srv  get_availabl: updating prompt cache\n0.04.730.363 W srv   prompt_save:  - saving prompt with length 1798, total state size = 21.169 MiB (draft: 0.000 MiB)\n0.04.732.410 I srv          load:  - looking for better prompt, base f_keep = 0.002, sim = 0.002\n0.04.732.414 I srv        update:  - cache state: 3 prompts, 64.495 MiB (limits: 8192.000 MiB, 8192 tokens, 690725 est)\n0.04.732.415 I srv        update:    - prompt 0x7c8ce0330:    1827 tokens, checkpoints:  2,    21.666 MiB\n0.04.732.415 I srv        update:    - prompt 0x7c8ce0470:    1813 tokens, checkpoints:  2,    21.502 MiB\n0.04.732.415 I srv        update:    - prompt 0x7c8ce0510:    1798 tokens, checkpoints:  2,    21.326 MiB\n0.04.732.416 I srv  get_availabl: prompt cache update took 2.11 ms\n0.04.732.438 I slot launch_slot_: id  0 | task 80 | processing task, is_child = 0\n0.04.732.443 I slot update_slots: id  0 | task 80 | Checking checkpoint with [1790, 1790] against 4...\n0.04.732.443 I slot update_slots: id  0 | task 80 | Checking checkpoint with [0, 0] against 4...\n0.04.732.468 W slot update_slots: id  0 | task 80 | restored context checkpoint (pos_min = 0, pos_max = 0, n_tokens = 1, n_past = 1, size = 0.078 MiB)\n0.04.732.470 W slot update_slots: id  0 | task 80 | erased invalidated context checkpoint (pos_min = 1790, pos_max = 1790, n_tokens = 1791, n_swa = 0, pos_next = 1, size = 0.078 MiB)\n0.04.733.191 I slot process_mtmd: id  0 | task 80 | encoding mtmd batch from idx = 14, n_chunks = 1\n0.04.906.456 I slot process_mtmd: id  0 | task 80 | encoding mtmd batch from idx = 271, n_chunks = 1\n0.05.077.113 I slot process_mtmd: id  0 | task 80 | encoding mtmd batch from idx = 528, n_chunks = 1\n0.05.246.292 I slot process_mtmd: id  0 | task 80 | encoding mtmd batch from idx = 785, n_chunks = 1\n0.05.422.870 I slot process_mtmd: id  0 | task 80 | encoding mtmd batch from idx = 1042, n_chunks = 1\n0.05.594.999 I slot process_mtmd: id  0 | task 80 | encoding mtmd batch from idx = 1299, n_chunks = 1\n0.05.770.616 I slot process_mtmd: id  0 | task 80 | encoding mtmd batch from idx = 1556, n_chunks = 1\n0.05.944.485 I slot create_check: id  0 | task 80 | created context checkpoint 2 of 32 (pos_min = 1791, pos_max = 1791, n_tokens = 1792, size = 0.078 MiB)\n0.06.136.044 I slot print_timing: id  0 | task 80 | prompt eval time =    1221.96 ms /  1795 tokens (    0.68 ms per token,  1468.96 tokens per second)\n0.06.136.054 I slot print_timing: id  0 | task 80 |        eval time =     181.63 ms /    32 tokens (    5.68 ms per token,   176.18 tokens per second)\n0.06.136.056 I slot print_timing: id  0 | task 80 |       total time =    1403.59 ms /  1827 tokens\n0.06.136.057 I slot print_timing: id  0 | task 80 |    graphs reused =         77\n0.06.136.094 I slot      release: id  0 | task 80 | stop processing: n_tokens = 1827, truncated = 0\n0.06.136.116 I srv  update_slots: all slots are idle\n",
+        "server_pid": 38523,
+        "server_started_at": "2026-08-15T18:25:59.883Z",
+        "server_restart_count": 0,
+        "request_started_at": "2026-08-15T18:26:04.550Z",
+        "request_finished_at": "2026-08-15T18:26:06.068Z",
+        "timeout_triggered": false,
+        "retry_count": 0
+      }
+    },
+    {
+      "provider": "patched_llamacpp",
+      "imagePath": "<REPOSITORY_ROOT>/data/inference-images/9a894466-0176-45ce-afb1-82199183a31f.jpg",
+      "prompt": "What is the most visible dog physically resting on?",
+      "status": "PASS",
+      "rawOutput": "The most visible dog is resting on a white towel.",
+      "latencyMs": 1377,
+      "runtimeStats": {
+        "backend": "metal",
+        "gpuLayers": 99,
+        "lifecycle": "persistent llama-server reused across predictions",
+        "pid": 38523,
+        "coldStartMs": null,
+        "warmInferenceMs": 1377,
+        "serverReused": true,
+        "timeoutMs": 60000,
+        "nativeTimings": {
+          "promptEvalMs": 1222.04,
+          "promptTokens": 1797,
+          "generationMs": 64.49,
+          "generationTokens": 12,
+          "totalMs": 1286.53
+        },
+        "trace": [
+          {
+            "at": "2026-08-15T18:26:06.068Z",
+            "elapsedMs": 0,
+            "stage": "provider_invocation_start"
+          },
+          {
+            "at": "2026-08-15T18:26:06.070Z",
+            "elapsedMs": 2,
+            "stage": "runtime_process_reuse",
+            "pid": 38523
+          },
+          {
+            "at": "2026-08-15T18:26:06.070Z",
+            "elapsedMs": 2,
+            "stage": "model_ready",
+            "pid": 38523,
+            "coldStartMs": 438,
+            "reused": true
+          },
+          {
+            "at": "2026-08-15T18:26:06.070Z",
+            "elapsedMs": 2,
+            "stage": "inference_image_read_start",
+            "pid": 38523
+          },
+          {
+            "at": "2026-08-15T18:26:06.070Z",
+            "elapsedMs": 2,
+            "stage": "inference_image_read_end",
+            "pid": 38523,
+            "durationMs": 1,
+            "byteLength": 884574
+          },
+          {
+            "at": "2026-08-15T18:26:06.070Z",
+            "elapsedMs": 2,
+            "stage": "prompt_sent",
+            "pid": 38523
+          },
+          {
+            "at": "2026-08-15T18:26:07.444Z",
+            "elapsedMs": 1376,
+            "stage": "first_output_byte",
+            "pid": 38523
+          },
+          {
+            "at": "2026-08-15T18:26:07.465Z",
+            "elapsedMs": 1398,
+            "stage": "provider_invocation_end",
+            "pid": 38523
+          }
+        ],
+        "stderrTail": "d context checkpoint (pos_min = 0, pos_max = 0, n_tokens = 1, n_past = 1, size = 0.078 MiB)\n0.03.385.083 W slot update_slots: id  0 | task 67 | erased invalidated context checkpoint (pos_min = 1793, pos_max = 1793, n_tokens = 1794, n_swa = 0, pos_next = 1, size = 0.078 MiB)\n0.03.385.777 I slot process_mtmd: id  0 | task 67 | encoding mtmd batch from idx = 13, n_chunks = 1\n0.03.555.377 I slot process_mtmd: id  0 | task 67 | encoding mtmd batch from idx = 270, n_chunks = 1\n0.03.723.670 I slot process_mtmd: id  0 | task 67 | encoding mtmd batch from idx = 527, n_chunks = 1\n0.03.898.215 I slot process_mtmd: id  0 | task 67 | encoding mtmd batch from idx = 784, n_chunks = 1\n0.04.072.230 I slot process_mtmd: id  0 | task 67 | encoding mtmd batch from idx = 1041, n_chunks = 1\n0.04.245.977 I slot process_mtmd: id  0 | task 67 | encoding mtmd batch from idx = 1298, n_chunks = 1\n0.04.424.400 I slot process_mtmd: id  0 | task 67 | encoding mtmd batch from idx = 1555, n_chunks = 1\n0.04.593.495 I slot create_check: id  0 | task 67 | created context checkpoint 2 of 32 (pos_min = 1790, pos_max = 1790, n_tokens = 1791, size = 0.078 MiB)\n0.04.618.258 I slot print_timing: id  0 | task 67 | prompt eval time =    1216.48 ms /  1794 tokens (    0.68 ms per token,  1474.75 tokens per second)\n0.04.618.267 I slot print_timing: id  0 | task 67 |        eval time =      16.71 ms /     4 tokens (    4.18 ms per token,   239.33 tokens per second)\n0.04.618.269 I slot print_timing: id  0 | task 67 |       total time =    1233.19 ms /  1798 tokens\n0.04.618.270 I slot print_timing: id  0 | task 67 |    graphs reused =         47\n0.04.618.305 I slot      release: id  0 | task 67 | stop processing: n_tokens = 1798, truncated = 0\n0.04.618.327 I srv  update_slots: all slots are idle\n0.04.730.214 I srv  params_from_: Chat format: peg-native\n0.04.730.303 I slot get_availabl: id  0 | task -1 | selected slot by LRU, t_last = 761901287213\n0.04.730.305 I srv  get_availabl: updating prompt cache\n0.04.730.363 W srv   prompt_save:  - saving prompt with length 1798, total state size = 21.169 MiB (draft: 0.000 MiB)\n0.04.732.410 I srv          load:  - looking for better prompt, base f_keep = 0.002, sim = 0.002\n0.04.732.414 I srv        update:  - cache state: 3 prompts, 64.495 MiB (limits: 8192.000 MiB, 8192 tokens, 690725 est)\n0.04.732.415 I srv        update:    - prompt 0x7c8ce0330:    1827 tokens, checkpoints:  2,    21.666 MiB\n0.04.732.415 I srv        update:    - prompt 0x7c8ce0470:    1813 tokens, checkpoints:  2,    21.502 MiB\n0.04.732.415 I srv        update:    - prompt 0x7c8ce0510:    1798 tokens, checkpoints:  2,    21.326 MiB\n0.04.732.416 I srv  get_availabl: prompt cache update took 2.11 ms\n0.04.732.438 I slot launch_slot_: id  0 | task 80 | processing task, is_child = 0\n0.04.732.443 I slot update_slots: id  0 | task 80 | Checking checkpoint with [1790, 1790] against 4...\n0.04.732.443 I slot update_slots: id  0 | task 80 | Checking checkpoint with [0, 0] against 4...\n0.04.732.468 W slot update_slots: id  0 | task 80 | restored context checkpoint (pos_min = 0, pos_max = 0, n_tokens = 1, n_past = 1, size = 0.078 MiB)\n0.04.732.470 W slot update_slots: id  0 | task 80 | erased invalidated context checkpoint (pos_min = 1790, pos_max = 1790, n_tokens = 1791, n_swa = 0, pos_next = 1, size = 0.078 MiB)\n0.04.733.191 I slot process_mtmd: id  0 | task 80 | encoding mtmd batch from idx = 14, n_chunks = 1\n0.04.906.456 I slot process_mtmd: id  0 | task 80 | encoding mtmd batch from idx = 271, n_chunks = 1\n0.05.077.113 I slot process_mtmd: id  0 | task 80 | encoding mtmd batch from idx = 528, n_chunks = 1\n0.05.246.292 I slot process_mtmd: id  0 | task 80 | encoding mtmd batch from idx = 785, n_chunks = 1\n0.05.422.870 I slot process_mtmd: id  0 | task 80 | encoding mtmd batch from idx = 1042, n_chunks = 1\n0.05.594.999 I slot process_mtmd: id  0 | task 80 | encoding mtmd batch from idx = 1299, n_chunks = 1\n0.05.770.616 I slot process_mtmd: id  0 | task 80 | encoding mtmd batch from idx = 1556, n_chunks = 1\n0.05.944.485 I slot create_check: id  0 | task 80 | created context checkpoint 2 of 32 (pos_min = 1791, pos_max = 1791, n_tokens = 1792, size = 0.078 MiB)\n0.06.136.044 I slot print_timing: id  0 | task 80 | prompt eval time =    1221.96 ms /  1795 tokens (    0.68 ms per token,  1468.96 tokens per second)\n0.06.136.054 I slot print_timing: id  0 | task 80 |        eval time =     181.63 ms /    32 tokens (    5.68 ms per token,   176.18 tokens per second)\n0.06.136.056 I slot print_timing: id  0 | task 80 |       total time =    1403.59 ms /  1827 tokens\n0.06.136.057 I slot print_timing: id  0 | task 80 |    graphs reused =         77\n0.06.136.094 I slot      release: id  0 | task 80 | stop processing: n_tokens = 1827, truncated = 0\n0.06.136.116 I srv  update_slots: all slots are idle\n0.06.246.038 I srv  params_from_: Chat format: peg-native\n0.06.246.136 I slot get_availabl: id  0 | task -1 | selected slot by LRU, t_last = 761902805001\n0.06.246.137 I srv  get_availabl: updating prompt cache\n0.06.246.197 W srv   prompt_save:  - saving prompt with length 1827, total state size = 21.510 MiB (draft: 0.000 MiB)\n0.06.248.760 I srv          load:  - looking for better prompt, base f_keep = 0.003, sim = 0.003\n0.06.248.764 I srv        update:  - cache state: 4 prompts, 86.161 MiB (limits: 8192.000 MiB, 8192 tokens, 690740 est)\n0.06.248.765 I srv        update:    - prompt 0x7c8ce0330:    1827 tokens, checkpoints:  2,    21.666 MiB\n0.06.248.766 I srv        update:    - prompt 0x7c8ce0470:    1813 tokens, checkpoints:  2,    21.502 MiB\n0.06.248.766 I srv        update:    - prompt 0x7c8ce0510:    1798 tokens, checkpoints:  2,    21.326 MiB\n0.06.248.766 I srv        update:    - prompt 0x7c8ce05b0:    1827 tokens, checkpoints:  2,    21.666 MiB\n0.06.248.767 I srv  get_availabl: prompt cache update took 2.63 ms\n0.06.248.790 I slot launch_slot_: id  0 | task 121 | processing task, is_child = 0\n0.06.248.796 I slot update_slots: id  0 | task 121 | Checking checkpoint with [1791, 1791] against 5...\n0.06.248.796 I slot update_slots: id  0 | task 121 | Checking checkpoint with [0, 0] against 5...\n0.06.248.821 W slot update_slots: id  0 | task 121 | restored context checkpoint (pos_min = 0, pos_max = 0, n_tokens = 1, n_past = 1, size = 0.078 MiB)\n0.06.248.823 W slot update_slots: id  0 | task 121 | erased invalidated context checkpoint (pos_min = 1791, pos_max = 1791, n_tokens = 1792, n_swa = 0, pos_next = 1, size = 0.078 MiB)\n0.06.249.564 I slot process_mtmd: id  0 | task 121 | encoding mtmd batch from idx = 16, n_chunks = 1\n0.06.422.305 I slot process_mtmd: id  0 | task 121 | encoding mtmd batch from idx = 273, n_chunks = 1\n0.06.591.461 I slot process_mtmd: id  0 | task 121 | encoding mtmd batch from idx = 530, n_chunks = 1\n0.06.762.718 I slot process_mtmd: id  0 | task 121 | encoding mtmd batch from idx = 787, n_chunks = 1\n0.06.939.365 I slot process_mtmd: id  0 | task 121 | encoding mtmd batch from idx = 1044, n_chunks = 1\n0.07.112.188 I slot process_mtmd: id  0 | task 121 | encoding mtmd batch from idx = 1301, n_chunks = 1\n0.07.290.277 I slot process_mtmd: id  0 | task 121 | encoding mtmd batch from idx = 1558, n_chunks = 1\n0.07.461.547 I slot create_check: id  0 | task 121 | created context checkpoint 2 of 32 (pos_min = 1793, pos_max = 1793, n_tokens = 1794, size = 0.078 MiB)\n0.07.535.337 I slot print_timing: id  0 | task 121 | prompt eval time =    1222.04 ms /  1797 tokens (    0.68 ms per token,  1470.49 tokens per second)\n0.07.535.347 I slot print_timing: id  0 | task 121 |        eval time =      64.49 ms /    12 tokens (    5.37 ms per token,   186.07 tokens per second)\n0.07.535.348 I slot print_timing: id  0 | task 121 |       total time =    1286.53 ms /  1809 tokens\n0.07.535.350 I slot print_timing: id  0 | task 121 |    graphs reused =         87\n0.07.535.385 I slot      release: id  0 | task 121 | stop processing: n_tokens = 1809, truncated = 0\n0.07.535.405 I srv  update_slots: all slots are idle\n",
+        "server_pid": 38523,
+        "server_started_at": "2026-08-15T18:25:59.883Z",
+        "server_restart_count": 0,
+        "request_started_at": "2026-08-15T18:26:06.068Z",
+        "request_finished_at": "2026-08-15T18:26:07.465Z",
+        "timeout_triggered": false,
+        "retry_count": 0
+      }
+    },
+    {
+      "provider": "patched_llamacpp",
+      "imagePath": "<REPOSITORY_ROOT>/data/inference-images/9a894466-0176-45ce-afb1-82199183a31f.jpg",
+      "prompt": "Is this photo indoors or outdoors?",
+      "status": "PASS",
+      "rawOutput": "Indoors",
+      "latencyMs": 1309,
+      "runtimeStats": {
+        "backend": "metal",
+        "gpuLayers": 99,
+        "lifecycle": "persistent llama-server reused across predictions",
+        "pid": 38523,
+        "coldStartMs": null,
+        "warmInferenceMs": 1309,
+        "serverReused": true,
+        "timeoutMs": 60000,
+        "nativeTimings": {
+          "promptEvalMs": 1208.21,
+          "promptTokens": 1794,
+          "generationMs": 19.1,
+          "generationTokens": 4,
+          "totalMs": 1227.31
+        },
+        "trace": [
+          {
+            "at": "2026-08-15T18:26:07.466Z",
+            "elapsedMs": 0,
+            "stage": "provider_invocation_start"
+          },
+          {
+            "at": "2026-08-15T18:26:07.467Z",
+            "elapsedMs": 1,
+            "stage": "runtime_process_reuse",
+            "pid": 38523
+          },
+          {
+            "at": "2026-08-15T18:26:07.467Z",
+            "elapsedMs": 1,
+            "stage": "model_ready",
+            "pid": 38523,
+            "coldStartMs": 438,
+            "reused": true
+          },
+          {
+            "at": "2026-08-15T18:26:07.467Z",
+            "elapsedMs": 1,
+            "stage": "inference_image_read_start",
+            "pid": 38523
+          },
+          {
+            "at": "2026-08-15T18:26:07.468Z",
+            "elapsedMs": 3,
+            "stage": "inference_image_read_end",
+            "pid": 38523,
+            "durationMs": 1,
+            "byteLength": 884574
+          },
+          {
+            "at": "2026-08-15T18:26:07.468Z",
+            "elapsedMs": 3,
+            "stage": "prompt_sent",
+            "pid": 38523
+          },
+          {
+            "at": "2026-08-15T18:26:08.774Z",
+            "elapsedMs": 1308,
+            "stage": "first_output_byte",
+            "pid": 38523
+          },
+          {
+            "at": "2026-08-15T18:26:08.796Z",
+            "elapsedMs": 1330,
+            "stage": "provider_invocation_end",
+            "pid": 38523
+          }
+        ],
+        "stderrTail": " n_swa = 0, pos_next = 1, size = 0.078 MiB)\n0.04.733.191 I slot process_mtmd: id  0 | task 80 | encoding mtmd batch from idx = 14, n_chunks = 1\n0.04.906.456 I slot process_mtmd: id  0 | task 80 | encoding mtmd batch from idx = 271, n_chunks = 1\n0.05.077.113 I slot process_mtmd: id  0 | task 80 | encoding mtmd batch from idx = 528, n_chunks = 1\n0.05.246.292 I slot process_mtmd: id  0 | task 80 | encoding mtmd batch from idx = 785, n_chunks = 1\n0.05.422.870 I slot process_mtmd: id  0 | task 80 | encoding mtmd batch from idx = 1042, n_chunks = 1\n0.05.594.999 I slot process_mtmd: id  0 | task 80 | encoding mtmd batch from idx = 1299, n_chunks = 1\n0.05.770.616 I slot process_mtmd: id  0 | task 80 | encoding mtmd batch from idx = 1556, n_chunks = 1\n0.05.944.485 I slot create_check: id  0 | task 80 | created context checkpoint 2 of 32 (pos_min = 1791, pos_max = 1791, n_tokens = 1792, size = 0.078 MiB)\n0.06.136.044 I slot print_timing: id  0 | task 80 | prompt eval time =    1221.96 ms /  1795 tokens (    0.68 ms per token,  1468.96 tokens per second)\n0.06.136.054 I slot print_timing: id  0 | task 80 |        eval time =     181.63 ms /    32 tokens (    5.68 ms per token,   176.18 tokens per second)\n0.06.136.056 I slot print_timing: id  0 | task 80 |       total time =    1403.59 ms /  1827 tokens\n0.06.136.057 I slot print_timing: id  0 | task 80 |    graphs reused =         77\n0.06.136.094 I slot      release: id  0 | task 80 | stop processing: n_tokens = 1827, truncated = 0\n0.06.136.116 I srv  update_slots: all slots are idle\n0.06.246.038 I srv  params_from_: Chat format: peg-native\n0.06.246.136 I slot get_availabl: id  0 | task -1 | selected slot by LRU, t_last = 761902805001\n0.06.246.137 I srv  get_availabl: updating prompt cache\n0.06.246.197 W srv   prompt_save:  - saving prompt with length 1827, total state size = 21.510 MiB (draft: 0.000 MiB)\n0.06.248.760 I srv          load:  - looking for better prompt, base f_keep = 0.003, sim = 0.003\n0.06.248.764 I srv        update:  - cache state: 4 prompts, 86.161 MiB (limits: 8192.000 MiB, 8192 tokens, 690740 est)\n0.06.248.765 I srv        update:    - prompt 0x7c8ce0330:    1827 tokens, checkpoints:  2,    21.666 MiB\n0.06.248.766 I srv        update:    - prompt 0x7c8ce0470:    1813 tokens, checkpoints:  2,    21.502 MiB\n0.06.248.766 I srv        update:    - prompt 0x7c8ce0510:    1798 tokens, checkpoints:  2,    21.326 MiB\n0.06.248.766 I srv        update:    - prompt 0x7c8ce05b0:    1827 tokens, checkpoints:  2,    21.666 MiB\n0.06.248.767 I srv  get_availabl: prompt cache update took 2.63 ms\n0.06.248.790 I slot launch_slot_: id  0 | task 121 | processing task, is_child = 0\n0.06.248.796 I slot update_slots: id  0 | task 121 | Checking checkpoint with [1791, 1791] against 5...\n0.06.248.796 I slot update_slots: id  0 | task 121 | Checking checkpoint with [0, 0] against 5...\n0.06.248.821 W slot update_slots: id  0 | task 121 | restored context checkpoint (pos_min = 0, pos_max = 0, n_tokens = 1, n_past = 1, size = 0.078 MiB)\n0.06.248.823 W slot update_slots: id  0 | task 121 | erased invalidated context checkpoint (pos_min = 1791, pos_max = 1791, n_tokens = 1792, n_swa = 0, pos_next = 1, size = 0.078 MiB)\n0.06.249.564 I slot process_mtmd: id  0 | task 121 | encoding mtmd batch from idx = 16, n_chunks = 1\n0.06.422.305 I slot process_mtmd: id  0 | task 121 | encoding mtmd batch from idx = 273, n_chunks = 1\n0.06.591.461 I slot process_mtmd: id  0 | task 121 | encoding mtmd batch from idx = 530, n_chunks = 1\n0.06.762.718 I slot process_mtmd: id  0 | task 121 | encoding mtmd batch from idx = 787, n_chunks = 1\n0.06.939.365 I slot process_mtmd: id  0 | task 121 | encoding mtmd batch from idx = 1044, n_chunks = 1\n0.07.112.188 I slot process_mtmd: id  0 | task 121 | encoding mtmd batch from idx = 1301, n_chunks = 1\n0.07.290.277 I slot process_mtmd: id  0 | task 121 | encoding mtmd batch from idx = 1558, n_chunks = 1\n0.07.461.547 I slot create_check: id  0 | task 121 | created context checkpoint 2 of 32 (pos_min = 1793, pos_max = 1793, n_tokens = 1794, size = 0.078 MiB)\n0.07.535.337 I slot print_timing: id  0 | task 121 | prompt eval time =    1222.04 ms /  1797 tokens (    0.68 ms per token,  1470.49 tokens per second)\n0.07.535.347 I slot print_timing: id  0 | task 121 |        eval time =      64.49 ms /    12 tokens (    5.37 ms per token,   186.07 tokens per second)\n0.07.535.348 I slot print_timing: id  0 | task 121 |       total time =    1286.53 ms /  1809 tokens\n0.07.535.350 I slot print_timing: id  0 | task 121 |    graphs reused =         87\n0.07.535.385 I slot      release: id  0 | task 121 | stop processing: n_tokens = 1809, truncated = 0\n0.07.535.405 I srv  update_slots: all slots are idle\n0.07.636.326 I srv  params_from_: Chat format: peg-native\n0.07.636.429 I slot get_availabl: id  0 | task -1 | selected slot by LRU, t_last = 761904204292\n0.07.636.430 I srv  get_availabl: updating prompt cache\n0.07.636.507 W srv   prompt_save:  - saving prompt with length 1809, total state size = 21.298 MiB (draft: 0.000 MiB)\n0.07.638.589 I srv          load:  - looking for better prompt, base f_keep = 0.002, sim = 0.002\n0.07.638.593 I srv        update:  - cache state: 5 prompts, 107.616 MiB (limits: 8192.000 MiB, 8192 tokens, 690734 est)\n0.07.638.594 I srv        update:    - prompt 0x7c8ce0330:    1827 tokens, checkpoints:  2,    21.666 MiB\n0.07.638.595 I srv        update:    - prompt 0x7c8ce0470:    1813 tokens, checkpoints:  2,    21.502 MiB\n0.07.638.595 I srv        update:    - prompt 0x7c8ce0510:    1798 tokens, checkpoints:  2,    21.326 MiB\n0.07.638.595 I srv        update:    - prompt 0x7c8ce05b0:    1827 tokens, checkpoints:  2,    21.666 MiB\n0.07.638.595 I srv        update:    - prompt 0x7c8ce0650:    1809 tokens, checkpoints:  2,    21.455 MiB\n0.07.638.596 I srv  get_availabl: prompt cache update took 2.17 ms\n0.07.638.617 I slot launch_slot_: id  0 | task 142 | processing task, is_child = 0\n0.07.638.621 I slot update_slots: id  0 | task 142 | Checking checkpoint with [1793, 1793] against 4...\n0.07.638.621 I slot update_slots: id  0 | task 142 | Checking checkpoint with [0, 0] against 4...\n0.07.638.647 W slot update_slots: id  0 | task 142 | restored context checkpoint (pos_min = 0, pos_max = 0, n_tokens = 1, n_past = 1, size = 0.078 MiB)\n0.07.638.648 W slot update_slots: id  0 | task 142 | erased invalidated context checkpoint (pos_min = 1793, pos_max = 1793, n_tokens = 1794, n_swa = 0, pos_next = 1, size = 0.078 MiB)\n0.07.639.347 I slot process_mtmd: id  0 | task 142 | encoding mtmd batch from idx = 13, n_chunks = 1\n0.07.811.751 I slot process_mtmd: id  0 | task 142 | encoding mtmd batch from idx = 270, n_chunks = 1\n0.07.978.762 I slot process_mtmd: id  0 | task 142 | encoding mtmd batch from idx = 527, n_chunks = 1\n0.08.147.435 I slot process_mtmd: id  0 | task 142 | encoding mtmd batch from idx = 784, n_chunks = 1\n0.08.321.513 I slot process_mtmd: id  0 | task 142 | encoding mtmd batch from idx = 1041, n_chunks = 1\n0.08.492.364 I slot process_mtmd: id  0 | task 142 | encoding mtmd batch from idx = 1298, n_chunks = 1\n0.08.664.251 I slot process_mtmd: id  0 | task 142 | encoding mtmd batch from idx = 1555, n_chunks = 1\n0.08.837.371 I slot create_check: id  0 | task 142 | created context checkpoint 2 of 32 (pos_min = 1790, pos_max = 1790, n_tokens = 1791, size = 0.078 MiB)\n0.08.865.935 I slot print_timing: id  0 | task 142 | prompt eval time =    1208.21 ms /  1794 tokens (    0.67 ms per token,  1484.84 tokens per second)\n0.08.865.941 I slot print_timing: id  0 | task 142 |        eval time =      19.10 ms /     4 tokens (    4.77 ms per token,   209.44 tokens per second)\n0.08.865.942 I slot print_timing: id  0 | task 142 |       total time =    1227.31 ms /  1798 tokens\n0.08.865.943 I slot print_timing: id  0 | task 142 |    graphs reused =         89\n0.08.865.969 I slot      release: id  0 | task 142 | stop processing: n_tokens = 1798, truncated = 0\n0.08.865.985 I srv  update_slots: all slots are idle\n",
+        "server_pid": 38523,
+        "server_started_at": "2026-08-15T18:25:59.883Z",
+        "server_restart_count": 0,
+        "request_started_at": "2026-08-15T18:26:07.466Z",
+        "request_finished_at": "2026-08-15T18:26:08.796Z",
+        "timeout_triggered": false,
+        "retry_count": 0
+      }
+    }
+  ]
+}

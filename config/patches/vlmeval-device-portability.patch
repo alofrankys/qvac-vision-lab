@@ -1,0 +1,141 @@
+diff --git a/vlmeval/vlm/liquid.py b/vlmeval/vlm/liquid.py
+--- a/vlmeval/vlm/liquid.py
++++ b/vlmeval/vlm/liquid.py
+@@ -1,3 +1,5 @@
++import os
++
+ import torch
+ from PIL import Image
+
+@@ -7,6 +9,8 @@ from .base import BaseModel
+ class LFM2VL(BaseModel):
+     def __init__(self, model_path, **kwargs):
+         from transformers import AutoModelForImageTextToText, AutoProcessor
++        self.device = os.environ.get("VLMEVAL_DEVICE", "cuda")
++        self.dtype = torch.bfloat16 if self.device != "cpu" else torch.float32
+         self.default_instruction_prompt = (
+             "\nPlease answer directly with only the final answer, "
+             "do not give any explanation."
+@@ -17,9 +21,9 @@ class LFM2VL(BaseModel):
+                 model_path,
+                 # attn_implementation="flash_attention_2",
+                 attn_implementation="sdpa",
+-                torch_dtype=torch.bfloat16,
++                torch_dtype=self.dtype,
+             )
+-            .cuda()
++            .to(self.device)
+             .eval()
+         )
+
+@@ -74,7 +78,7 @@ class LFM2VL(BaseModel):
+             images=images,
+             text=[chat_inputs],
+             return_tensors="pt",
+-        ).to(dtype=torch.bfloat16, device="cuda")
++        ).to(dtype=self.dtype, device=self.device)
+
+         history = self.model.generate(**generation_inputs, **self.kwargs)
+         decoded = self.processor.decode(history[0], skip_special_tokens=False)
+diff --git a/vlmeval/vlm/nanovlm.py b/vlmeval/vlm/nanovlm.py
+--- a/vlmeval/vlm/nanovlm.py
++++ b/vlmeval/vlm/nanovlm.py
+@@ -46,6 +46,7 @@ class NanoVLM(BaseModel):
+     def __init__(self, model_path='lusxvr/nanoVLM-460M-8k', use_vllm=False, **kwargs):
+         super().__init__()
+         _ensure_nanovlm_importable()
++        self.device = os.environ.get('VLMEVAL_DEVICE', 'cuda')
+         self.use_vllm = use_vllm
+
+         raw_probe = self._read_raw_config(model_path)
+@@ -59,7 +60,7 @@ class NanoVLM(BaseModel):
+             from transformers import AutoModelForImageTextToText, AutoProcessor
+             self.vlm = AutoModelForImageTextToText.from_pretrained(
+                 model_path, trust_remote_code=True, dtype=torch.float32,
+-            ).to('cuda').eval()
++            ).to(self.device).eval()
+             if hasattr(self.vlm, 'apply_eager_profile'):
+                 self.vlm.apply_eager_profile()
+             self.processor = AutoProcessor.from_pretrained(
+@@ -97,7 +98,7 @@ class NanoVLM(BaseModel):
+                 from models.vision_language_model import VisionLanguageModel
+             except ImportError:
+                 raise ImportError(_NANOVLM_INSTALL_MSG)
+-            self.vlm = VisionLanguageModel.from_pretrained(model_path).to('cuda').eval()
++            self.vlm = VisionLanguageModel.from_pretrained(model_path).to(self.device).eval()
+             self.cfg = self.vlm.cfg
+             # Older checkpoints (e.g. nanoVLM-222M) were trained without image
+             # splitting and don't have max_img_size / vlm_extra_tokens in their
+@@ -150,7 +151,8 @@ class NanoVLM(BaseModel):
+         self.kwargs = kwargs_default
+         warnings.warn(f'NanoVLM kwargs: {self.kwargs}')
+         if not use_vllm:
+-            torch.cuda.empty_cache()
++            if self.device.startswith('cuda'):
++                torch.cuda.empty_cache()
+
+     @staticmethod
+     def _read_raw_config(model_path):
+@@ -290,8 +292,8 @@ class NanoVLM(BaseModel):
+             truncation=True,
+             max_length=self.cfg.lm_max_position_embeddings,
+         )
+-        input_ids = inputs['input_ids'].to('cuda')
+-        attention_mask = inputs['attention_mask'].to('cuda')
++        input_ids = inputs['input_ids'].to(self.device)
++        attention_mask = inputs['attention_mask'].to(self.device)
+
+         images_for_model = all_processed if all_processed else None
+
+@@ -322,7 +324,7 @@ class NanoVLM(BaseModel):
+             return_tensors='pt',
+         )
+         inputs = {
+-            k: (v.to('cuda') if torch.is_tensor(v) else v)
++            k: (v.to(self.device) if torch.is_tensor(v) else v)
+             for k, v in inputs.items()
+             if v is not None
+         }
+diff --git a/vlmeval/vlm/smolvlm.py b/vlmeval/vlm/smolvlm.py
+--- a/vlmeval/vlm/smolvlm.py
++++ b/vlmeval/vlm/smolvlm.py
+@@ -1,3 +1,4 @@
++import os
+ import os.path as osp
+ import warnings
+
+@@ -16,6 +17,7 @@ class SmolVLM(BaseModel):
+         from transformers import AutoProcessor, Idefics3ForConditionalGeneration
+
+         assert osp.exists(model_path) or splitlen(model_path) == 2
++        self.device = os.environ.get("VLMEVAL_DEVICE", "cuda")
+
+         self.processor = AutoProcessor.from_pretrained(model_path)
+         self.model = Idefics3ForConditionalGeneration.from_pretrained(
+@@ -359,6 +361,7 @@ class SmolVLM2(BaseModel):
+         from transformers import AutoModelForImageTextToText, AutoProcessor
+
+         assert osp.exists(model_path) or splitlen(model_path) == 2
++        self.device = os.environ.get("VLMEVAL_DEVICE", "cuda")
+
+         self.sampling_frames = 64
+         # Set resolution based on model
+@@ -374,7 +377,7 @@ class SmolVLM2(BaseModel):
+         self.model = AutoModelForImageTextToText.from_pretrained(
+             model_path,
+             torch_dtype=torch.float32,
+-        ).to("cuda")
++        ).to(self.device)
+
+         kwargs_default = {"max_new_tokens": 2048, "do_sample": False, "use_cache": True}
+         kwargs_default.update(kwargs)
+@@ -382,7 +385,8 @@ class SmolVLM2(BaseModel):
+         warnings.warn(
+             f"Following kwargs received: {self.kwargs}, will use as generation config."
+         )
+-        torch.cuda.empty_cache()
++        if self.device.startswith("cuda"):
++            torch.cuda.empty_cache()
+
+     def generate_inner(self, message, dataset=None):
+         if dataset in [

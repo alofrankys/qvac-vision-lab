@@ -1,0 +1,676 @@
+{
+  "generatedAt": "2026-08-25T18:03:10.534Z",
+  "purpose": "Diagnostic runtime KPI audit; small sample, not ranking evidence.",
+  "controls": {
+    "hardware": "same Apple M4 host",
+    "execution": "sequential, one loaded provider at a time",
+    "model": "same VisionPsy Flash Q4_K_M artifact and Q8 projector",
+    "inputs": "same two normalized JPEGs, exact prompts, maxTokens=24, temperature=0",
+    "caveat": "provider order was not rotated; HTTP and SDK generation defaults are not byte-identical"
+  },
+  "summaries": [
+    {
+      "provider": "sdk_current",
+      "completed": 4,
+      "total": 4,
+      "exact": 4,
+      "meanLatencyMs": 21070,
+      "meanWarmLatencyMs": 20815,
+      "coldStartMs": 3493,
+      "meanTimeToFirstTokenMs": 20947,
+      "meanTokensPerSecond": 107
+    },
+    {
+      "provider": "sdk_optimized",
+      "completed": 4,
+      "total": 4,
+      "exact": 4,
+      "meanLatencyMs": 3808,
+      "meanWarmLatencyMs": 3613,
+      "coldStartMs": 1167,
+      "meanTimeToFirstTokenMs": 3657,
+      "meanTokensPerSecond": 58
+    },
+    {
+      "provider": "patched_metal",
+      "completed": 4,
+      "total": 4,
+      "exact": 4,
+      "meanLatencyMs": 2663,
+      "meanWarmLatencyMs": 1576,
+      "coldStartMs": 1554,
+      "meanTimeToFirstTokenMs": null,
+      "meanTokensPerSecond": null
+    }
+  ],
+  "results": [
+    {
+      "provider": "sdk_current",
+      "image": "two-dogs-bed",
+      "task": "environment",
+      "expected": "indoor",
+      "output": "indoor",
+      "exact": true,
+      "status": "PASS",
+      "startedAt": "2026-08-25T18:01:15.400Z",
+      "latencyMs": 21836,
+      "runtimeStats": {
+        "timeToFirstToken": 21694.772,
+        "tokensPerSecond": 140.10507880910683,
+        "cacheTokens": 0,
+        "promptTokens": 884,
+        "generatedTokens": 2,
+        "emittedTokens": 2,
+        "avgConcurrentSeq": 1,
+        "backendDevice": "gpu",
+        "lifecycle": "QVAC model reused while active and unloaded after idle timeout",
+        "coldStartMs": 3493,
+        "warmInferenceMs": null,
+        "modelReused": false,
+        "timeoutMs": 60000,
+        "requestId": "02979274-8c6e-4af0-bae9-a8cf5ad30db7",
+        "generation": {
+          "temp": 0,
+          "top_p": 1,
+          "top_k": 40,
+          "seed": 42,
+          "predict": 24
+        }
+      }
+    },
+    {
+      "provider": "sdk_current",
+      "image": "two-dogs-bed",
+      "task": "dog_count",
+      "expected": "two",
+      "output": "two",
+      "exact": true,
+      "status": "PASS",
+      "startedAt": "2026-08-25T18:01:40.731Z",
+      "latencyMs": 22962,
+      "runtimeStats": {
+        "timeToFirstToken": 22855.993000000002,
+        "tokensPerSecond": 86.78295582747549,
+        "cacheTokens": 0,
+        "promptTokens": 890,
+        "generatedTokens": 1,
+        "emittedTokens": 1,
+        "avgConcurrentSeq": 1,
+        "backendDevice": "gpu",
+        "lifecycle": "QVAC model reused while active and unloaded after idle timeout",
+        "coldStartMs": null,
+        "warmInferenceMs": 22962,
+        "modelReused": true,
+        "timeoutMs": 60000,
+        "requestId": "bccb1df9-4129-4cab-987a-2d8bc8e89acd",
+        "generation": {
+          "temp": 0,
+          "top_p": 1,
+          "top_k": 40,
+          "seed": 42,
+          "predict": 24
+        }
+      }
+    },
+    {
+      "provider": "sdk_current",
+      "image": "one-dog-pad",
+      "task": "environment",
+      "expected": "indoor",
+      "output": "indoor",
+      "exact": true,
+      "status": "PASS",
+      "startedAt": "2026-08-25T18:02:03.692Z",
+      "latencyMs": 22515,
+      "runtimeStats": {
+        "timeToFirstToken": 22394.732,
+        "tokensPerSecond": 122.94074256208506,
+        "cacheTokens": 0,
+        "promptTokens": 884,
+        "generatedTokens": 2,
+        "emittedTokens": 2,
+        "avgConcurrentSeq": 1,
+        "backendDevice": "gpu",
+        "lifecycle": "QVAC model reused while active and unloaded after idle timeout",
+        "coldStartMs": null,
+        "warmInferenceMs": 22515,
+        "modelReused": true,
+        "timeoutMs": 60000,
+        "requestId": "6608d376-22f4-4b32-a28a-1795ef95a4fc",
+        "generation": {
+          "temp": 0,
+          "top_p": 1,
+          "top_k": 40,
+          "seed": 42,
+          "predict": 24
+        }
+      }
+    },
+    {
+      "provider": "sdk_current",
+      "image": "one-dog-pad",
+      "task": "dog_count",
+      "expected": "one",
+      "output": "one",
+      "exact": true,
+      "status": "PASS",
+      "startedAt": "2026-08-25T18:02:26.208Z",
+      "latencyMs": 16967,
+      "runtimeStats": {
+        "timeToFirstToken": 16843.43,
+        "tokensPerSecond": 78.80220646178093,
+        "cacheTokens": 0,
+        "promptTokens": 890,
+        "generatedTokens": 1,
+        "emittedTokens": 1,
+        "avgConcurrentSeq": 1,
+        "backendDevice": "gpu",
+        "lifecycle": "QVAC model reused while active and unloaded after idle timeout",
+        "coldStartMs": null,
+        "warmInferenceMs": 16967,
+        "modelReused": true,
+        "timeoutMs": 60000,
+        "requestId": "75be52b5-2acc-4d1a-a871-1e6f7fe42a0f",
+        "generation": {
+          "temp": 0,
+          "top_p": 1,
+          "top_k": 40,
+          "seed": 42,
+          "predict": 24
+        }
+      }
+    },
+    {
+      "provider": "sdk_optimized",
+      "image": "two-dogs-bed",
+      "task": "environment",
+      "expected": "indoor",
+      "output": "indoor",
+      "exact": true,
+      "status": "PASS",
+      "startedAt": "2026-08-25T18:02:43.199Z",
+      "latencyMs": 4394,
+      "runtimeStats": {
+        "timeToFirstToken": 4236.002,
+        "tokensPerSecond": 40.34047359716003,
+        "cacheTokens": 0,
+        "promptTokens": 884,
+        "generatedTokens": 2,
+        "emittedTokens": 2,
+        "avgConcurrentSeq": 1,
+        "backendDevice": "gpu",
+        "lifecycle": "QVAC model reused while active and unloaded after idle timeout",
+        "coldStartMs": 1167,
+        "warmInferenceMs": null,
+        "modelReused": false,
+        "timeoutMs": 60000,
+        "requestId": "72663337-4998-4ff6-950f-cd3065acbb08",
+        "generation": {
+          "temp": 0,
+          "top_p": 1,
+          "top_k": 40,
+          "seed": 42,
+          "predict": 24
+        }
+      }
+    },
+    {
+      "provider": "sdk_optimized",
+      "image": "two-dogs-bed",
+      "task": "dog_count",
+      "expected": "two",
+      "output": "two",
+      "exact": true,
+      "status": "PASS",
+      "startedAt": "2026-08-25T18:02:48.760Z",
+      "latencyMs": 3784,
+      "runtimeStats": {
+        "timeToFirstToken": 3598.34,
+        "tokensPerSecond": 62.94058408862034,
+        "cacheTokens": 0,
+        "promptTokens": 890,
+        "generatedTokens": 1,
+        "emittedTokens": 1,
+        "avgConcurrentSeq": 1,
+        "backendDevice": "gpu",
+        "lifecycle": "QVAC model reused while active and unloaded after idle timeout",
+        "coldStartMs": null,
+        "warmInferenceMs": 3784,
+        "modelReused": true,
+        "timeoutMs": 60000,
+        "requestId": "e04395bb-6df7-4000-b503-febafc6105a1",
+        "generation": {
+          "temp": 0,
+          "top_p": 1,
+          "top_k": 40,
+          "seed": 42,
+          "predict": 24
+        }
+      }
+    },
+    {
+      "provider": "sdk_optimized",
+      "image": "one-dog-pad",
+      "task": "environment",
+      "expected": "indoor",
+      "output": "indoor",
+      "exact": true,
+      "status": "PASS",
+      "startedAt": "2026-08-25T18:02:52.544Z",
+      "latencyMs": 3483,
+      "runtimeStats": {
+        "timeToFirstToken": 3332.2490000000003,
+        "tokensPerSecond": 81.58936074735854,
+        "cacheTokens": 0,
+        "promptTokens": 884,
+        "generatedTokens": 2,
+        "emittedTokens": 2,
+        "avgConcurrentSeq": 1,
+        "backendDevice": "gpu",
+        "lifecycle": "QVAC model reused while active and unloaded after idle timeout",
+        "coldStartMs": null,
+        "warmInferenceMs": 3483,
+        "modelReused": true,
+        "timeoutMs": 60000,
+        "requestId": "a8da7f5a-92ef-4de0-a055-d1b1c8b1f6af",
+        "generation": {
+          "temp": 0,
+          "top_p": 1,
+          "top_k": 40,
+          "seed": 42,
+          "predict": 24
+        }
+      }
+    },
+    {
+      "provider": "sdk_optimized",
+      "image": "one-dog-pad",
+      "task": "dog_count",
+      "expected": "one",
+      "output": "one",
+      "exact": true,
+      "status": "PASS",
+      "startedAt": "2026-08-25T18:02:56.027Z",
+      "latencyMs": 3572,
+      "runtimeStats": {
+        "timeToFirstToken": 3461.077,
+        "tokensPerSecond": 45.18957024718695,
+        "cacheTokens": 0,
+        "promptTokens": 890,
+        "generatedTokens": 1,
+        "emittedTokens": 1,
+        "avgConcurrentSeq": 1,
+        "backendDevice": "gpu",
+        "lifecycle": "QVAC model reused while active and unloaded after idle timeout",
+        "coldStartMs": null,
+        "warmInferenceMs": 3572,
+        "modelReused": true,
+        "timeoutMs": 60000,
+        "requestId": "efdf9535-a07f-4ea1-98a3-04225880886b",
+        "generation": {
+          "temp": 0,
+          "top_p": 1,
+          "top_k": 40,
+          "seed": 42,
+          "predict": 24
+        }
+      }
+    },
+    {
+      "provider": "patched_metal",
+      "image": "two-dogs-bed",
+      "task": "environment",
+      "expected": "indoor",
+      "output": "indoor",
+      "exact": true,
+      "status": "PASS",
+      "startedAt": "2026-08-25T18:02:59.666Z",
+      "latencyMs": 5926,
+      "runtimeStats": {
+        "backend": "metal",
+        "gpuLayers": 99,
+        "lifecycle": "llama-server reused while active and stopped after idle timeout",
+        "pid": 31026,
+        "coldStartMs": 1554,
+        "warmInferenceMs": null,
+        "serverReused": false,
+        "timeoutMs": 60000,
+        "nativeTimings": {
+          "promptEvalMs": 3913.81,
+          "promptTokens": 868,
+          "generationMs": 21.82,
+          "generationTokens": 3,
+          "totalMs": 3935.62
+        },
+        "trace": [
+          {
+            "at": "2026-08-25T18:02:59.667Z",
+            "elapsedMs": 0,
+            "stage": "provider_invocation_start"
+          },
+          {
+            "at": "2026-08-25T18:02:59.743Z",
+            "elapsedMs": 76,
+            "stage": "runtime_process_start",
+            "pid": 31026
+          },
+          {
+            "at": "2026-08-25T18:03:01.221Z",
+            "elapsedMs": 1555,
+            "stage": "model_ready",
+            "pid": 31026,
+            "coldStartMs": 1554,
+            "reused": false
+          },
+          {
+            "at": "2026-08-25T18:03:01.221Z",
+            "elapsedMs": 1555,
+            "stage": "inference_image_read_start",
+            "pid": 31026
+          },
+          {
+            "at": "2026-08-25T18:03:01.223Z",
+            "elapsedMs": 1557,
+            "stage": "inference_image_read_end",
+            "pid": 31026,
+            "durationMs": 2,
+            "byteLength": 837501
+          },
+          {
+            "at": "2026-08-25T18:03:01.223Z",
+            "elapsedMs": 1557,
+            "stage": "prompt_sent",
+            "pid": 31026
+          },
+          {
+            "at": "2026-08-25T18:03:05.590Z",
+            "elapsedMs": 5923,
+            "stage": "first_output_byte",
+            "pid": 31026
+          },
+          {
+            "at": "2026-08-25T18:03:05.613Z",
+            "elapsedMs": 5947,
+            "stage": "provider_invocation_end",
+            "pid": 31026
+          }
+        ],
+        "stderrTail": "0.00.182.887 I log_info: verbosity = 3 (adjust with the `-lv N` CLI arg)\n0.00.182.893 I device_info:\n0.00.182.911 I   - MTL0    : Apple M4 (12124 MiB, 12123 MiB free)\n0.00.182.914 I   - BLAS    : Accelerate (0 MiB, 0 MiB free)\n0.00.182.928 I   - CPU     : Apple M4 (16384 MiB, 16384 MiB free)\n0.00.183.179 I system_info: n_threads = 4 (n_threads_batch = 4) / 10 | MTL : EMBED_LIBRARY = 1 | CPU : NEON = 1 | ARM_FMA = 1 | FP16_VA = 1 | MATMUL_INT8 = 1 | DOTPROD = 1 | SME = 1 | ACCELERATE = 1 | REPACK = 1 | \n0.00.184.191 I srv          init: running without SSL\n0.00.185.121 I srv          init: using 9 threads for HTTP server\n0.00.186.406 I srv         start: binding port with default address family\n0.00.188.248 I srv  llama_server: loading model\n0.00.188.387 I srv    load_model: loading model '<QVAC_HOME>/models/8fe2e85ea66c27c8_visionpsy-nano-460m-flash-q4_k_m-imat.gguf'\n0.00.537.458 I srv    load_model: [mtmd] estimated worst-case memory usage of mmproj is 110.76 MiB\n0.00.538.087 I common_init_result: fitting params to device memory ...\n0.00.538.090 I common_init_result: (for bugs during this step try to reproduce them with -fit off, or provide --verbose logs if the bug only occurs with -fit on)\n0.01.066.707 I common_init_from_params: warming up the model with an empty run - please wait ... (--no-warmup to disable)\n0.01.273.205 I srv    load_model: loaded multimodal model, '<QVAC_HOME>/models/a8585d02f6913607_mmproj-visionpsy-nano-460m-flash-q8.gguf'\n0.01.273.213 I srv    load_model: initializing slots, n_slots = 1\n0.01.352.062 W common_speculative_init: no implementations specified for speculative decoding\n0.01.352.069 I slot   load_model: id  0 | task -1 | new slot, n_ctx = 8192\n0.01.352.137 I srv    load_model: prompt cache is enabled, size limit: 8192 MiB\n0.01.352.138 I srv    load_model: use `--cache-ram 0` to disable the prompt cache\n0.01.352.138 I srv    load_model: for more info see https://github.com/ggml-org/llama.cpp/pull/16391\n0.01.352.139 I srv    load_model: context checkpoints enabled, max = 32, min spacing = 256\n0.01.352.216 I srv          init: idle slots will be saved to prompt cache upon starting a new task\n0.01.364.259 I init: chat template, example_format: '<|im_start|>system\nYou are a helpful assistant<|im_end|>\n<|im_start|>user\nHello<|im_end|>\n<|im_start|>assistant\nHi there<|im_end|>\n<|im_start|>user\nHow are you?<|im_end|>\n<|im_start|>assistant\n'\n0.01.365.278 I srv          init: init: chat template, thinking = 0\n0.01.365.313 I srv  llama_server: model loaded\n0.01.365.315 I srv  llama_server: server is listening on http://127.0.0.1:8793\n0.01.365.338 I srv  update_slots: all slots are idle\n0.01.802.302 I srv  params_from_: Chat format: peg-native\n0.01.805.649 I slot get_availabl: id  0 | task -1 | selected slot by LRU, t_last = -1\n0.01.805.652 I srv  get_availabl: updating prompt cache\n0.01.805.656 I srv          load:  - looking for better prompt, base f_keep = -1.000, sim = 0.000\n0.01.805.658 I srv        update:  - cache state: 0 prompts, 0.000 MiB (limits: 8192.000 MiB, 8192 tokens, 8589934592 est)\n0.01.805.659 I srv  get_availabl: prompt cache update took 0.01 ms\n0.01.805.733 I slot launch_slot_: id  0 | task 0 | processing task, is_child = 0\n0.01.809.370 I slot process_mtmd: id  0 | task 0 | encoding mtmd batch from idx = 4, n_chunks = 1\n0.01.940.973 I slot process_mtmd: id  0 | task 0 | encoding mtmd batch from idx = 53, n_chunks = 12\n0.05.030.214 I slot print_timing: id  0 | task 0 | prompt processing, n_tokens =    118, progress = 0.14, t =   3.22 s / 36.60 tokens per second\n0.05.080.997 I slot print_timing: id  0 | task 0 | prompt processing, n_tokens =    183, progress = 0.21, t =   3.28 s / 55.87 tokens per second\n0.05.148.129 I slot print_timing: id  0 | task 0 | prompt processing, n_tokens =    248, progress = 0.29, t =   3.34 s / 74.20 tokens per second\n0.05.282.957 I slot print_timing: id  0 | task 0 | prompt processing, n_tokens =    313, progress = 0.36, t =   3.48 s / 90.01 tokens per second\n0.05.328.265 I slot print_timing: id  0 | task 0 | prompt processing, n_tokens =    378, progress = 0.44, t =   3.52 s / 107.31 tokens per second\n0.05.375.187 I slot print_timing: id  0 | task 0 | prompt processing, n_tokens =    443, progress = 0.51, t =   3.57 s / 124.11 tokens per second\n0.05.422.353 I slot print_timing: id  0 | task 0 | prompt processing, n_tokens =    508, progress = 0.59, t =   3.62 s / 140.46 tokens per second\n0.05.467.370 I slot print_timing: id  0 | task 0 | prompt processing, n_tokens =    573, progress = 0.66, t =   3.66 s / 156.49 tokens per second\n0.05.545.648 I slot print_timing: id  0 | task 0 | prompt processing, n_tokens =    638, progress = 0.74, t =   3.74 s / 170.59 tokens per second\n0.05.591.843 I slot print_timing: id  0 | task 0 | prompt processing, n_tokens =    703, progress = 0.81, t =   3.79 s / 185.68 tokens per second\n0.05.638.340 I slot print_timing: id  0 | task 0 | prompt processing, n_tokens =    768, progress = 0.88, t =   3.83 s / 200.39 tokens per second\n0.05.741.370 I slot print_timing: id  0 | task 0 | prompt eval time =    3913.81 ms /   868 tokens (    4.51 ms per token,   221.78 tokens per second)\n0.05.741.375 I slot print_timing: id  0 | task 0 |        eval time =      21.82 ms /     3 tokens (    7.27 ms per token,   137.51 tokens per second)\n0.05.741.376 I slot print_timing: id  0 | task 0 |       total time =    3935.62 ms /   871 tokens\n0.05.741.376 I slot print_timing: id  0 | task 0 |    graphs reused =          2\n0.05.741.407 I slot      release: id  0 | task 0 | stop processing: n_tokens = 870, truncated = 0\n0.05.741.420 I srv  update_slots: all slots are idle\n",
+        "server_pid": 31026,
+        "server_started_at": "2026-08-25T18:02:59.743Z",
+        "server_restart_count": 0,
+        "request_started_at": "2026-08-25T18:02:59.667Z",
+        "request_finished_at": "2026-08-25T18:03:05.613Z",
+        "timeout_triggered": false,
+        "retry_count": 0
+      }
+    },
+    {
+      "provider": "patched_metal",
+      "image": "two-dogs-bed",
+      "task": "dog_count",
+      "expected": "two",
+      "output": "two",
+      "exact": true,
+      "status": "PASS",
+      "startedAt": "2026-08-25T18:03:05.614Z",
+      "latencyMs": 440,
+      "runtimeStats": {
+        "backend": "metal",
+        "gpuLayers": 99,
+        "lifecycle": "llama-server reused while active and stopped after idle timeout",
+        "pid": 31026,
+        "coldStartMs": null,
+        "warmInferenceMs": 440,
+        "serverReused": true,
+        "timeoutMs": 60000,
+        "nativeTimings": {
+          "promptEvalMs": 35.27,
+          "promptTokens": 42,
+          "generationMs": 10.2,
+          "generationTokens": 2,
+          "totalMs": 45.47
+        },
+        "trace": [
+          {
+            "at": "2026-08-25T18:03:05.614Z",
+            "elapsedMs": 0,
+            "stage": "provider_invocation_start"
+          },
+          {
+            "at": "2026-08-25T18:03:05.615Z",
+            "elapsedMs": 2,
+            "stage": "runtime_process_reuse",
+            "pid": 31026
+          },
+          {
+            "at": "2026-08-25T18:03:05.615Z",
+            "elapsedMs": 2,
+            "stage": "model_ready",
+            "pid": 31026,
+            "coldStartMs": 1554,
+            "reused": true
+          },
+          {
+            "at": "2026-08-25T18:03:05.616Z",
+            "elapsedMs": 2,
+            "stage": "inference_image_read_start",
+            "pid": 31026
+          },
+          {
+            "at": "2026-08-25T18:03:05.616Z",
+            "elapsedMs": 3,
+            "stage": "inference_image_read_end",
+            "pid": 31026,
+            "durationMs": 1,
+            "byteLength": 837501
+          },
+          {
+            "at": "2026-08-25T18:03:05.616Z",
+            "elapsedMs": 3,
+            "stage": "prompt_sent",
+            "pid": 31026
+          },
+          {
+            "at": "2026-08-25T18:03:06.052Z",
+            "elapsedMs": 439,
+            "stage": "first_output_byte",
+            "pid": 31026
+          },
+          {
+            "at": "2026-08-25T18:03:06.074Z",
+            "elapsedMs": 460,
+            "stage": "provider_invocation_end",
+            "pid": 31026
+          }
+        ],
+        "stderrTail": "0.00.182.887 I log_info: verbosity = 3 (adjust with the `-lv N` CLI arg)\n0.00.182.893 I device_info:\n0.00.182.911 I   - MTL0    : Apple M4 (12124 MiB, 12123 MiB free)\n0.00.182.914 I   - BLAS    : Accelerate (0 MiB, 0 MiB free)\n0.00.182.928 I   - CPU     : Apple M4 (16384 MiB, 16384 MiB free)\n0.00.183.179 I system_info: n_threads = 4 (n_threads_batch = 4) / 10 | MTL : EMBED_LIBRARY = 1 | CPU : NEON = 1 | ARM_FMA = 1 | FP16_VA = 1 | MATMUL_INT8 = 1 | DOTPROD = 1 | SME = 1 | ACCELERATE = 1 | REPACK = 1 | \n0.00.184.191 I srv          init: running without SSL\n0.00.185.121 I srv          init: using 9 threads for HTTP server\n0.00.186.406 I srv         start: binding port with default address family\n0.00.188.248 I srv  llama_server: loading model\n0.00.188.387 I srv    load_model: loading model '<QVAC_HOME>/models/8fe2e85ea66c27c8_visionpsy-nano-460m-flash-q4_k_m-imat.gguf'\n0.00.537.458 I srv    load_model: [mtmd] estimated worst-case memory usage of mmproj is 110.76 MiB\n0.00.538.087 I common_init_result: fitting params to device memory ...\n0.00.538.090 I common_init_result: (for bugs during this step try to reproduce them with -fit off, or provide --verbose logs if the bug only occurs with -fit on)\n0.01.066.707 I common_init_from_params: warming up the model with an empty run - please wait ... (--no-warmup to disable)\n0.01.273.205 I srv    load_model: loaded multimodal model, '<QVAC_HOME>/models/a8585d02f6913607_mmproj-visionpsy-nano-460m-flash-q8.gguf'\n0.01.273.213 I srv    load_model: initializing slots, n_slots = 1\n0.01.352.062 W common_speculative_init: no implementations specified for speculative decoding\n0.01.352.069 I slot   load_model: id  0 | task -1 | new slot, n_ctx = 8192\n0.01.352.137 I srv    load_model: prompt cache is enabled, size limit: 8192 MiB\n0.01.352.138 I srv    load_model: use `--cache-ram 0` to disable the prompt cache\n0.01.352.138 I srv    load_model: for more info see https://github.com/ggml-org/llama.cpp/pull/16391\n0.01.352.139 I srv    load_model: context checkpoints enabled, max = 32, min spacing = 256\n0.01.352.216 I srv          init: idle slots will be saved to prompt cache upon starting a new task\n0.01.364.259 I init: chat template, example_format: '<|im_start|>system\nYou are a helpful assistant<|im_end|>\n<|im_start|>user\nHello<|im_end|>\n<|im_start|>assistant\nHi there<|im_end|>\n<|im_start|>user\nHow are you?<|im_end|>\n<|im_start|>assistant\n'\n0.01.365.278 I srv          init: init: chat template, thinking = 0\n0.01.365.313 I srv  llama_server: model loaded\n0.01.365.315 I srv  llama_server: server is listening on http://127.0.0.1:8793\n0.01.365.338 I srv  update_slots: all slots are idle\n0.01.802.302 I srv  params_from_: Chat format: peg-native\n0.01.805.649 I slot get_availabl: id  0 | task -1 | selected slot by LRU, t_last = -1\n0.01.805.652 I srv  get_availabl: updating prompt cache\n0.01.805.656 I srv          load:  - looking for better prompt, base f_keep = -1.000, sim = 0.000\n0.01.805.658 I srv        update:  - cache state: 0 prompts, 0.000 MiB (limits: 8192.000 MiB, 8192 tokens, 8589934592 est)\n0.01.805.659 I srv  get_availabl: prompt cache update took 0.01 ms\n0.01.805.733 I slot launch_slot_: id  0 | task 0 | processing task, is_child = 0\n0.01.809.370 I slot process_mtmd: id  0 | task 0 | encoding mtmd batch from idx = 4, n_chunks = 1\n0.01.940.973 I slot process_mtmd: id  0 | task 0 | encoding mtmd batch from idx = 53, n_chunks = 12\n0.05.030.214 I slot print_timing: id  0 | task 0 | prompt processing, n_tokens =    118, progress = 0.14, t =   3.22 s / 36.60 tokens per second\n0.05.080.997 I slot print_timing: id  0 | task 0 | prompt processing, n_tokens =    183, progress = 0.21, t =   3.28 s / 55.87 tokens per second\n0.05.148.129 I slot print_timing: id  0 | task 0 | prompt processing, n_tokens =    248, progress = 0.29, t =   3.34 s / 74.20 tokens per second\n0.05.282.957 I slot print_timing: id  0 | task 0 | prompt processing, n_tokens =    313, progress = 0.36, t =   3.48 s / 90.01 tokens per second\n0.05.328.265 I slot print_timing: id  0 | task 0 | prompt processing, n_tokens =    378, progress = 0.44, t =   3.52 s / 107.31 tokens per second\n0.05.375.187 I slot print_timing: id  0 | task 0 | prompt processing, n_tokens =    443, progress = 0.51, t =   3.57 s / 124.11 tokens per second\n0.05.422.353 I slot print_timing: id  0 | task 0 | prompt processing, n_tokens =    508, progress = 0.59, t =   3.62 s / 140.46 tokens per second\n0.05.467.370 I slot print_timing: id  0 | task 0 | prompt processing, n_tokens =    573, progress = 0.66, t =   3.66 s / 156.49 tokens per second\n0.05.545.648 I slot print_timing: id  0 | task 0 | prompt processing, n_tokens =    638, progress = 0.74, t =   3.74 s / 170.59 tokens per second\n0.05.591.843 I slot print_timing: id  0 | task 0 | prompt processing, n_tokens =    703, progress = 0.81, t =   3.79 s / 185.68 tokens per second\n0.05.638.340 I slot print_timing: id  0 | task 0 | prompt processing, n_tokens =    768, progress = 0.88, t =   3.83 s / 200.39 tokens per second\n0.05.741.370 I slot print_timing: id  0 | task 0 | prompt eval time =    3913.81 ms /   868 tokens (    4.51 ms per token,   221.78 tokens per second)\n0.05.741.375 I slot print_timing: id  0 | task 0 |        eval time =      21.82 ms /     3 tokens (    7.27 ms per token,   137.51 tokens per second)\n0.05.741.376 I slot print_timing: id  0 | task 0 |       total time =    3935.62 ms /   871 tokens\n0.05.741.376 I slot print_timing: id  0 | task 0 |    graphs reused =          2\n0.05.741.407 I slot      release: id  0 | task 0 | stop processing: n_tokens = 870, truncated = 0\n0.05.741.420 I srv  update_slots: all slots are idle\n0.06.113.546 I srv  params_from_: Chat format: peg-native\n0.06.114.145 I slot get_availabl: id  0 | task -1 | selected slot by LCP similarity, sim_best = 0.952 (> 0.100 thold), f_keep = 0.956\n0.06.114.390 I slot launch_slot_: id  0 | task 17 | processing task, is_child = 0\n0.06.159.972 I slot print_timing: id  0 | task 17 | prompt eval time =      35.27 ms /    42 tokens (    0.84 ms per token,  1190.64 tokens per second)\n0.06.159.979 I slot print_timing: id  0 | task 17 |        eval time =      10.20 ms /     2 tokens (    5.10 ms per token,   196.17 tokens per second)\n0.06.159.980 I slot print_timing: id  0 | task 17 |       total time =      45.47 ms /    44 tokens\n0.06.159.981 I slot print_timing: id  0 | task 17 |    graphs reused =          2\n0.06.160.006 I slot      release: id  0 | task 17 | stop processing: n_tokens = 875, truncated = 0\n0.06.160.110 I srv  update_slots: all slots are idle\n",
+        "server_pid": 31026,
+        "server_started_at": "2026-08-25T18:02:59.743Z",
+        "server_restart_count": 0,
+        "request_started_at": "2026-08-25T18:03:05.614Z",
+        "request_finished_at": "2026-08-25T18:03:06.074Z",
+        "timeout_triggered": false,
+        "retry_count": 0
+      }
+    },
+    {
+      "provider": "patched_metal",
+      "image": "one-dog-pad",
+      "task": "environment",
+      "expected": "indoor",
+      "output": "indoor",
+      "exact": true,
+      "status": "PASS",
+      "startedAt": "2026-08-25T18:03:06.074Z",
+      "latencyMs": 4034,
+      "runtimeStats": {
+        "backend": "metal",
+        "gpuLayers": 99,
+        "lifecycle": "llama-server reused while active and stopped after idle timeout",
+        "pid": 31026,
+        "coldStartMs": null,
+        "warmInferenceMs": 4034,
+        "serverReused": true,
+        "timeoutMs": 60000,
+        "nativeTimings": {
+          "promptEvalMs": 3522.43,
+          "promptTokens": 864,
+          "generationMs": 24.91,
+          "generationTokens": 3,
+          "totalMs": 3547.34
+        },
+        "trace": [
+          {
+            "at": "2026-08-25T18:03:06.074Z",
+            "elapsedMs": 0,
+            "stage": "provider_invocation_start"
+          },
+          {
+            "at": "2026-08-25T18:03:06.091Z",
+            "elapsedMs": 17,
+            "stage": "runtime_process_reuse",
+            "pid": 31026
+          },
+          {
+            "at": "2026-08-25T18:03:06.091Z",
+            "elapsedMs": 17,
+            "stage": "model_ready",
+            "pid": 31026,
+            "coldStartMs": 1554,
+            "reused": true
+          },
+          {
+            "at": "2026-08-25T18:03:06.091Z",
+            "elapsedMs": 17,
+            "stage": "inference_image_read_start",
+            "pid": 31026
+          },
+          {
+            "at": "2026-08-25T18:03:06.092Z",
+            "elapsedMs": 18,
+            "stage": "inference_image_read_end",
+            "pid": 31026,
+            "durationMs": 1,
+            "byteLength": 884574
+          },
+          {
+            "at": "2026-08-25T18:03:06.092Z",
+            "elapsedMs": 18,
+            "stage": "prompt_sent",
+            "pid": 31026
+          },
+          {
+            "at": "2026-08-25T18:03:10.107Z",
+            "elapsedMs": 4033,
+            "stage": "first_output_byte",
+            "pid": 31026
+          },
+          {
+            "at": "2026-08-25T18:03:10.132Z",
+            "elapsedMs": 4058,
+            "stage": "provider_invocation_end",
+            "pid": 31026
+          }
+        ],
+        "stderrTail": "Users/frankys91/.qvac/models/a8585d02f6913607_mmproj-visionpsy-nano-460m-flash-q8.gguf'\n0.01.273.213 I srv    load_model: initializing slots, n_slots = 1\n0.01.352.062 W common_speculative_init: no implementations specified for speculative decoding\n0.01.352.069 I slot   load_model: id  0 | task -1 | new slot, n_ctx = 8192\n0.01.352.137 I srv    load_model: prompt cache is enabled, size limit: 8192 MiB\n0.01.352.138 I srv    load_model: use `--cache-ram 0` to disable the prompt cache\n0.01.352.138 I srv    load_model: for more info see https://github.com/ggml-org/llama.cpp/pull/16391\n0.01.352.139 I srv    load_model: context checkpoints enabled, max = 32, min spacing = 256\n0.01.352.216 I srv          init: idle slots will be saved to prompt cache upon starting a new task\n0.01.364.259 I init: chat template, example_format: '<|im_start|>system\nYou are a helpful assistant<|im_end|>\n<|im_start|>user\nHello<|im_end|>\n<|im_start|>assistant\nHi there<|im_end|>\n<|im_start|>user\nHow are you?<|im_end|>\n<|im_start|>assistant\n'\n0.01.365.278 I srv          init: init: chat template, thinking = 0\n0.01.365.313 I srv  llama_server: model loaded\n0.01.365.315 I srv  llama_server: server is listening on http://127.0.0.1:8793\n0.01.365.338 I srv  update_slots: all slots are idle\n0.01.802.302 I srv  params_from_: Chat format: peg-native\n0.01.805.649 I slot get_availabl: id  0 | task -1 | selected slot by LRU, t_last = -1\n0.01.805.652 I srv  get_availabl: updating prompt cache\n0.01.805.656 I srv          load:  - looking for better prompt, base f_keep = -1.000, sim = 0.000\n0.01.805.658 I srv        update:  - cache state: 0 prompts, 0.000 MiB (limits: 8192.000 MiB, 8192 tokens, 8589934592 est)\n0.01.805.659 I srv  get_availabl: prompt cache update took 0.01 ms\n0.01.805.733 I slot launch_slot_: id  0 | task 0 | processing task, is_child = 0\n0.01.809.370 I slot process_mtmd: id  0 | task 0 | encoding mtmd batch from idx = 4, n_chunks = 1\n0.01.940.973 I slot process_mtmd: id  0 | task 0 | encoding mtmd batch from idx = 53, n_chunks = 12\n0.05.030.214 I slot print_timing: id  0 | task 0 | prompt processing, n_tokens =    118, progress = 0.14, t =   3.22 s / 36.60 tokens per second\n0.05.080.997 I slot print_timing: id  0 | task 0 | prompt processing, n_tokens =    183, progress = 0.21, t =   3.28 s / 55.87 tokens per second\n0.05.148.129 I slot print_timing: id  0 | task 0 | prompt processing, n_tokens =    248, progress = 0.29, t =   3.34 s / 74.20 tokens per second\n0.05.282.957 I slot print_timing: id  0 | task 0 | prompt processing, n_tokens =    313, progress = 0.36, t =   3.48 s / 90.01 tokens per second\n0.05.328.265 I slot print_timing: id  0 | task 0 | prompt processing, n_tokens =    378, progress = 0.44, t =   3.52 s / 107.31 tokens per second\n0.05.375.187 I slot print_timing: id  0 | task 0 | prompt processing, n_tokens =    443, progress = 0.51, t =   3.57 s / 124.11 tokens per second\n0.05.422.353 I slot print_timing: id  0 | task 0 | prompt processing, n_tokens =    508, progress = 0.59, t =   3.62 s / 140.46 tokens per second\n0.05.467.370 I slot print_timing: id  0 | task 0 | prompt processing, n_tokens =    573, progress = 0.66, t =   3.66 s / 156.49 tokens per second\n0.05.545.648 I slot print_timing: id  0 | task 0 | prompt processing, n_tokens =    638, progress = 0.74, t =   3.74 s / 170.59 tokens per second\n0.05.591.843 I slot print_timing: id  0 | task 0 | prompt processing, n_tokens =    703, progress = 0.81, t =   3.79 s / 185.68 tokens per second\n0.05.638.340 I slot print_timing: id  0 | task 0 | prompt processing, n_tokens =    768, progress = 0.88, t =   3.83 s / 200.39 tokens per second\n0.05.741.370 I slot print_timing: id  0 | task 0 | prompt eval time =    3913.81 ms /   868 tokens (    4.51 ms per token,   221.78 tokens per second)\n0.05.741.375 I slot print_timing: id  0 | task 0 |        eval time =      21.82 ms /     3 tokens (    7.27 ms per token,   137.51 tokens per second)\n0.05.741.376 I slot print_timing: id  0 | task 0 |       total time =    3935.62 ms /   871 tokens\n0.05.741.376 I slot print_timing: id  0 | task 0 |    graphs reused =          2\n0.05.741.407 I slot      release: id  0 | task 0 | stop processing: n_tokens = 870, truncated = 0\n0.05.741.420 I srv  update_slots: all slots are idle\n0.06.113.546 I srv  params_from_: Chat format: peg-native\n0.06.114.145 I slot get_availabl: id  0 | task -1 | selected slot by LCP similarity, sim_best = 0.952 (> 0.100 thold), f_keep = 0.956\n0.06.114.390 I slot launch_slot_: id  0 | task 17 | processing task, is_child = 0\n0.06.159.972 I slot print_timing: id  0 | task 17 | prompt eval time =      35.27 ms /    42 tokens (    0.84 ms per token,  1190.64 tokens per second)\n0.06.159.979 I slot print_timing: id  0 | task 17 |        eval time =      10.20 ms /     2 tokens (    5.10 ms per token,   196.17 tokens per second)\n0.06.159.980 I slot print_timing: id  0 | task 17 |       total time =      45.47 ms /    44 tokens\n0.06.159.981 I slot print_timing: id  0 | task 17 |    graphs reused =          2\n0.06.160.006 I slot      release: id  0 | task 17 | stop processing: n_tokens = 875, truncated = 0\n0.06.160.110 I srv  update_slots: all slots are idle\n0.06.704.415 I srv  params_from_: Chat format: peg-native\n0.06.704.540 I slot get_availabl: id  0 | task -1 | selected slot by LRU, t_last = 1624521687503\n0.06.704.542 I srv  get_availabl: updating prompt cache\n0.06.704.625 W srv   prompt_save:  - saving prompt with length 875, total state size = 34.190 MiB (draft: 0.000 MiB)\n0.06.714.347 I srv          load:  - looking for better prompt, base f_keep = 0.005, sim = 0.005\n0.06.714.357 I srv        update:  - cache state: 1 prompts, 34.190 MiB (limits: 8192.000 MiB, 8192 tokens, 209649 est)\n0.06.714.359 I srv        update:    - prompt 0xc850401f0:     875 tokens, checkpoints:  0,    34.190 MiB\n0.06.714.366 I srv  get_availabl: prompt cache update took 9.82 ms\n0.06.714.459 I slot launch_slot_: id  0 | task 20 | processing task, is_child = 0\n0.06.714.674 I slot process_mtmd: id  0 | task 20 | encoding mtmd batch from idx = 4, n_chunks = 1\n0.06.840.631 I slot process_mtmd: id  0 | task 20 | encoding mtmd batch from idx = 53, n_chunks = 12\n0.09.735.037 I slot print_timing: id  0 | task 20 | prompt processing, n_tokens =    309, progress = 0.36, t =   3.02 s / 102.30 tokens per second\n0.09.783.628 I slot print_timing: id  0 | task 20 | prompt processing, n_tokens =    374, progress = 0.44, t =   3.07 s / 121.86 tokens per second\n0.09.856.033 I slot print_timing: id  0 | task 20 | prompt processing, n_tokens =    439, progress = 0.51, t =   3.14 s / 139.74 tokens per second\n0.09.920.967 I slot print_timing: id  0 | task 20 | prompt processing, n_tokens =    504, progress = 0.59, t =   3.21 s / 157.18 tokens per second\n0.09.967.478 I slot print_timing: id  0 | task 20 | prompt processing, n_tokens =    569, progress = 0.66, t =   3.25 s / 174.92 tokens per second\n0.10.022.215 I slot print_timing: id  0 | task 20 | prompt processing, n_tokens =    634, progress = 0.74, t =   3.31 s / 191.67 tokens per second\n0.10.082.519 I slot print_timing: id  0 | task 20 | prompt processing, n_tokens =    699, progress = 0.81, t =   3.37 s / 207.54 tokens per second\n0.10.138.392 I slot print_timing: id  0 | task 20 | prompt processing, n_tokens =    764, progress = 0.88, t =   3.42 s / 223.14 tokens per second\n0.10.261.821 I slot print_timing: id  0 | task 20 | prompt eval time =    3522.43 ms /   864 tokens (    4.08 ms per token,   245.29 tokens per second)\n0.10.261.827 I slot print_timing: id  0 | task 20 |        eval time =      24.91 ms /     3 tokens (    8.30 ms per token,   120.42 tokens per second)\n0.10.261.828 I slot print_timing: id  0 | task 20 |       total time =    3547.34 ms /   867 tokens\n0.10.261.829 I slot print_timing: id  0 | task 20 |    graphs reused =          3\n0.10.261.993 I slot      release: id  0 | task 20 | stop processing: n_tokens = 870, truncated = 0\n0.10.262.041 I srv  update_slots: all slots are idle\n",
+        "server_pid": 31026,
+        "server_started_at": "2026-08-25T18:02:59.743Z",
+        "server_restart_count": 0,
+        "request_started_at": "2026-08-25T18:03:06.074Z",
+        "request_finished_at": "2026-08-25T18:03:10.132Z",
+        "timeout_triggered": false,
+        "retry_count": 0
+      }
+    },
+    {
+      "provider": "patched_metal",
+      "image": "one-dog-pad",
+      "task": "dog_count",
+      "expected": "one",
+      "output": "one",
+      "exact": true,
+      "status": "PASS",
+      "startedAt": "2026-08-25T18:03:10.132Z",
+      "latencyMs": 253,
+      "runtimeStats": {
+        "backend": "metal",
+        "gpuLayers": 99,
+        "lifecycle": "llama-server reused while active and stopped after idle timeout",
+        "pid": 31026,
+        "coldStartMs": null,
+        "warmInferenceMs": 253,
+        "serverReused": true,
+        "timeoutMs": 60000,
+        "nativeTimings": {
+          "promptEvalMs": 40.45,
+          "promptTokens": 42,
+          "generationMs": 16.99,
+          "generationTokens": 2,
+          "totalMs": 57.44
+        },
+        "trace": [
+          {
+            "at": "2026-08-25T18:03:10.132Z",
+            "elapsedMs": 0,
+            "stage": "provider_invocation_start"
+          },
+          {
+            "at": "2026-08-25T18:03:10.134Z",
+            "elapsedMs": 2,
+            "stage": "runtime_process_reuse",
+            "pid": 31026
+          },
+          {
+            "at": "2026-08-25T18:03:10.135Z",
+            "elapsedMs": 2,
+            "stage": "model_ready",
+            "pid": 31026,
+            "coldStartMs": 1554,
+            "reused": true
+          },
+          {
+            "at": "2026-08-25T18:03:10.135Z",
+            "elapsedMs": 2,
+            "stage": "inference_image_read_start",
+            "pid": 31026
+          },
+          {
+            "at": "2026-08-25T18:03:10.135Z",
+            "elapsedMs": 3,
+            "stage": "inference_image_read_end",
+            "pid": 31026,
+            "durationMs": 1,
+            "byteLength": 884574
+          },
+          {
+            "at": "2026-08-25T18:03:10.135Z",
+            "elapsedMs": 3,
+            "stage": "prompt_sent",
+            "pid": 31026
+          },
+          {
+            "at": "2026-08-25T18:03:10.384Z",
+            "elapsedMs": 252,
+            "stage": "first_output_byte",
+            "pid": 31026
+          },
+          {
+            "at": "2026-08-25T18:03:10.411Z",
+            "elapsedMs": 279,
+            "stage": "provider_invocation_end",
+            "pid": 31026
+          }
+        ],
+        "stderrTail": "m_end|>\n<|im_start|>assistant\nHi there<|im_end|>\n<|im_start|>user\nHow are you?<|im_end|>\n<|im_start|>assistant\n'\n0.01.365.278 I srv          init: init: chat template, thinking = 0\n0.01.365.313 I srv  llama_server: model loaded\n0.01.365.315 I srv  llama_server: server is listening on http://127.0.0.1:8793\n0.01.365.338 I srv  update_slots: all slots are idle\n0.01.802.302 I srv  params_from_: Chat format: peg-native\n0.01.805.649 I slot get_availabl: id  0 | task -1 | selected slot by LRU, t_last = -1\n0.01.805.652 I srv  get_availabl: updating prompt cache\n0.01.805.656 I srv          load:  - looking for better prompt, base f_keep = -1.000, sim = 0.000\n0.01.805.658 I srv        update:  - cache state: 0 prompts, 0.000 MiB (limits: 8192.000 MiB, 8192 tokens, 8589934592 est)\n0.01.805.659 I srv  get_availabl: prompt cache update took 0.01 ms\n0.01.805.733 I slot launch_slot_: id  0 | task 0 | processing task, is_child = 0\n0.01.809.370 I slot process_mtmd: id  0 | task 0 | encoding mtmd batch from idx = 4, n_chunks = 1\n0.01.940.973 I slot process_mtmd: id  0 | task 0 | encoding mtmd batch from idx = 53, n_chunks = 12\n0.05.030.214 I slot print_timing: id  0 | task 0 | prompt processing, n_tokens =    118, progress = 0.14, t =   3.22 s / 36.60 tokens per second\n0.05.080.997 I slot print_timing: id  0 | task 0 | prompt processing, n_tokens =    183, progress = 0.21, t =   3.28 s / 55.87 tokens per second\n0.05.148.129 I slot print_timing: id  0 | task 0 | prompt processing, n_tokens =    248, progress = 0.29, t =   3.34 s / 74.20 tokens per second\n0.05.282.957 I slot print_timing: id  0 | task 0 | prompt processing, n_tokens =    313, progress = 0.36, t =   3.48 s / 90.01 tokens per second\n0.05.328.265 I slot print_timing: id  0 | task 0 | prompt processing, n_tokens =    378, progress = 0.44, t =   3.52 s / 107.31 tokens per second\n0.05.375.187 I slot print_timing: id  0 | task 0 | prompt processing, n_tokens =    443, progress = 0.51, t =   3.57 s / 124.11 tokens per second\n0.05.422.353 I slot print_timing: id  0 | task 0 | prompt processing, n_tokens =    508, progress = 0.59, t =   3.62 s / 140.46 tokens per second\n0.05.467.370 I slot print_timing: id  0 | task 0 | prompt processing, n_tokens =    573, progress = 0.66, t =   3.66 s / 156.49 tokens per second\n0.05.545.648 I slot print_timing: id  0 | task 0 | prompt processing, n_tokens =    638, progress = 0.74, t =   3.74 s / 170.59 tokens per second\n0.05.591.843 I slot print_timing: id  0 | task 0 | prompt processing, n_tokens =    703, progress = 0.81, t =   3.79 s / 185.68 tokens per second\n0.05.638.340 I slot print_timing: id  0 | task 0 | prompt processing, n_tokens =    768, progress = 0.88, t =   3.83 s / 200.39 tokens per second\n0.05.741.370 I slot print_timing: id  0 | task 0 | prompt eval time =    3913.81 ms /   868 tokens (    4.51 ms per token,   221.78 tokens per second)\n0.05.741.375 I slot print_timing: id  0 | task 0 |        eval time =      21.82 ms /     3 tokens (    7.27 ms per token,   137.51 tokens per second)\n0.05.741.376 I slot print_timing: id  0 | task 0 |       total time =    3935.62 ms /   871 tokens\n0.05.741.376 I slot print_timing: id  0 | task 0 |    graphs reused =          2\n0.05.741.407 I slot      release: id  0 | task 0 | stop processing: n_tokens = 870, truncated = 0\n0.05.741.420 I srv  update_slots: all slots are idle\n0.06.113.546 I srv  params_from_: Chat format: peg-native\n0.06.114.145 I slot get_availabl: id  0 | task -1 | selected slot by LCP similarity, sim_best = 0.952 (> 0.100 thold), f_keep = 0.956\n0.06.114.390 I slot launch_slot_: id  0 | task 17 | processing task, is_child = 0\n0.06.159.972 I slot print_timing: id  0 | task 17 | prompt eval time =      35.27 ms /    42 tokens (    0.84 ms per token,  1190.64 tokens per second)\n0.06.159.979 I slot print_timing: id  0 | task 17 |        eval time =      10.20 ms /     2 tokens (    5.10 ms per token,   196.17 tokens per second)\n0.06.159.980 I slot print_timing: id  0 | task 17 |       total time =      45.47 ms /    44 tokens\n0.06.159.981 I slot print_timing: id  0 | task 17 |    graphs reused =          2\n0.06.160.006 I slot      release: id  0 | task 17 | stop processing: n_tokens = 875, truncated = 0\n0.06.160.110 I srv  update_slots: all slots are idle\n0.06.704.415 I srv  params_from_: Chat format: peg-native\n0.06.704.540 I slot get_availabl: id  0 | task -1 | selected slot by LRU, t_last = 1624521687503\n0.06.704.542 I srv  get_availabl: updating prompt cache\n0.06.704.625 W srv   prompt_save:  - saving prompt with length 875, total state size = 34.190 MiB (draft: 0.000 MiB)\n0.06.714.347 I srv          load:  - looking for better prompt, base f_keep = 0.005, sim = 0.005\n0.06.714.357 I srv        update:  - cache state: 1 prompts, 34.190 MiB (limits: 8192.000 MiB, 8192 tokens, 209649 est)\n0.06.714.359 I srv        update:    - prompt 0xc850401f0:     875 tokens, checkpoints:  0,    34.190 MiB\n0.06.714.366 I srv  get_availabl: prompt cache update took 9.82 ms\n0.06.714.459 I slot launch_slot_: id  0 | task 20 | processing task, is_child = 0\n0.06.714.674 I slot process_mtmd: id  0 | task 20 | encoding mtmd batch from idx = 4, n_chunks = 1\n0.06.840.631 I slot process_mtmd: id  0 | task 20 | encoding mtmd batch from idx = 53, n_chunks = 12\n0.09.735.037 I slot print_timing: id  0 | task 20 | prompt processing, n_tokens =    309, progress = 0.36, t =   3.02 s / 102.30 tokens per second\n0.09.783.628 I slot print_timing: id  0 | task 20 | prompt processing, n_tokens =    374, progress = 0.44, t =   3.07 s / 121.86 tokens per second\n0.09.856.033 I slot print_timing: id  0 | task 20 | prompt processing, n_tokens =    439, progress = 0.51, t =   3.14 s / 139.74 tokens per second\n0.09.920.967 I slot print_timing: id  0 | task 20 | prompt processing, n_tokens =    504, progress = 0.59, t =   3.21 s / 157.18 tokens per second\n0.09.967.478 I slot print_timing: id  0 | task 20 | prompt processing, n_tokens =    569, progress = 0.66, t =   3.25 s / 174.92 tokens per second\n0.10.022.215 I slot print_timing: id  0 | task 20 | prompt processing, n_tokens =    634, progress = 0.74, t =   3.31 s / 191.67 tokens per second\n0.10.082.519 I slot print_timing: id  0 | task 20 | prompt processing, n_tokens =    699, progress = 0.81, t =   3.37 s / 207.54 tokens per second\n0.10.138.392 I slot print_timing: id  0 | task 20 | prompt processing, n_tokens =    764, progress = 0.88, t =   3.42 s / 223.14 tokens per second\n0.10.261.821 I slot print_timing: id  0 | task 20 | prompt eval time =    3522.43 ms /   864 tokens (    4.08 ms per token,   245.29 tokens per second)\n0.10.261.827 I slot print_timing: id  0 | task 20 |        eval time =      24.91 ms /     3 tokens (    8.30 ms per token,   120.42 tokens per second)\n0.10.261.828 I slot print_timing: id  0 | task 20 |       total time =    3547.34 ms /   867 tokens\n0.10.261.829 I slot print_timing: id  0 | task 20 |    graphs reused =          3\n0.10.261.993 I slot      release: id  0 | task 20 | stop processing: n_tokens = 870, truncated = 0\n0.10.262.041 I srv  update_slots: all slots are idle\n0.10.480.295 I srv  params_from_: Chat format: peg-native\n0.10.480.472 I slot get_availabl: id  0 | task -1 | selected slot by LCP similarity, sim_best = 0.952 (> 0.100 thold), f_keep = 0.956\n0.10.480.607 I slot launch_slot_: id  0 | task 36 | processing task, is_child = 0\n0.10.538.066 I slot print_timing: id  0 | task 36 | prompt eval time =      40.45 ms /    42 tokens (    0.96 ms per token,  1038.37 tokens per second)\n0.10.538.072 I slot print_timing: id  0 | task 36 |        eval time =      16.99 ms /     2 tokens (    8.50 ms per token,   117.71 tokens per second)\n0.10.538.073 I slot print_timing: id  0 | task 36 |       total time =      57.44 ms /    44 tokens\n0.10.538.073 I slot print_timing: id  0 | task 36 |    graphs reused =          3\n0.10.538.097 I slot      release: id  0 | task 36 | stop processing: n_tokens = 875, truncated = 0\n0.10.538.117 I srv  update_slots: all slots are idle\n",
+        "server_pid": 31026,
+        "server_started_at": "2026-08-25T18:02:59.743Z",
+        "server_restart_count": 0,
+        "request_started_at": "2026-08-25T18:03:10.132Z",
+        "request_finished_at": "2026-08-25T18:03:10.411Z",
+        "timeout_triggered": false,
+        "retry_count": 0
+      }
+    }
+  ]
+}

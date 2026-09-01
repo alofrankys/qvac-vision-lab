@@ -1,0 +1,100 @@
+{
+  "schemaVersion": 1,
+  "id": "qvac-visionpsy-official-17-replication-v1",
+  "claimPublishedAt": "2026-07-29",
+  "status": "PROTOCOL_LOCKED_EXECUTION_PENDING",
+  "sources": {
+    "qvacEvaluation": "https://huggingface.co/blog/qvac/visionpsy",
+    "visionPsyModelCard": "https://huggingface.co/qvac/VisionPsy-Nano-460M",
+    "visionPsyGgufCard": "https://huggingface.co/qvac/VisionPsy-Nano-460M-GGUFs",
+    "vlmevalkit": "https://github.com/open-compass/VLMEvalKit"
+  },
+  "harness": {
+    "repository": "open-compass/VLMEvalKit",
+    "baseCommit": "63a279f1e53cccc5b9b4d8984b17a8fbbaef8d67",
+    "baseSelection": "Parent shared by QVAC PR 1611 and PR 1613; QVAC did not publish a combined base commit, so this is an explicit reconstruction choice.",
+    "requiredPullRequests": [
+      { "number": 1601, "commit": "5aaadcbcc6b5bbd9aa18468a387711596d7d5da1", "purpose": "MM-IFEval rule verifier fix" },
+      { "number": 1602, "commit": "3aa99a43ff77430d413b7038b430b68d2083b82f", "purpose": "LLM-judge rescoring for open VQA" },
+      { "number": 1611, "commit": "8e292bf48a8802c9c8d3c114ed3d23607742b039", "purpose": "judge kwargs fix" },
+      { "number": 1613, "commit": "02c8d8c4e4afe91161b567fe44675cf9e10922fa", "purpose": "VisionPsy support and reference preprocessing", "pinNote": "PR head observed on 2026-08-31 after the previously recorded force-pushed commit became unreachable" }
+    ],
+    "localReproductionShim": {
+      "reason": "The four QVAC-linked PRs do not register LFM2.5-VL-450M even though the published comparison includes it.",
+      "modelClass": "LFM2VL",
+      "modelPath": "LiquidAI/LFM2.5-VL-450M",
+      "datasetLocalizationWorkerShim": "VLMEvalKit hard-codes 32 workers even when nproc is supplied. The local patch honors nproc and permits one deterministic worker; decoded bytes and dataset rows are unchanged and remain checksum-locked to the source TSV."
+    }
+  },
+  "profiles": {
+    "reference": {
+      "purpose": "Reproduce the public cross-model claim with original Hub checkpoints and the QVAC VLMEvalKit adapters.",
+      "precision": "VisionPsy FP32; LFM2.5 BF16; SmolVLM2 adapter precision as implemented by VLMEvalKit",
+      "hardware": "CUDA required by the published QVAC PR implementations",
+      "models": [
+        { "id": "VisionPsy-Nano-460M", "repository": "qvac/VisionPsy-Nano-460M", "observedHubRevision": "a779cb695f7627c36ded60a82a8c3cc73f03fa24", "revisionStatus": "LOCKED_BY_THIS_REPLICATION_NOT_PUBLISHED_BY_QVAC", "publishedNormalized": 62.3 },
+        { "id": "LFM2.5-VL-450M", "repository": "LiquidAI/LFM2.5-VL-450M", "observedHubRevision": "fc6221ca597f3315e4f82fc2df606783267b34ba", "revisionStatus": "LOCKED_BY_THIS_REPLICATION_NOT_PUBLISHED_BY_QVAC", "publishedNormalized": 59.6 },
+        { "id": "SmolVLM2-500M", "repository": "HuggingFaceTB/SmolVLM2-500M-Video-Instruct", "observedHubRevision": "7b375e1b73b11138ff12fe22c8f2822d8fe03467", "nestedLanguageModelRepository": "HuggingFaceTB/SmolLM2-360M-Instruct", "nestedLanguageModelObservedRevision": "a10cc1512eabd3dde888204e902eca88bddb4951", "revisionStatus": "LOCKED_BY_THIS_REPLICATION_NOT_PUBLISHED_BY_QVAC", "publishedNormalized": 52.5 }
+      ]
+    },
+    "mpsPort": {
+      "purpose": "Run the same Hub checkpoints, QVAC adapters, prompts, datasets and metrics on Apple MPS when CUDA is unavailable.",
+      "differenceFromReference": "Only the hard-coded device target is changed; numerical kernels and hardware differ, so results are reported separately from CUDA reference.",
+      "device": "mps",
+      "smokeCheck": {
+        "date": "2026-08-21",
+        "dataset": "ScienceQA_TEST",
+        "datasetRow": 0,
+        "sourceIndex": "1",
+        "gold": "B",
+        "predictions": {
+          "VisionPsy-Nano-460M": "The answer is B",
+          "LFM2.5-VL-450M": "B",
+          "SmolVLM2-500M": "B"
+        },
+        "interpretation": "Pipeline verification only; one shared item is not an accuracy comparison."
+      }
+    },
+    "localQ8": {
+      "purpose": "Measure the same public datasets with the three on-device Q8 artifacts already locked by QVAC Vision Lab.",
+      "modelLock": "config/fair-arena-model-lock.json",
+      "publishedVisionPsyNormalized": 61.75,
+      "comparability": "Same datasets and metrics, but mixed local runtimes and GGUF prompt/preprocessing paths make this a deployment replication, not the reference result."
+    }
+  },
+  "judge": {
+    "referenceNameInBlog": "Qwen3.6-27B",
+    "referenceNameInGgufCard": "Qwen3-27B-FP8",
+    "requiredFor": ["OCRBench", "DocVQA", "ChartQA", "InfoVQA", "TextVQA", "MathVista", "MMVet", "MM-IFEval"],
+    "status": "UNRESOLVED_UPSTREAM_IDENTITY",
+    "reason": "QVAC's two official pages use different judge names and publish neither an immutable model revision nor a serving configuration. Judge-backed scores cannot be called exact until this is resolved."
+  },
+  "datasets": [
+    { "name": "MME", "vlmeval": "MME", "area": "visual_perception", "questionFormat": "yes_no", "scoring": "official_rule_metric", "metric": "perception_plus_reasoning_points", "artifact": { "url": "https://opencompass.openxlab.space/utils/VLMEval/MME.tsv", "md5": "b36b43c3f09801f5d368627fb92187c3" }, "published": { "VisionPsy-Nano-460M": 1541, "LFM2.5-VL-450M": 1453, "SmolVLM2-500M": 1455 }, "visionPsyQ8": 1553.5 },
+    { "name": "OCRBench", "vlmeval": "OCRBench", "area": "document_ocr", "questionFormat": "open_ocr", "scoring": "strict_and_llm_judge", "metric": "llm_judge_over_1000", "artifact": { "url": "https://opencompass.openxlab.space/utils/VLMEval/OCRBench.tsv", "md5": "e953d98a987cc6e26ef717b61260b778" }, "published": { "VisionPsy-Nano-460M": 757, "LFM2.5-VL-450M": 710, "SmolVLM2-500M": 619 }, "publishedStrict": { "VisionPsy-Nano-460M": 726, "LFM2.5-VL-450M": 679, "SmolVLM2-500M": 611 }, "visionPsyQ8": 764 },
+    { "name": "ScienceQA", "vlmeval": "ScienceQA_TEST", "area": "reasoning_knowledge", "questionFormat": "multiple_choice", "scoring": "exact_matching", "metric": "accuracy_percent", "n": 2017, "countSource": "QVAC_EXPLICIT", "artifact": { "url": "https://opencompass.openxlab.space/utils/benchmarks/ScienceQA/ScienceQA_TEST.tsv", "md5": "e42e9e00f9c59a80d8a5db35bc32b71f" }, "published": { "VisionPsy-Nano-460M": 86.5, "LFM2.5-VL-450M": 77.7, "SmolVLM2-500M": 76.3 }, "visionPsyQ8": 84.7 },
+    { "name": "MathVista", "vlmeval": "MathVista_MINI", "area": "reasoning_knowledge", "questionFormat": "mixed_math", "scoring": "llm_judge", "metric": "llm_judge_accuracy_percent", "artifact": { "url": "https://opencompass.openxlab.space/utils/VLMEval/MathVista_MINI.tsv", "md5": "f199b98e178e5a2a20e7048f5dcb0464" }, "published": { "VisionPsy-Nano-460M": 48.9, "LFM2.5-VL-450M": 42.2, "SmolVLM2-500M": 38.5 }, "visionPsyQ8": 47.8 },
+    { "name": "MMBench", "vlmeval": "MMBench_DEV_EN", "splitConfidence": "INFERRED_NOT_PUBLISHED", "area": "visual_perception", "questionFormat": "multiple_choice", "scoring": "exact_matching", "metric": "accuracy_percent", "artifact": { "url": "https://opencompass.openxlab.space/utils/benchmarks/MMBench/MMBench_DEV_EN.tsv", "md5": "b6caf1133a01c6bb705cf753bb527ed8" }, "published": { "VisionPsy-Nano-460M": 61.9, "LFM2.5-VL-450M": 56.8, "SmolVLM2-500M": 51.4 }, "visionPsyQ8": 61.8 },
+    { "name": "MMStar", "vlmeval": "MMStar", "area": "reasoning_knowledge", "questionFormat": "multiple_choice", "scoring": "exact_matching", "metric": "accuracy_percent", "artifact": { "url": "https://opencompass.openxlab.space/utils/VLMEval/MMStar.tsv", "md5": "e1ecd2140806c1b1bbf54b43372efb9e" }, "published": { "VisionPsy-Nano-460M": 47.6, "LFM2.5-VL-450M": 42.7, "SmolVLM2-500M": 38.3 }, "visionPsyQ8": 46.1 },
+    { "name": "AI2D", "vlmeval": "AI2D_TEST", "area": "reasoning_knowledge", "questionFormat": "multiple_choice_diagram", "scoring": "exact_matching", "metric": "accuracy_percent", "artifact": { "url": "https://opencompass.openxlab.space/utils/VLMEval/AI2D_TEST.tsv", "md5": "0f593e0d1c7df9a3d69bf1f947e71975" }, "published": { "VisionPsy-Nano-460M": 66.5, "LFM2.5-VL-450M": 62.2, "SmolVLM2-500M": 57.3 }, "visionPsyQ8": 65.3 },
+    { "name": "DocVQA", "vlmeval": "DocVQA_VAL", "area": "document_ocr", "questionFormat": "open_document_vqa", "scoring": "strict_and_llm_judge", "metric": "llm_judge_accuracy_percent", "artifact": { "url": "https://opencompass.openxlab.space/utils/VLMEval/DocVQA_VAL.tsv", "md5": "d5ee77e1926ff10690d469c56b73eabf" }, "published": { "VisionPsy-Nano-460M": 85.7, "LFM2.5-VL-450M": 82.7, "SmolVLM2-500M": 74.7 }, "publishedStrict": { "VisionPsy-Nano-460M": 80.6, "LFM2.5-VL-450M": 78.3, "SmolVLM2-500M": 68.6 }, "visionPsyQ8": 83.7 },
+    { "name": "ChartQA", "vlmeval": "ChartQA_TEST", "area": "document_ocr", "questionFormat": "open_chart_vqa", "scoring": "strict_and_llm_judge", "metric": "llm_judge_accuracy_percent", "artifact": { "url": "https://opencompass.openxlab.space/utils/VLMEval/ChartQA_TEST.tsv", "md5": "c902e0aa9be5582a7aad6dcf52734b42" }, "published": { "VisionPsy-Nano-460M": 78.7, "LFM2.5-VL-450M": 76.6, "SmolVLM2-500M": 64.9 }, "publishedStrict": { "VisionPsy-Nano-460M": 76.8, "LFM2.5-VL-450M": 75.0, "SmolVLM2-500M": 60.9 }, "visionPsyQ8": 77.5 },
+    { "name": "SEEDBench", "vlmeval": "SEEDBench_IMG", "area": "visual_perception", "questionFormat": "multiple_choice", "scoring": "exact_matching", "metric": "accuracy_percent", "artifact": { "url": "https://opencompass.openxlab.space/utils/benchmarks/SEEDBench/SEEDBench_IMG.tsv", "md5": "68017231464752261a2526d6ca3a10c0" }, "published": { "VisionPsy-Nano-460M": 69.2, "LFM2.5-VL-450M": 67.5, "SmolVLM2-500M": 62.1 }, "visionPsyQ8": 68.9 },
+    { "name": "POPE", "vlmeval": "POPE", "area": "instruction_reliability", "questionFormat": "yes_no_hallucination", "scoring": "official_f1", "metric": "f1_percent", "n": 5127, "countSource": "QVAC_EXPLICIT", "artifact": { "url": "https://opencompass.openxlab.space/utils/VLMEval/POPE.tsv", "md5": "c12f5acb142f2ef1f85a26ba2fbe41d5" }, "published": { "VisionPsy-Nano-460M": 87.9, "LFM2.5-VL-450M": 86.5, "SmolVLM2-500M": 82.7 }, "visionPsyQ8": 87.7 },
+    { "name": "RealWorldQA", "vlmeval": "RealWorldQA", "area": "visual_perception", "questionFormat": "multiple_choice_real_scene", "scoring": "exact_matching", "metric": "accuracy_percent", "artifact": { "url": "https://opencompass.openxlab.space/utils/VLMEval/RealWorldQA.tsv", "md5": "4de008f55dc4fd008ca9e15321dc44b7" }, "published": { "VisionPsy-Nano-460M": 60.0, "LFM2.5-VL-450M": 59.0, "SmolVLM2-500M": 50.1 }, "visionPsyQ8": 59.1 },
+    { "name": "InfoVQA", "vlmeval": "InfoVQA_VAL", "area": "document_ocr", "questionFormat": "open_infographic_vqa", "scoring": "strict_and_llm_judge", "metric": "llm_judge_accuracy_percent", "artifact": { "url": "https://opencompass.openxlab.space/utils/VLMEval/InfoVQA_VAL.tsv", "md5": "2342e9c225222f0ef4dec545ebb126fe" }, "published": { "VisionPsy-Nano-460M": 49.8, "LFM2.5-VL-450M": 48.9, "SmolVLM2-500M": 39.0 }, "publishedStrict": { "VisionPsy-Nano-460M": 43.3, "LFM2.5-VL-450M": 43.3, "SmolVLM2-500M": 27.6 }, "visionPsyQ8": 47.8 },
+    { "name": "TextVQA", "vlmeval": "TextVQA_VAL", "area": "document_ocr", "questionFormat": "open_scene_text_vqa", "scoring": "strict_and_llm_judge", "metric": "llm_judge_accuracy_percent", "artifact": { "url": "https://opencompass.openxlab.space/utils/VLMEval/TextVQA_VAL.tsv", "md5": "b233b31f551bbf4056f2f955da3a92cd" }, "published": { "VisionPsy-Nano-460M": 79.3, "LFM2.5-VL-450M": 78.8, "SmolVLM2-500M": 71.3 }, "publishedStrict": { "VisionPsy-Nano-460M": 71.0, "LFM2.5-VL-450M": 69.8, "SmolVLM2-500M": 60.6 }, "visionPsyQ8": 79.1 },
+    { "name": "MM-IFEval", "vlmeval": "MM-IFEval", "area": "instruction_reliability", "questionFormat": "visual_instruction_following", "scoring": "official_rule_verifier", "metric": "instruction_following_accuracy_percent", "n": 400, "countSource": "QVAC_EXPLICIT_MAIN_CASES", "countRule": { "kind": "delimited_token", "token": "\tmain\t", "meaning": "400 main evaluation cases; the remaining 287 TSV rows are auxiliary comparison prompts required by the evaluator" }, "artifact": { "url": "https://opencompass.openxlab.space/utils/VLMEval/MM-IFEval.tsv", "md5": "973bb839961a449565073a5ee70ae7a6" }, "published": { "VisionPsy-Nano-460M": 42.3, "LFM2.5-VL-450M": 42.0, "SmolVLM2-500M": 11.1 }, "visionPsyQ8": 43.5 },
+    { "name": "MMMU", "vlmeval": "MMMU_DEV_VAL", "splitConfidence": "INFERRED_NOT_PUBLISHED", "area": "reasoning_knowledge", "questionFormat": "multiple_choice_multidiscipline", "scoring": "exact_matching", "metric": "accuracy_percent", "artifact": { "url": "https://opencompass.openxlab.space/utils/VLMEval/MMMU_DEV_VAL.tsv", "md5": "585e8ad75e73f75dcad265dfd0417d64" }, "published": { "VisionPsy-Nano-460M": 31.4, "LFM2.5-VL-450M": 30.7, "SmolVLM2-500M": 31.6 }, "visionPsyQ8": 32.6 },
+    { "name": "MMVet", "vlmeval": "MMVet", "area": "reasoning_knowledge", "questionFormat": "open_multicapability_vqa", "scoring": "llm_judge_partial_credit", "metric": "llm_judge_partial_credit_percent", "artifact": { "url": "https://opencompass.openxlab.space/utils/VLMEval/MMVet.tsv", "md5": "748aa6d4aa9d4de798306a63718455e3" }, "published": { "VisionPsy-Nano-460M": 32.3, "LFM2.5-VL-450M": 36.0, "SmolVLM2-500M": 28.6 }, "visionPsyQ8": 32.3 }
+  ],
+  "executionSuites": {
+    "scienceQA": ["ScienceQA_TEST"],
+    "pope": ["POPE"],
+    "mmifeval": ["MM-IFEval"],
+    "headline": ["ScienceQA_TEST", "MM-IFEval", "POPE"],
+    "balancedExternal": ["OCRBench", "ChartQA_TEST", "POPE", "MM-IFEval"],
+    "strictFirst": ["MME", "ScienceQA_TEST", "MMBench_DEV_EN", "MMStar", "AI2D_TEST", "SEEDBench_IMG", "POPE", "RealWorldQA", "MMMU_DEV_VAL"],
+    "full": ["MME", "OCRBench", "ScienceQA_TEST", "MathVista_MINI", "MMBench_DEV_EN", "MMStar", "AI2D_TEST", "DocVQA_VAL", "ChartQA_TEST", "SEEDBench_IMG", "POPE", "RealWorldQA", "InfoVQA_VAL", "TextVQA_VAL", "MM-IFEval", "MMMU_DEV_VAL", "MMVet"]
+  }
+}

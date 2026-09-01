@@ -1,0 +1,40 @@
+.ground-truth-banner { display: flex; justify-content: space-between; align-items: center; gap: 20px; margin: 0 0 16px; padding: 18px 20px; border: 1px solid #66883a; border-radius: 14px; background: linear-gradient(120deg, rgba(185,246,90,.12), rgba(185,246,90,.025)); }
+.ground-truth-banner .eyebrow { margin-bottom: 6px; }
+.ground-truth-banner b { font-size: 15px; }
+.ground-truth-banner > span { color: var(--lime); font-size: 12px; white-space: nowrap; }
+.ground-truth-shortcut { border-color: #66883a !important; color: var(--lime) !important; background: rgba(185,246,90,.08) !important; }
+#photo-grid.ground-truth-mode { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+.photo-ground-truth { padding: 12px 13px 14px; border-top: 1px solid #44582d; background: #11150f; }
+.truth-title { display: flex; justify-content: space-between; align-items: center; margin-bottom: 9px; color: var(--lime); font-size: 11px; text-transform: uppercase; letter-spacing: .08em; }
+.truth-title span { color: var(--muted); }
+.truth-row { display: grid; grid-template-columns: minmax(78px,.8fr) minmax(120px,1.25fr) auto; align-items: center; gap: 6px; padding: 7px 0; border-top: 1px solid rgba(255,255,255,.055); }
+.truth-row > div { min-width: 0; }
+.truth-row > div b, .truth-row > div small { display: block; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.truth-row > div b { font-size: 10px; }
+.truth-row > div small { color: var(--muted); font-size: 8px; margin-top: 2px; }
+.truth-row select { min-width: 0; width: 100%; padding: 7px; border: 1px solid var(--line); border-radius: 7px; background: #0b0d0d; color: var(--ink); font-size: 9px; }
+.truth-row button { padding: 7px 8px; border: 1px solid #596f39; border-radius: 7px; background: #1d2816; color: var(--lime); font-size: 9px; cursor: pointer; }
+.truth-row button:disabled { opacity: .3; cursor: not-allowed; }
+.truth-row.confirmed { border-left: 2px solid var(--lime); padding-left: 6px; }
+@media (max-width: 900px) { #photo-grid.ground-truth-mode { grid-template-columns: 1fr; } }
+@media (max-width: 650px) { .ground-truth-banner { align-items: flex-start; flex-direction: column; }.truth-row { grid-template-columns: 1fr auto; }.truth-row > div { grid-column: 1 / -1; } }
+.quick-ground-truth { margin: 0 0 20px; padding: 20px; }
+.quick-ground-truth > p { margin: 8px 0 16px; color: var(--muted); font-size: 11px; }
+.quick-truth-tabs { display: flex; gap: 6px; overflow-x: auto; padding-bottom: 10px; }
+.quick-truth-tabs button { flex: 0 0 auto; border: 1px solid var(--line); border-radius: 999px; background: #111313; color: var(--muted); padding: 8px 10px; font-size: 10px; cursor: pointer; }
+.quick-truth-tabs button.active { border-color: var(--lime); color: var(--lime); background: rgba(185,246,90,.08); }
+.quick-truth-tabs span { opacity: .7; margin-left: 4px; }
+.quick-truth-grid { display: grid; gap: 7px; margin-top: 5px; }
+.quick-truth-filters { display:flex;gap:10px;flex-wrap:wrap;margin:0 0 12px; }
+.quick-truth-filters label { display:flex;align-items:center;gap:6px;color:var(--muted);font-size:9px; }
+.quick-truth-filters select { border:1px solid var(--line);border-radius:7px;background:#0b0d0d;color:var(--ink);padding:7px;font-size:9px; }
+.quick-truth-row { display: grid; grid-template-columns: 76px minmax(130px,.7fr) minmax(260px,1.3fr); align-items: center; gap: 12px; border: 1px solid var(--line); border-radius: 10px; overflow: hidden; background: #0e1010; }
+.quick-truth-row.reviewed { border-color: #526d31; }
+.quick-truth-row img { width: 76px; height: 62px; object-fit: cover; }
+.quick-truth-row > div b,.quick-truth-row > div small { display: block; }
+.quick-truth-row > div b { font-size: 10px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.quick-truth-row > div small { color: var(--muted); font-size: 9px; margin-top: 4px; }
+.quick-labels { display: flex; justify-content: flex-end; gap: 5px; padding-right: 10px; }
+.quick-labels button { min-width: 70px; border: 1px solid var(--line); border-radius: 7px; background: #171a19; color: var(--muted); padding: 8px; font-size: 10px; cursor: pointer; }
+.quick-labels button:hover,.quick-labels button.selected { border-color: var(--lime); color: var(--lime); background: #1b2416; }
+@media (max-width: 750px) { .quick-truth-row { grid-template-columns: 64px 1fr; }.quick-truth-row img { width:64px;height:64px}.quick-labels { grid-column: 1 / -1; justify-content: flex-start; padding: 0 8px 9px; flex-wrap: wrap; } }

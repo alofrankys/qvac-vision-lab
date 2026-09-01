@@ -1,0 +1,70 @@
+node_modules/
+.DS_Store
+.env
+.env.*
+!.env.example
+artifacts/
+data/pawvault.json
+data/pawvault.json.tmp
+data/photos/*
+!data/photos/.gitkeep
+data/inference-images/*
+!data/inference-images/.gitkeep
+data/smoke-results/*
+!data/smoke-results/.gitkeep
+data/integration-test/
+data/dedup-backup/
+data/backups/
+data/showcase/
+data/balanced-diagnostic-600/
+data/qvac-server.log
+data/qvac-server.pid
+npm-debug.log*
+.third_party/
+.venv-vlmeval/
+data/vlmeval/
+data/qvac-official-replication/
+scripts/__pycache__/
+**/__pycache__/
+*.pyc
+
+# Generated benchmark packs and private/raw evaluation evidence stay local.
+packs/
+reports/*
+!reports/README.md
+!reports/visionpsy-three-way-realworldqa-765-qvac-sdk-unified-0182.json
+!reports/visionpsy-three-way-realworldqa-765-qvac-sdk-unified-0182.md
+!reports/visionpsy-realworldqa-765-qvac-sdk-unified-audit.json
+!reports/visionpsy-realworldqa-765-qvac-sdk-unified-audit.md
+!reports/visionpsy-realworldqa-vlmeval-parity-qvac-sdk-unified-0182.json
+!reports/visionpsy-realworldqa-vlmeval-parity-qvac-sdk-unified-0182.md
+!reports/visionpsy-standard-preprocess-ablation.json
+!reports/visionpsy-standard-preprocess-ablation.md
+
+# The public repository vendors only the small 20-case display sample.
+# Full RealWorldQA partitions are generated locally from the checksum-locked source.
+public/showcase/realworldqa-validation-50/
+public/showcase/realworldqa-validation-50-b/
+public/showcase/realworldqa-validation-150-c/
+public/showcase/realworldqa-remainder-495/
+
+# Locally recorded media and third-party preview music are not redistributed.
+public/showcase/videos/
+public/showcase/music-previews/
+public/showcase/music-previews.html
+public/showcase/video-preview.html
+public/showcase/visionpsy-balanced-diagnostic-600-final.json
+
+# The retired mixed 600-case diagnostic stays local and outside the public story.
+config/visionpsy-balanced-diagnostic-600.json
+scripts/*balanced*
+scripts/score-visionpsy-mmifeval-rules.py
+src/evaluation/balanced-diagnostic.mjs
+src/showcase/balanced-diagnostic.mjs
+test/balanced-diagnostic.test.mjs
+
+# Local video production helpers are not part of the reproducible application.
+scripts/encode-demo3-frames.swift
+scripts/export-video-check-frames.swift
+scripts/generate-demo3-music-previews.swift
+scripts/postprocess-demo3-video.swift
