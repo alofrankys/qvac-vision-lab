@@ -62,6 +62,22 @@ test('screen-recording demos expose one 16:9 canvas, two public scenarios, repla
   assert.ok(script.indexOf("'video/webm;codecs=vp8'") < script.indexOf("'video/webm;codecs=vp9'"))
 })
 
+test('public RealWorldQA audit exposes canonical scores, uncertainty and repeatability separately', () => {
+  const report = JSON.parse(readFileSync(new URL('../public/showcase/visionpsy-three-way-realworldqa-765.json', import.meta.url), 'utf8'))
+  assert.equal(report.statisticalVerdict, 'NO_CLEAR_WINNER_AFTER_HOLM')
+  assert.deepEqual(report.providers.map(item => item.real.passed), [446, 438, 428])
+  assert.deepEqual(report.providers.map(item => item.officialRealWorldQaAccuracy), [0.591, 0.567, 0.549])
+  assert.equal(report.methodology.questions, 765)
+  assert.equal(report.methodology.uniqueRealImages, 762)
+  assert.equal(report.methodology.scorerParity.extractionDifferences, 1)
+  assert.equal(report.methodology.scorerParity.passVerdictChanges, 1)
+  assert.equal(report.repeatability.cases, 100)
+  assert.equal(report.repeatability.newInferences, 600)
+  assert.equal(report.repeatability.maximumAccuracySwingPoints, 0)
+  assert.equal(report.repeatability.minimumExactOutputAgreement, 1)
+  assert.equal(report.repeatability.minimumPassFailAgreement, 1)
+})
+
 test('local frame capture is disabled unless explicitly enabled', () => {
   const server = readFileSync(new URL('../src/server.mjs', import.meta.url), 'utf8')
   assert.match(server, /QVAC_ENABLE_FRAME_CAPTURE === '1'/)

@@ -1,0 +1,165 @@
+{
+  "schemaVersion": 3,
+  "generatedAt": "2026-09-01T23:42:05.719Z",
+  "sourceRun": "visionpsy-three-way-realworldqa-765-qvac-sdk-vlmevalkit-470e517.json",
+  "verdict": "UPSTREAM_PROMPT_LOCAL_CORROBORATION",
+  "results": [
+    {
+      "providerId": "qvac-visionpsy-standard-q8",
+      "label": "VisionPsy Standard Q8_0",
+      "correct": 446,
+      "total": 765,
+      "accuracy": 0.5830065359477125,
+      "publishedMatchingGgufAccuracy": 0.591,
+      "deltaPercentagePoints": -0.7993464052287513
+    },
+    {
+      "providerId": "qvac-visionpsy",
+      "label": "VisionPsy Flash Q8_0",
+      "correct": 438,
+      "total": 765,
+      "accuracy": 0.5725490196078431,
+      "publishedMatchingGgufAccuracy": 0.567,
+      "deltaPercentagePoints": 0.5549019607843153
+    },
+    {
+      "providerId": "qvac-visionpsy-flash-q4",
+      "label": "VisionPsy Flash Q4_K_M imatrix",
+      "correct": 428,
+      "total": 765,
+      "accuracy": 0.5594771241830065,
+      "publishedMatchingGgufAccuracy": 0.549,
+      "deltaPercentagePoints": 1.0477124183006503
+    }
+  ],
+  "sanityBaselines": {
+    "answerLetters": {
+      "B": 337,
+      "C": 145,
+      "A": 280,
+      "D": 3
+    },
+    "majorityLetterBaseline": 0.44052287581699345,
+    "optionCounts": {
+      "2": 210,
+      "3": 536,
+      "4": 19
+    },
+    "weightedRandomOptionBaseline": 0.3770152505446623
+  },
+  "reproducibility": {
+    "applicationCommit": "e66c5deb9b23cb4ba51075e0ea5fac56cf20eb1a",
+    "applicationDirty": false,
+    "generation": {
+      "temp": 0,
+      "top_p": 1,
+      "top_k": 40,
+      "seed": 42,
+      "predict": 16
+    },
+    "scorer": {
+      "implementation": "OpenCompass VLMEvalKit vlmeval/utils/matching_util.py can_infer",
+      "revision": "470e51787a351764057869304e425bc76170bdc6",
+      "fileSha256": "06088ed4da68cd9d8c3018e7630d0503f1365e6dd31f651cbedd8aa44dc14466"
+    },
+    "artifacts": {
+      "qvac-visionpsy-standard-q8": {
+        "model": {
+          "registryPath": "qvac/VisionPsy-Nano-460M-GGUFs/resolve/4138c5bd6e026d67cebf2dbd2d81c6229c14cdc1/visionpsy-nano-460m-q8_0.gguf",
+          "revision": "4138c5bd6e026d67cebf2dbd2d81c6229c14cdc1",
+          "modelId": "visionpsy-nano-460m-q8_0.gguf",
+          "expectedSize": 436676000,
+          "sha256": "fc70a6c6eed7d2f82ed48cbd52cc7118b249eff8b91112ef9cbfca6813a1eefa",
+          "quantization": "q8_0"
+        },
+        "projector": {
+          "registryPath": "qvac/VisionPsy-Nano-460M-GGUFs/resolve/4138c5bd6e026d67cebf2dbd2d81c6229c14cdc1/mmproj-visionpsy-nano-460m-q8.gguf",
+          "revision": "4138c5bd6e026d67cebf2dbd2d81c6229c14cdc1",
+          "modelId": "mmproj-visionpsy-nano-460m-q8.gguf",
+          "expectedSize": 108782144,
+          "sha256": "92f1bb80acaba3e7b59b6534f47447b830330bc9051018d6d8b5d768e58503c2",
+          "quantization": "q8_0"
+        }
+      },
+      "qvac-visionpsy": {
+        "model": {
+          "registryPath": "qvac/VisionPsy-Nano-460M-Flash-GGUFs/resolve/a24fb9cdd1119406b15ff60b06a51f8438a931c1/visionpsy-nano-460m-flash-q8_0.gguf",
+          "revision": "a24fb9cdd1119406b15ff60b06a51f8438a931c1",
+          "modelId": "visionpsy-nano-460m-flash-q8_0.gguf",
+          "expectedSize": 436676000,
+          "sha256": "66d84c0f552c96ec6734d8cef7f0a3192f4f2df2cd781a193339df194f501a12",
+          "quantization": "q8_0"
+        },
+        "projector": {
+          "registryPath": "qvac/VisionPsy-Nano-460M-Flash-GGUFs/resolve/a24fb9cdd1119406b15ff60b06a51f8438a931c1/mmproj-visionpsy-nano-460m-flash-q8.gguf",
+          "revision": "a24fb9cdd1119406b15ff60b06a51f8438a931c1",
+          "modelId": "mmproj-visionpsy-nano-460m-flash-q8.gguf",
+          "expectedSize": 108782144,
+          "sha256": "bbb0691873a4e638f6928898b3c3be9a4730bd4ced301197726a4fcb549695d0",
+          "quantization": "q8_0"
+        }
+      },
+      "qvac-visionpsy-flash-q4": {
+        "model": {
+          "registryPath": "qvac/VisionPsy-Nano-460M-Flash-GGUFs/resolve/a24fb9cdd1119406b15ff60b06a51f8438a931c1/visionpsy-nano-460m-flash-q4_k_m-imat.gguf",
+          "revision": "a24fb9cdd1119406b15ff60b06a51f8438a931c1",
+          "modelId": "visionpsy-nano-460m-flash-q4_k_m-imat.gguf",
+          "expectedSize": 303143488,
+          "sha256": "90b0abe16180f1fe5918bc5d89c3b6eeaf40520a50f906d6303a59a32b699fbc",
+          "quantization": "q4_k_m"
+        },
+        "projector": {
+          "registryPath": "qvac/VisionPsy-Nano-460M-Flash-GGUFs/resolve/a24fb9cdd1119406b15ff60b06a51f8438a931c1/mmproj-visionpsy-nano-460m-flash-q8.gguf",
+          "revision": "a24fb9cdd1119406b15ff60b06a51f8438a931c1",
+          "modelId": "mmproj-visionpsy-nano-460m-flash-q8.gguf",
+          "expectedSize": 108782144,
+          "sha256": "bbb0691873a4e638f6928898b3c3be9a4730bd4ced301197726a4fcb549695d0",
+          "quantization": "q8_0"
+        }
+      }
+    },
+    "environment": {
+      "platform": "darwin",
+      "release": "25.6.0",
+      "architecture": "arm64",
+      "cpu": "Apple M4",
+      "logicalCpuCount": 10,
+      "totalMemoryBytes": 17179869184,
+      "node": "v22.22.0"
+    },
+    "retryPolicy": "up to three attempts for transport/runtime failure only; valid wrong answers are never retried"
+  },
+  "scorerAudit": {
+    "kind": "DIRECT_PINNED_VLMEVALKIT_SOURCE",
+    "report": "visionpsy-realworldqa-vlmevalkit-upstream-470e517.json",
+    "revision": "470e51787a351764057869304e425bc76170bdc6",
+    "scorerSha256": "06088ed4da68cd9d8c3018e7630d0503f1365e6dd31f651cbedd8aa44dc14466",
+    "extractionDifferences": 1,
+    "passVerdictChanges": 1
+  },
+  "repeatabilityAudit": {
+    "report": "visionpsy-realworldqa-repeatability-100x3.json",
+    "cases": 100,
+    "repeats": 3,
+    "newInferences": 600,
+    "maximumAccuracySwingPoints": 0,
+    "minimumExactOutputAgreement": 1,
+    "minimumPassFailAgreement": 1
+  },
+  "controls": {
+    "dataset": "Complete checksum-locked RealWorldQA: 765 questions over 762 unique image hashes.",
+    "prompt": "Question: <question>\\nOptions:\\nA. ...\\nPlease select the correct answer from the options above. ",
+    "runtime": "All three providers use QVAC SDK and @qvac/llm-llamacpp; preprocessing remains model-specific by design.",
+    "order": "cases deterministically shuffled; provider order uses a balanced three-position Latin rotation",
+    "retries": "up to three attempts for transport/runtime failure only; valid wrong answers are never retried",
+    "categories": "Capability/category labels are local heuristics and are not an official RealWorldQA taxonomy."
+  },
+  "residualLimitations": [
+    "Tether reports in-house results; an exact vendor environment and all internal generation details are not publicly frozen.",
+    "This is one benchmark and does not reproduce the complete 17-benchmark VisionPsy table.",
+    "The 100-case repeatability audit tests deterministic local implementation stability, not other prompts, stochastic settings, hardware or the full 765-case set.",
+    "Exact multiple-choice accuracy does not measure open-ended prose quality, safety, calibration or usefulness.",
+    "Performance KPIs are local-device measurements and are not comparable with unpublished vendor hardware."
+  ],
+  "publicationWording": "I ran the complete 765-question RealWorldQA set locally on matching VisionPsy GGUF variants: VisionPsy Standard Q8_0 446/765 (58.30%) versus 59.10%; VisionPsy Flash Q8_0 438/765 (57.25%) versus 56.70%; VisionPsy Flash Q4_K_M imatrix 428/765 (55.95%) versus 54.90%. The checksum-pinned upstream VLMEvalKit scorer produced 1 extraction differences and 1 pass/fail changes. A separate 100-case, three-pass audit produced 0.00 pp maximum score swing and 100.0% minimum exact-output agreement. This is an independent local corroboration on Apple Metal, not a reproduction of Tether's complete in-house evaluation."
+}

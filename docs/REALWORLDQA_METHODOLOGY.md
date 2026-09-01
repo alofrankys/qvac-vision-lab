@@ -14,29 +14,33 @@ All three were served locally through `@qvac/sdk` 0.18.2, `@qvac/llm-llamacpp` 0
 
 | Variant | Correct | Local | Published matching GGUF | Delta |
 | --- | ---: | ---: | ---: | ---: |
-| Standard Q8_0 | 438/765 | 57.25% | 59.1% | -1.85 pp |
-| Flash Q8_0 | 432/765 | 56.47% | 56.7% | -0.23 pp |
-| Flash Q4_K_M imatrix | 432/765 | 56.47% | 54.9% | +1.57 pp |
+| Standard Q8_0 | 446/765 | 58.30% | 59.1% | -0.80 pp |
+| Flash Q8_0 | 438/765 | 57.25% | 56.7% | +0.55 pp |
+| Flash Q4_K_M imatrix | 428/765 | 55.95% | 54.9% | +1.05 pp |
 
-The six-answer lead for Standard is not statistically decisive. All Holm-adjusted paired exact McNemar p-values equal 1.0. The defensible conclusion is “no clear winner in this local run.”
+The eight-answer lead for Standard over Flash Q8 is not statistically decisive. The three Holm-adjusted paired exact McNemar p-values are 0.6037, 0.5199 and 0.6037. The defensible conclusion is “no clear winner in this local run.”
 
 ## What matches the official evaluation
 
 - Same named public benchmark and full 765-question scope.
 - Same source checksum and 762 unique images.
 - Matching model/quantization variants.
-- Exact multiple-choice scoring; a VLMEvalKit-compatible rescoring audit changed zero outcomes.
+- The public VLMEvalKit prompt is frozen from revision `470e51787a351764057869304e425bc76170bdc6`; the checksum-verified upstream `can_infer` scorer changed one extraction and one pass/fail outcome across 2,295 outputs.
 - One aggregate RealWorldQA result; the dog demo and external diagnostic suites are never mixed into it.
 
 ## What is not proven identical
 
-- Exact private VLMEvalKit revision and invocation used for the published table.
+- Exact internal harness revision and invocation used for the published table.
 - Bit-identical chat template, generation defaults and stop rules.
 - Bit-identical image decoder, resize implementation and numerical kernels.
 - Hardware, OS and runtime conditions.
-- Repeated-run or repeated-seed variance.
+- Behavior under different prompts, stochastic generation settings, hardware or numerical kernels.
 
-Therefore this project uses **local corroboration** or **method-aligned comparison**, not “official reproduction” or “new leaderboard result.” The canonical raw evidence is `reports/visionpsy-three-way-realworldqa-765-qvac-sdk-unified-0182.json`; older exploratory runs are intentionally excluded from the public repository.
+Therefore this project uses **local corroboration** or **method-aligned comparison**, not “official reproduction” or “new leaderboard result.” The canonical raw evidence is `reports/visionpsy-three-way-realworldqa-765-qvac-sdk-vlmevalkit-470e517.json`; older exploratory runs are intentionally excluded from the public repository.
+
+## Deterministic repeatability
+
+A seeded, answer-letter/option-count-stratified subset of 100 cases was evaluated three times per model. Repeat 1 reuses the canonical run; repeats 2 and 3 add 600 new inferences. Every model produced identical raw outputs and identical pass/fail verdicts on all 100 cases in all three passes, yielding a 0.00 percentage-point score swing. This demonstrates deterministic repeatability for this local fixed protocol; it is not a confidence interval and does not generalize to different prompts, seeds, hardware or stochastic decoding.
 
 ## Interpreting errors
 

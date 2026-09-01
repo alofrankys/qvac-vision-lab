@@ -11,6 +11,8 @@ if (run.dataset?.caseCount !== 765 || run.results?.length !== 2295) throw new Er
 
 const directScorerName = 'visionpsy-realworldqa-vlmevalkit-upstream-470e517.json'
 const directScorer = await readOptional(directScorerName)
+const repeatabilityName = 'visionpsy-realworldqa-repeatability-100x3.json'
+const repeatability = await readOptional(repeatabilityName)
 const providerIds = Object.keys(run.summaries)
 const published = {
   'qvac-visionpsy-standard-q8': 0.591,
@@ -49,6 +51,15 @@ const audit = {
     revision: directScorer.implementation.revision, scorerSha256: directScorer.implementation.scorerSha256,
     extractionDifferences: directScorer.totalExtractionDifferences, passVerdictChanges: directScorer.totalPassVerdictChanges
   } : { kind: 'NOT_YET_RUN', consequence: 'Do not claim direct VLMEvalKit scorer parity until the pinned upstream audit has completed.' },
+  repeatabilityAudit: repeatability ? {
+    report: repeatabilityName,
+    cases: repeatability.selection.cases,
+    repeats: 3,
+    newInferences: repeatability.selection.cases * 3 * 2,
+    maximumAccuracySwingPoints: Math.max(...Object.values(repeatability.providers).map(item => item.maximumAccuracySwingPoints)),
+    minimumExactOutputAgreement: Math.min(...Object.values(repeatability.providers).map(item => item.identicalOutputs.rate)),
+    minimumPassFailAgreement: Math.min(...Object.values(repeatability.providers).map(item => item.identicalPassFailVerdicts.rate))
+  } : null,
   controls: {
     dataset: 'Complete checksum-locked RealWorldQA: 765 questions over 762 unique image hashes.',
     prompt: run.dataset.promptTemplate || 'Legacy local answer-letter suffix; differs from upstream VLMEvalKit.',
@@ -60,7 +71,7 @@ const audit = {
   residualLimitations: [
     'Tether reports in-house results; an exact vendor environment and all internal generation details are not publicly frozen.',
     'This is one benchmark and does not reproduce the complete 17-benchmark VisionPsy table.',
-    'One deterministic full run does not estimate implementation nondeterminism; repeat-run variance remains a separate robustness question.',
+    repeatability ? 'The 100-case repeatability audit tests deterministic local implementation stability, not other prompts, stochastic settings, hardware or the full 765-case set.' : 'One deterministic full run does not estimate implementation nondeterminism; repeat-run variance remains a separate robustness question.',
     'Exact multiple-choice accuracy does not measure open-ended prose quality, safety, calibration or usefulness.',
     'Performance KPIs are local-device measurements and are not comparable with unpublished vendor hardware.'
   ]
@@ -104,13 +115,18 @@ function publicationWording(value) {
   const scorer = value.scorerAudit.kind === 'DIRECT_PINNED_VLMEVALKIT_SOURCE'
     ? `The checksum-pinned upstream VLMEvalKit scorer produced ${value.scorerAudit.extractionDifferences} extraction differences and ${value.scorerAudit.passVerdictChanges} pass/fail changes.`
     : 'Direct pinned VLMEvalKit scorer verification is still pending.'
-  return `I ran the complete 765-question RealWorldQA set locally on matching VisionPsy GGUF variants: ${scores}. ${scorer} This is an independent local corroboration on Apple Metal, not a reproduction of Tether's complete in-house evaluation.`
+  const repeatability = value.repeatabilityAudit
+    ? `A separate ${value.repeatabilityAudit.cases}-case, three-pass audit produced ${value.repeatabilityAudit.maximumAccuracySwingPoints.toFixed(2)} pp maximum score swing and ${(value.repeatabilityAudit.minimumExactOutputAgreement * 100).toFixed(1)}% minimum exact-output agreement.`
+    : 'A repeated-subset robustness audit is still pending.'
+  return `I ran the complete 765-question RealWorldQA set locally on matching VisionPsy GGUF variants: ${scores}. ${scorer} ${repeatability} This is an independent local corroboration on Apple Metal, not a reproduction of Tether's complete in-house evaluation.`
 }
 
 function markdown(value) {
   const lines = ['# VisionPsy methodology audit · adversarial release view', '', `Generated: ${value.generatedAt}`, '', `Verdict: **${value.verdict}**.`, '', '| Model | Local | Matching published GGUF | Delta |', '|---|---:|---:|---:|']
   for (const item of value.results) lines.push(`| ${item.label} | ${item.correct}/${item.total} (${percent(item.accuracy)}) | ${percent(item.publishedMatchingGgufAccuracy)} | ${signed(item.deltaPercentagePoints)} pp |`)
-  lines.push('', '## Sanity baselines', '', `- Majority answer-letter baseline: ${percent(value.sanityBaselines.majorityLetterBaseline)}.`, `- Weighted random-option baseline: ${Number.isFinite(value.sanityBaselines.weightedRandomOptionBaseline) ? percent(value.sanityBaselines.weightedRandomOptionBaseline) : 'unavailable until all manifests are installed'}.`, `- Answer letters: ${Object.entries(value.sanityBaselines.answerLetters).map(([key, count]) => `${key}=${count}`).join(', ')}.`, '', '## Publication wording', '', `> ${value.publicationWording}`, '', '## Residual limitations', '')
+  lines.push('', '## Sanity baselines', '', `- Majority answer-letter baseline: ${percent(value.sanityBaselines.majorityLetterBaseline)}.`, `- Weighted random-option baseline: ${Number.isFinite(value.sanityBaselines.weightedRandomOptionBaseline) ? percent(value.sanityBaselines.weightedRandomOptionBaseline) : 'unavailable until all manifests are installed'}.`, `- Answer letters: ${Object.entries(value.sanityBaselines.answerLetters).map(([key, count]) => `${key}=${count}`).join(', ')}.`)
+  if (value.repeatabilityAudit) lines.push('', '## Deterministic repeatability', '', `- ${value.repeatabilityAudit.cases} stratified cases × ${value.repeatabilityAudit.repeats} passes per model.`, `- ${value.repeatabilityAudit.newInferences} new inferences in passes 2 and 3.`, `- Maximum accuracy swing: ${value.repeatabilityAudit.maximumAccuracySwingPoints.toFixed(2)} pp.`, `- Minimum exact-output agreement: ${(value.repeatabilityAudit.minimumExactOutputAgreement * 100).toFixed(1)}%.`, `- Minimum pass/fail agreement: ${(value.repeatabilityAudit.minimumPassFailAgreement * 100).toFixed(1)}%.`)
+  lines.push('', '## Publication wording', '', `> ${value.publicationWording}`, '', '## Residual limitations', '')
   for (const item of value.residualLimitations) lines.push(`- ${item}`)
   lines.push('', 'Primary references:', '', '- https://huggingface.co/qvac/VisionPsy-Nano-460M-GGUFs', '- https://huggingface.co/qvac/VisionPsy-Nano-460M-Flash-GGUFs', '- https://github.com/open-compass/VLMEvalKit', '')
   return lines.join('\n')

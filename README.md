@@ -42,11 +42,11 @@ All three variants use QVAC SDK and the same QVAC llama.cpp backend on Apple Met
 
 | Variant | Local exact | Matching published GGUF | Delta |
 | --- | ---: | ---: | ---: |
-| Standard Q8_0 | 438/765 · 57.25% | 59.1% | -1.85 pp |
-| Flash Q8_0 | 432/765 · 56.47% | 56.7% | -0.23 pp |
-| Flash Q4_K_M imatrix | 432/765 · 56.47% | 54.9% | +1.57 pp |
+| Standard Q8_0 | 446/765 · 58.30% | 59.1% | -0.80 pp |
+| Flash Q8_0 | 438/765 · 57.25% | 56.7% | +0.55 pp |
+| Flash Q4_K_M imatrix | 428/765 · 55.95% | 54.9% | +1.05 pp |
 
-Standard finished six answers ahead, but paired exact McNemar tests with Holm correction found no clear winner. This is a **local corroboration**, not a bit-for-bit reproduction of Tether’s in-house VLMEvalKit run. Read the [methodology](docs/REALWORLDQA_METHODOLOGY.md), [publication audit](docs/PUBLICATION_AUDIT.md), and [canonical result](reports/visionpsy-three-way-realworldqa-765-qvac-sdk-unified-0182.md).
+Standard finished eight answers ahead of Flash Q8, but paired exact McNemar tests with Holm correction found no clear winner. A separate 100-case stratified repeatability audit produced identical outputs in all three passes for every model (0.00 pp score swing); that verifies this deterministic local implementation, not other prompts, hardware or stochastic settings. This is a **local corroboration**, not a bit-for-bit reproduction of Tether’s in-house evaluation. Read the [methodology](docs/REALWORLDQA_METHODOLOGY.md), [publication audit](docs/PUBLICATION_AUDIT.md), [canonical result](reports/visionpsy-three-way-realworldqa-765-qvac-sdk-vlmevalkit-470e517.md), and [repeatability audit](reports/visionpsy-realworldqa-repeatability-100x3.md).
 
 ## Reusable Visual Q&A workflow
 
@@ -121,6 +121,12 @@ npm run showcase:audit:vlmevalkit-upstream
 ```
 
 The scorer command verifies both the VLMEvalKit Git revision and the SHA-256 of `matching_util.py` before directly executing its `can_infer` implementation.
+
+For the separate deterministic repeatability audit (100 stratified cases, three passes per model; repeat 1 is reused from the canonical run):
+
+```bash
+npm run showcase:test:repeatability
+```
 
 ## Privacy
 

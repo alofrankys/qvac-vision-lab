@@ -9,7 +9,7 @@ import readline from 'node:readline'
 const root = path.resolve(import.meta.dirname, '..')
 const sourcePath = path.resolve(process.argv[2] || '')
 const expectedMd5 = '4de008f55dc4fd008ca9e15321dc44b7'
-const reportPath = path.join(root, 'reports', 'visionpsy-three-way-realworldqa-765-qvac-sdk-unified-0182.json')
+const reportPath = path.join(root, 'reports', 'visionpsy-three-way-realworldqa-765-qvac-sdk-vlmevalkit-470e517.json')
 
 if (!sourcePath) throw new Error('Usage: npm run showcase:install:realworldqa -- /path/to/RealWorldQA.tsv')
 if (await hashFile(sourcePath, 'md5') !== expectedMd5) throw new Error(`RealWorldQA checksum mismatch; expected ${expectedMd5}`)
