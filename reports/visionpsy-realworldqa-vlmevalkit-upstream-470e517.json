@@ -1,0 +1,50 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-09-01T22:04:23.745Z",
+  "inputReport": "visionpsy-three-way-realworldqa-765-qvac-sdk-vlmevalkit-470e517.json",
+  "implementation": {
+    "repository": "https://github.com/open-compass/VLMEvalKit",
+    "revision": "470e51787a351764057869304e425bc76170bdc6",
+    "source": "vlmeval/utils/matching_util.py can_infer",
+    "scorerSha256": "06088ed4da68cd9d8c3018e7630d0503f1365e6dd31f651cbedd8aa44dc14466",
+    "directChecksumVerifiedSourceExecution": true,
+    "judgeFallback": false
+  },
+  "totalCompared": 2295,
+  "totalExtractionDifferences": 1,
+  "totalPassVerdictChanges": 1,
+  "providers": {
+    "qvac-visionpsy-standard-q8": {
+      "cases": 765,
+      "upstreamPassed": 447,
+      "extractionDifferences": 1,
+      "passVerdictChanges": 1
+    },
+    "qvac-visionpsy": {
+      "cases": 765,
+      "upstreamPassed": 438,
+      "extractionDifferences": 0,
+      "passVerdictChanges": 0
+    },
+    "qvac-visionpsy-flash-q4": {
+      "cases": 765,
+      "upstreamPassed": 428,
+      "extractionDifferences": 0,
+      "passVerdictChanges": 0
+    }
+  },
+  "differences": [
+    {
+      "caseId": "realworldqa-validation-655",
+      "sourceIndex": 655,
+      "providerId": "qvac-visionpsy-standard-q8",
+      "expectedLetter": "D",
+      "output": "The correct answer is D.",
+      "localLetter": null,
+      "upstreamLetter": "D",
+      "sameExtraction": false,
+      "localPass": false,
+      "upstreamPass": true
+    }
+  ]
+}

@@ -7,9 +7,11 @@ const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..')
 const reportsDir = path.join(root, 'reports')
 const inputName = process.env.QVAC_AUDIT_INPUT || 'visionpsy-three-way-realworldqa-765-qvac-sdk-vlmevalkit-470e517.json'
 const parityName = process.env.QVAC_AUDIT_PARITY || 'visionpsy-realworldqa-vlmevalkit-upstream-470e517.json'
+const repeatabilityName = process.env.QVAC_AUDIT_REPEATABILITY || 'visionpsy-realworldqa-repeatability-100x3.json'
 const outputStem = process.env.QVAC_AUDIT_OUTPUT_STEM || 'visionpsy-realworldqa-765-qvac-sdk-vlmevalkit-audit'
 const run = JSON.parse(await readFile(path.join(reportsDir, inputName), 'utf8'))
 const scorerParity = JSON.parse(await readFile(path.join(reportsDir, parityName), 'utf8'))
+const repeatabilityRun = await optionalJson(path.join(reportsDir, repeatabilityName))
 const cases = SHOWCASE_CASES.filter(item => Number.isInteger(item.sourceIndex))
 const caseLookup = new Map(cases.map(item => [item.id, item]))
 const providerIds = ['qvac-visionpsy-standard-q8', 'qvac-visionpsy', 'qvac-visionpsy-flash-q4']
@@ -29,6 +31,9 @@ const pairwise = holmAdjust(buildPairwise())
 const minimumAdjustedP = Math.min(...pairwise.map(item => item.holmAdjustedP))
 const agreement = buildAgreement()
 const questionInventory = buildInventory()
+const repeatability = buildRepeatability(repeatabilityRun)
+const flashQuantizationPair = pairwise.find(item => item.leftId === 'qvac-visionpsy' && item.rightId === 'qvac-visionpsy-flash-q4')
+const leaderMargin = providers[0].real.passed - providers[1].real.passed
 const report = {
   schemaVersion: 2,
   generatedAt: new Date().toISOString(),
@@ -80,7 +85,7 @@ const report = {
     observedWeakness('Left/right confusion', 'Observed directionally: only 3 explicitly labelled left/right cases; Standard passed 1 and each Flash passed 2. The sample is too small for a conclusion.', 'OBSERVED_BUT_UNDERPOWERED'),
     observedWeakness('Degenerate repetition loops', 'Not observable under one-letter constrained decoding; all 2,295 answers were parseable.', 'MASKED_BY_PROTOCOL'),
     observedWeakness('Flash sensitivity on high-resolution OCR', 'Not isolated by RealWorldQA capability labels; requires OCRBench/DocVQA/InfoVQA or a dedicated high-resolution OCR slice.', 'NOT_TESTED'),
-    observedWeakness('Quality degradation at lower quantization', 'Not visible in aggregate here: Flash Q8 and Flash Q4 both scored 432/765, but each uniquely won 35 cases, so equal totals hide different errors.', 'NOT_OBSERVED_IN_AGGREGATE')
+    observedWeakness('Quality degradation at lower quantization', `Observed directionally but not decisively: Flash Q8 scored ${run.summaries['qvac-visionpsy'].passed}/765 and Flash Q4 scored ${run.summaries['qvac-visionpsy-flash-q4'].passed}/765. They disagreed on ${flashQuantizationPair.leftOnly + flashQuantizationPair.rightOnly} cases (${flashQuantizationPair.leftOnly} Q8-only wins, ${flashQuantizationPair.rightOnly} Q4-only wins).`, 'OBSERVED_BUT_NOT_SIGNIFICANT')
   ],
   promptAblation: null,
   criticalities: [
@@ -89,16 +94,17 @@ const report = {
     criticality(3, 'Answer choices are imbalanced and category labels are heuristic', 'High', 'The majority answer letter is B (337/765); local capability labels are not an official RealWorldQA taxonomy.', 'Report only headline accuracy.', 'Publish majority/random baselines and label every category breakdown as local heuristic analysis.', 'B', 'This prevents category and letter-position artifacts from being mistaken for general visual skill.'),
     criticality(4, 'A single benchmark cannot validate all advertised capabilities', 'High', 'OCR, documents, charts, hallucination, instruction following and open-ended reasoning are weakly represented or absent.', 'Keep the claim strictly scoped to RealWorldQA.', 'Add official OCRBench, ChartQA, POPE and MM-IFEval replications later.', 'A now; B next', 'The X post must not generalize this score to overall VisionPsy quality.'),
     criticality(5, 'Exact one-letter scoring masks answer quality', 'Medium', 'It measures option selection, not explanations, calibration, hallucination or repetition.', 'Use exact scoring because that is the benchmark metric.', 'Add a separate open-answer qualitative audit with a frozen rubric.', 'A for benchmark; B as separate evidence', 'Do not mix qualitative grades into the official accuracy denominator.'),
-    criticality(6, 'The score gaps are statistically weak', 'High', 'Standard leads each Flash by 6/765, while paired exact McNemar p-values are about 0.70.', 'Publish the raw ranking only.', 'Publish counts, confidence intervals and paired tests together.', 'B', 'The defensible conclusion is “no clear local winner”, despite the rank order.'),
+    criticality(6, 'The score gaps are statistically weak', 'High', `The aggregate leader is only ${leaderMargin}/765 answers ahead of the runner-up, and the minimum Holm-adjusted paired p-value is ${minimumAdjustedP.toFixed(4)}.`, 'Publish the raw ranking only.', 'Publish counts, confidence intervals and paired tests together.', 'B', 'The defensible conclusion is “no clear local winner”, despite the rank order.'),
     criticality(7, 'System resource KPIs are not model-isolated', 'Medium', 'macOS GPU counters are system-wide and unified memory/process RSS does not fully represent model footprint.', 'Show them as live operational telemetry.', 'Label their scope and avoid cross-machine claims; use isolated device profiling for publication-grade memory data.', 'B', 'Latency is reliable for this machine/run; GPU/RAM comparisons need narrower claims.'),
-    criticality(8, 'Equal aggregate scores can hide different failure sets', 'Medium', 'Flash Q8 and Q4 tie overall but disagree on 70 questions.', 'Rank by total accuracy only.', 'Publish paired disagreement counts and inspect recurrent clusters.', 'B', 'The Q4 result does not prove quantization is lossless on individual cases.'),
+    criticality(8, 'Aggregate scores can hide different failure sets', 'Medium', `Flash Q8 and Q4 differ by ${Math.abs(run.summaries['qvac-visionpsy'].passed - run.summaries['qvac-visionpsy-flash-q4'].passed)} correct answers but disagree on ${flashQuantizationPair.leftOnly + flashQuantizationPair.rightOnly} individual questions.`, 'Rank by total accuracy only.', 'Publish paired disagreement counts and inspect recurrent clusters.', 'B', 'The Q4 result does not prove quantization is lossless on individual cases.'),
     criticality(9, 'Official-number provenance changes with precision and table revision', 'Medium', 'FP32/model-card headlines and matching GGUF rows are not interchangeable.', 'Compare against the family headline.', 'Compare each local file only against its matching GGUF column and record source URLs/date.', 'B', 'This avoids claiming a gain or loss against the wrong precision.'),
-    criticality(10, 'No repeated-seed variance estimate', 'Medium', 'A deterministic run reveals paired case differences but not sensitivity to stochastic decoding or implementation nondeterminism.', 'Use temperature-zero once.', 'Repeat a stratified subset and hash outputs/configuration.', 'A for this exact benchmark; B for robustness audit', 'One deterministic run is valid for the fixed protocol, not a universal variance estimate.'),
+    criticality(10, 'Repeatability is measured on a subset', 'Medium', repeatability ? `A deterministic 100-case subset was run three times: every provider had ${repeatability.minimumExactOutputAgreement * 100}% exact-output agreement and ${repeatability.maximumAccuracySwingPoints.toFixed(2)} pp maximum accuracy swing.` : 'The full run has no repeated-subset robustness audit attached.', 'Treat the deterministic full run as sufficient for this exact protocol.', 'Publish the separate stratified repeatability audit without presenting it as a confidence interval.', repeatability ? 'B completed' : 'B', 'This tests local implementation stability, not all prompts, seeds, hardware or stochastic settings.'),
     criticality(11, 'Execution remains sequential on one device', 'Low', 'The seeded shuffle and Latin rotation balance positions, but thermal drift can still affect performance KPIs.', 'Ignore run position.', 'Publish order and temperature-independent quality separately from device-specific performance.', 'B', 'Accuracy remains paired; latency is explicitly local-device evidence.')
   ],
   questionInventory,
   agreement,
   pairwise,
+  repeatability,
   providers,
   sanityBaselines: buildSanityBaselines(questionInventory),
   categoryLabels: { provenance: 'LOCAL_HEURISTIC', publicationRule: 'Never describe these labels as an official RealWorldQA taxonomy.' },
@@ -106,6 +112,7 @@ const report = {
   artifacts: {
     rawRun: inputName,
     scorerParity: parityName,
+    repeatability: repeatability ? repeatabilityName : null,
     checkpoint: '.visionpsy-three-way-realworldqa-765-qvac-sdk-vlmevalkit-470e517.checkpoint.ndjson',
     inputManifestEmbedded: Boolean(run.dataset.inputManifest?.length === 765),
     reproducibility: run.reproducibility
@@ -218,10 +225,43 @@ function markdown(audit) {
   audit.providers.forEach((provider, index) => lines.push(`| ${index + 1} | ${provider.label} | ${cell(provider.real)} | ${percent(provider.officialRealWorldQaAccuracy)} | ${signedPoints(provider.deviationFromOfficial)} | ${provider.real.interval.map(value => `${value.toFixed(1)}%`).join('–')} | ${duration(provider.performance.ttftMs.mean)} | ${duration(provider.performance.latencyMs.mean)} |`))
   lines.push('', `Statistical verdict: **${audit.verdict.statisticalVerdict.replaceAll('_', ' ')}**.`, '', `Sanity baselines: majority letter ${percent(audit.sanityBaselines.majorityLetterBaseline)}; option-count-weighted random choice ${percent(audit.sanityBaselines.weightedRandomOptionBaseline)}.`, '', 'Paired exact McNemar tests (Holm-adjusted):', '')
   for (const pair of audit.pairwise) lines.push(`- ${pair.leftLabel} vs ${pair.rightLabel}: unique wins ${pair.leftOnly}–${pair.rightOnly}; raw p=${pair.exactMcNemarP.toFixed(4)}; Holm p=${pair.holmAdjustedP.toFixed(4)}.`)
+  if (audit.repeatability) {
+    lines.push('', '## Deterministic repeatability', '', `${audit.repeatability.cases} stratified cases, ${audit.repeatability.repeats} total passes per model; repeats 2 and 3 add ${audit.repeatability.newInferences} new inferences.`, '')
+    for (const provider of audit.repeatability.providers) lines.push(`- ${provider.label}: ${provider.repeatScores.map(item => `${item.passed}/${item.cases}`).join(' · ')}; max swing ${provider.maximumAccuracySwingPoints.toFixed(2)} pp; exact outputs ${provider.identicalOutputs.cases}/${provider.identicalOutputs.total}.`)
+    lines.push('', audit.repeatability.interpretation)
+  }
   lines.push('', `Agreement: all correct ${audit.agreement.allCorrect}; all wrong ${audit.agreement.allWrong}; exactly one correct ${audit.agreement.exactlyOneCorrect}; exactly two correct ${audit.agreement.exactlyTwoCorrect}.`, '', '## Methodology versus official', '', `- Same public scope: ${audit.methodology.questions} questions, ${audit.methodology.uniqueRealImages} unique real images, source MD5 \`${audit.methodology.sourceMd5}\`.`, `- Prompt frozen verbatim from the pinned public VLMEvalKit revision; image is supplied before text.`, `- Same native stack across local variants: ${audit.methodology.runtime}; ${audit.methodology.backend}.`, `- Direct upstream scorer audit: ${audit.methodology.scorerParity.extractionDifferences} extraction differences and ${audit.methodology.scorerParity.passVerdictChanges} pass/fail changes (revision \`${audit.methodology.scorerParity.revision}\`).`, `- Remaining caveat: ${audit.methodology.officialDifference}`, '', '## Audit criticalities', '')
   for (const item of audit.criticalities) lines.push(`${item.id}. **${item.title} (${item.severity})** — ${item.consequence} Recommended: ${item.recommended}.`)
   lines.push('', '## Publication-safe claim', '', audit.verdict.publicationSafeClaim, '')
   return lines.join('\n')
+}
+
+function buildRepeatability(source) {
+  if (!source?.providers || !source.selection?.cases) return null
+  const providers = providerIds.map(providerId => {
+    const provider = source.providers[providerId]
+    assert(provider?.repeats?.length === 3, `Incomplete repeatability rows for ${providerId}`)
+    return {
+      providerId,
+      label: provider.label,
+      repeatScores: provider.repeats,
+      maximumAccuracySwingPoints: provider.maximumAccuracySwingPoints,
+      identicalOutputs: provider.identicalOutputs,
+      identicalPassFailVerdicts: provider.identicalPassFailVerdicts
+    }
+  })
+  return {
+    cases: source.selection.cases,
+    repeats: 3,
+    newInferences: source.selection.cases * providerIds.length * 2,
+    seed: source.selection.seed,
+    stratifiedBy: source.selection.stratifiedBy,
+    maximumAccuracySwingPoints: Math.max(...providers.map(item => item.maximumAccuracySwingPoints)),
+    minimumExactOutputAgreement: Math.min(...providers.map(item => item.identicalOutputs.rate)),
+    minimumPassFailAgreement: Math.min(...providers.map(item => item.identicalPassFailVerdicts.rate)),
+    providers,
+    interpretation: source.interpretation
+  }
 }
 
 function observedWeakness(claim, localFinding, status) { return { claim, localFinding, status } }

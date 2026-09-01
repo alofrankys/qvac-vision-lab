@@ -1,6 +1,6 @@
 # Public repository audit
 
-Audit date: 2026-09-01. Scope: repository history, runtime surface, dependencies, data provenance, benchmark methodology, public UX, reproducibility and publication contents.
+Audit date: 2026-09-02. Scope: repository history, runtime surface, dependencies, data provenance, benchmark methodology, public UX, reproducibility and publication contents.
 
 ## Publication contract
 
@@ -15,7 +15,7 @@ The public repository tells two distinct stories:
 | --- | --- | --- |
 | `sharp` dependency had published high-severity libvips advisories | High | Pinned `sharp` 0.35.4; production dependency audit returns zero known vulnerabilities. |
 | Redistributed RealWorldQA samples created avoidable licensing ambiguity | High | No RealWorldQA image/question is committed. The complete checksum-locked dataset is reconstructed locally and ignored by Git. |
-| Old 600-case diagnostic material could be mistaken for RealWorldQA evidence | High | Removed from the public Experiment 06 surface and aggregate; only canonical 765-case artifacts are allow-listed. |
+| Old diagnostic and superseded RealWorldQA material could be mistaken for canonical evidence | High | Removed from the public Experiment 06 surface and aggregate; the reports index names only the frozen 765-case run, direct scorer audit, methodology audit and repeatability audit as canonical. |
 | “Replica” language overstated parity with an in-house harness | High | README, UI and methodology use “local corroboration” and enumerate every known mismatch. |
 | Recording endpoint could write arbitrary volumes of local frame files | High | Disabled by default and gated behind `QVAC_ENABLE_FRAME_CAPTURE=1`; filenames and payload sizes remain bounded. |
 | Third-party music had no recorded redistribution grant | High | Excluded from Git; the demo falls back to locally generated Web Audio. |
@@ -28,7 +28,7 @@ The public repository tells two distinct stories:
 - Full RealWorldQA reconstruction requires the official source TSV and about 130 MB of generated local assets.
 - Model weights are external, large and downloaded on first use.
 - The browser dashboard is local-only and has not been hardened for exposure to an untrusted network.
-- The checked-in benchmark is a single machine/run. Its paired statistics reduce overclaiming but do not estimate run-to-run variance.
+- The checked-in benchmark is from one machine. A 100-case, three-pass audit found 100% exact-output agreement, but it does not estimate behavior across other prompts, stochastic settings, hardware or the full benchmark under repeated execution.
 
 ## Publication decision
 
