@@ -224,9 +224,10 @@ function officialRealWorldCase(item, manifest, group) {
 
 export function formatMultipleChoicePrompt(question, options) {
   return [
-    String(question || '').trim(),
+    `Question: ${String(question || '').trim()}`,
+    'Options:',
     ...Object.entries(options || {}).map(([letter, answer]) => `${letter}. ${answer}`),
-    'Answer with only the letter of the correct option.'
+    'Please select the correct answer from the options above. '
   ].join('\n')
 }
 

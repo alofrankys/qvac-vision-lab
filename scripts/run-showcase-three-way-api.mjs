@@ -1,11 +1,24 @@
+import { createHash } from 'node:crypto'
+import { execFileSync } from 'node:child_process'
 import { appendFile, mkdir, readFile, writeFile } from 'node:fs/promises'
+import os from 'node:os'
 import path from 'node:path'
 import { fileURLToPath } from 'node:url'
+import {
+  MMPROJ_VISIONPSY_NANO_460M_MULTIMODAL_Q8_0,
+  MMPROJ_VISIONPSY_NANO_460M_MULTIMODAL_Q8_0_1,
+  VISIONPSY_NANO_460M_MULTIMODAL_Q4_K_M,
+  VISIONPSY_NANO_460M_MULTIMODAL_Q8_0,
+  VISIONPSY_NANO_460M_MULTIMODAL_Q8_0_1
+} from '@qvac/sdk'
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..')
 const baseUrl = process.env.QVAC_SHOWCASE_URL || 'http://127.0.0.1:8878'
 const suiteId = process.env.QVAC_SHOWCASE_SUITE || 'official-real'
 const runId = sanitizeRunId(process.env.QVAC_SHOWCASE_RUN_ID || '')
+const shuffleSeed = String(process.env.QVAC_SHOWCASE_SHUFFLE_SEED || '')
+const vlmevalkitRevision = '470e51787a351764057869304e425bc76170bdc6'
+const vlmevalkitScorerSha256 = '06088ed4da68cd9d8c3018e7630d0503f1365e6dd31f651cbedd8aa44dc14466'
 const suites = Object.freeze({
   'official-real': { expectedCount: 20, slug: 'realworldqa-20', name: 'RealWorldQA official real-image sample', group: item => item.group === 'official-real', scoring: 'multiple-choice exact', prompt: 'benchmark-native question and options; answer-letter-only suffix' },
   'validation-real': { expectedCount: 50, slug: 'realworldqa-validation-50', name: 'RealWorldQA content-blind validation sample', group: item => item.group === 'validation-real', scoring: 'multiple-choice exact', prompt: 'benchmark-native question and options; answer-letter-only suffix' },
@@ -27,11 +40,17 @@ const providerLabels = Object.freeze({
   'qvac-visionpsy': 'VisionPsy Flash Q8 (QVAC SDK)',
   'qvac-visionpsy-flash-q4': 'VisionPsy Flash Q4 imatrix (QVAC SDK)'
 })
+const artifactSources = Object.freeze({
+  'qvac-visionpsy-standard-q8': { model: VISIONPSY_NANO_460M_MULTIMODAL_Q8_0_1, projector: MMPROJ_VISIONPSY_NANO_460M_MULTIMODAL_Q8_0_1 },
+  'qvac-visionpsy': { model: VISIONPSY_NANO_460M_MULTIMODAL_Q8_0, projector: MMPROJ_VISIONPSY_NANO_460M_MULTIMODAL_Q8_0 },
+  'qvac-visionpsy-flash-q4': { model: VISIONPSY_NANO_460M_MULTIMODAL_Q4_K_M, projector: MMPROJ_VISIONPSY_NANO_460M_MULTIMODAL_Q8_0 }
+})
 
 const response = await fetch(`${baseUrl}/api/showcase`)
 if (!response.ok) throw new Error(`Showcase API returned HTTP ${response.status}`)
 const catalog = await response.json()
-const cases = catalog.cases.filter(suite.group)
+const selectedCases = catalog.cases.filter(suite.group)
+const cases = shuffleSeed ? deterministicShuffle(selectedCases, shuffleSeed) : selectedCases
 if (cases.length !== suite.expectedCount) throw new Error(`Expected ${suite.expectedCount} ${suiteId} cases, received ${cases.length}`)
 for (const providerId of providerIds) {
   const provider = catalog.providers.find(item => item.id === providerId)
@@ -93,7 +112,7 @@ const inferenceFinishedAt = results.map(item => {
 }).filter(Number.isFinite).sort((a, b) => b - a)[0]
 
 const report = {
-  schemaVersion: 1,
+  schemaVersion: 2,
   runId: runId || null,
   protocol: `QVAC Vision Lab Experiment 06 · ${suite.name} · three-way${runId ? ` · ${runId}` : ''}`,
   baseUrl,
@@ -107,8 +126,44 @@ const report = {
     sourceIndices: cases.map(item => item.sourceIndex),
     scoring: suite.scoring,
     prompt: suite.prompt,
-    orderPolicy: 'provider order rotates by case index',
-    warmupPolicy: 'one excluded warm-up per provider'
+    promptTemplate: 'Question: <question>\\nOptions:\\nA. ...\\nPlease select the correct answer from the options above. ',
+    imageMessageOrder: 'image before text',
+    orderPolicy: shuffleSeed ? 'cases deterministically shuffled; provider order uses a balanced three-position Latin rotation' : 'provider order rotates by case index',
+    shuffleSeed: shuffleSeed || null,
+    warmupPolicy: 'one excluded warm-up per provider',
+    inputManifest: cases.map(item => ({
+      caseId: item.id,
+      sourceIndex: item.sourceIndex,
+      imageSha256: item.imageSha256,
+      questionSha256: sha256(item.question),
+      optionsSha256: sha256(stableJson(item.options)),
+      promptSha256: sha256(item.prompt),
+      expectedLetterSha256: sha256(item.expectedLetter)
+    }))
+  },
+  reproducibility: {
+    applicationCommit: gitValue(['rev-parse', 'HEAD']),
+    applicationDirty: Boolean(gitValue(['status', '--porcelain'])),
+    generation: { temp: 0, top_p: 1, top_k: 40, seed: 42, predict: 16 },
+    scorer: {
+      implementation: 'OpenCompass VLMEvalKit vlmeval/utils/matching_util.py can_infer',
+      revision: vlmevalkitRevision,
+      fileSha256: vlmevalkitScorerSha256
+    },
+    artifacts: Object.fromEntries(providerIds.map(providerId => [providerId, {
+      model: artifactMetadata(artifactSources[providerId].model),
+      projector: artifactMetadata(artifactSources[providerId].projector)
+    }])),
+    environment: {
+      platform: os.platform(),
+      release: os.release(),
+      architecture: os.arch(),
+      cpu: os.cpus()[0]?.model || null,
+      logicalCpuCount: os.cpus().length,
+      totalMemoryBytes: os.totalmem(),
+      node: process.version
+    },
+    retryPolicy: 'up to three attempts for transport/runtime failure only; valid wrong answers are never retried'
   },
   providers: Object.fromEntries(providerIds.map(id => [id, catalog.providers.find(item => item.id === id)])),
   warmups,
@@ -279,6 +334,39 @@ function percentile(ordered, fraction) {
 function rotate(items, offset) {
   const shift = ((offset % items.length) + items.length) % items.length
   return [...items.slice(shift), ...items.slice(0, shift)]
+}
+
+function deterministicShuffle(items, seed) {
+  return [...items].sort((left, right) => {
+    const leftHash = sha256(`${seed}:${left.sourceIndex}:${left.id}`)
+    const rightHash = sha256(`${seed}:${right.sourceIndex}:${right.id}`)
+    return leftHash.localeCompare(rightHash) || String(left.id).localeCompare(String(right.id))
+  })
+}
+
+function stableJson(value) {
+  if (Array.isArray(value)) return `[${value.map(stableJson).join(',')}]`
+  if (value && typeof value === 'object') return `{${Object.keys(value).sort().map(key => `${JSON.stringify(key)}:${stableJson(value[key])}`).join(',')}}`
+  return JSON.stringify(value)
+}
+
+function sha256(value) {
+  return createHash('sha256').update(String(value ?? '')).digest('hex')
+}
+
+function artifactMetadata(source) {
+  return {
+    registryPath: source.registryPath,
+    revision: source.registryPath?.match(/\/resolve\/([a-f0-9]{40})\//)?.[1] || null,
+    modelId: source.modelId,
+    expectedSize: source.expectedSize,
+    sha256: source.sha256Checksum,
+    quantization: source.quantization
+  }
+}
+
+function gitValue(args) {
+  try { return execFileSync('git', args, { cwd: root, encoding: 'utf8' }).trim() } catch { return null }
 }
 
 function sanitizeRunId(value) {

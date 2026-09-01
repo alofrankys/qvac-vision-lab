@@ -38,7 +38,7 @@ Experiment 06 exposes two public scenarios:
 1. **Dog stories** — four personal photographs, four natural questions and 12 live local inferences. This is an explanatory demo, not a benchmark.
 2. **RealWorldQA corroboration** — the official 765 questions over 762 unique real images from the checksum-locked TSV (`MD5 4de008f55dc4fd008ca9e15321dc44b7`). Questions and options are preserved and scored by exact answer letter. No synthetic or external suite enters the aggregate.
 
-All three variants use QVAC SDK and the same QVAC llama.cpp backend on Apple Metal; preprocessing remains model-specific. Execution order rotates per image. Recording Assist shows raw answers, Pass/Fail, TTFT, latency, throughput, tokens, process RSS/CPU, and system-wide macOS GPU samples.
+All three variants use QVAC SDK and the same QVAC llama.cpp backend on Apple Metal; preprocessing remains model-specific. The confirmatory protocol uses the checksum-pinned upstream VLMEvalKit prompt, deterministic case shuffling with a published seed, and a balanced three-position provider rotation. Recording Assist shows raw answers, Pass/Fail, TTFT, latency, throughput, tokens, process RSS/CPU, and system-wide macOS GPU samples.
 
 | Variant | Local exact | Matching published GGUF | Delta |
 | --- | ---: | ---: | ---: |
@@ -91,6 +91,8 @@ See [architecture](docs/ARCHITECTURE.md), the [PawVault experiment index](docs/e
 
 Requirements: macOS 14+, Node.js 22.17+, npm 10.9+. Apple Silicon is recommended.
 
+The npm dependency tree includes QVAC native binaries for several supported platforms. A clean `npm ci` currently occupies approximately 5.7 GB; model files and reconstructed RealWorldQA images require additional disk space.
+
 Local vision models are loaded only by real inference requests. QVAC SDK models
 and owned patched `llama-server` processes unload after 15 idle minutes by
 default and cold-start on demand; set `QVAC_VISION_IDLE_UNLOAD_MS` to override
@@ -103,13 +105,22 @@ npm start
 
 Open <http://127.0.0.1:8877>. Port 8877 is the permanent project UI port. Run checks with `npm test`. New experiments are prepared as drafts and are never executed automatically.
 
-The repository includes the four dog photos and a 20-case RealWorldQA display sample. To reconstruct all 765 official cases, download the official `RealWorldQA.tsv` and run:
+The repository includes the four owner-supplied dog photos but redistributes no RealWorldQA images or questions. To reconstruct all 765 official cases locally, download the official `RealWorldQA.tsv` and run:
 
 ```bash
 npm run showcase:install:realworldqa -- /absolute/path/to/RealWorldQA.tsv
 ```
 
-The installer refuses a source whose MD5 is not `4de008f55dc4fd008ca9e15321dc44b7`. Then use `npm run showcase:test:official-all-qvac-unified` for the complete three-model cycle. Models are downloaded by the configured QVAC providers on first use and are not stored in Git.
+The installer refuses a source whose MD5 is not `4de008f55dc4fd008ca9e15321dc44b7`. Then use `npm run showcase:test:official-all-vlmevalkit` for the complete three-model cycle. Models are downloaded by the configured QVAC providers on first use and are not stored in Git.
+
+For the checksum-pinned upstream scorer audit:
+
+```bash
+npm run showcase:setup:vlmevalkit-scorer
+npm run showcase:audit:vlmevalkit-upstream
+```
+
+The scorer command verifies both the VLMEvalKit Git revision and the SHA-256 of `matching_util.py` before directly executing its `can_infer` implementation.
 
 ## Privacy
 
@@ -123,6 +134,10 @@ Photos, EXIF/GPS, state, model outputs, backups, inference images, frame capture
 - Small evaluations reveal hypotheses and failure modes, not universal model rankings.
 
 Historical detailed findings and upstream evidence are indexed under `docs/experiments/pawvault/`.
+
+## License
+
+Source code is licensed under the Apache License 2.0; see [LICENSE](LICENSE). RealWorldQA, model artifacts, personal photographs and other third-party material retain their own terms described in [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md). The four dog-demo photographs are not licensed for reuse.
 
 ## Limitations
 

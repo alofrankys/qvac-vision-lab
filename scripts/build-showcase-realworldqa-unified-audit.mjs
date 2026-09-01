@@ -5,13 +5,11 @@ import { SHOWCASE_CASES } from '../src/showcase/index.mjs'
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..')
 const reportsDir = path.join(root, 'reports')
-const inputName = process.env.QVAC_AUDIT_INPUT || 'visionpsy-three-way-realworldqa-765-qvac-sdk-unified-0182.json'
-const parityName = process.env.QVAC_AUDIT_PARITY || 'visionpsy-realworldqa-vlmeval-parity-qvac-sdk-unified-0182.json'
-const outputStem = process.env.QVAC_AUDIT_OUTPUT_STEM || 'visionpsy-realworldqa-765-qvac-sdk-unified-audit'
+const inputName = process.env.QVAC_AUDIT_INPUT || 'visionpsy-three-way-realworldqa-765-qvac-sdk-vlmevalkit-470e517.json'
+const parityName = process.env.QVAC_AUDIT_PARITY || 'visionpsy-realworldqa-vlmevalkit-upstream-470e517.json'
+const outputStem = process.env.QVAC_AUDIT_OUTPUT_STEM || 'visionpsy-realworldqa-765-qvac-sdk-vlmevalkit-audit'
 const run = JSON.parse(await readFile(path.join(reportsDir, inputName), 'utf8'))
 const scorerParity = JSON.parse(await readFile(path.join(reportsDir, parityName), 'utf8'))
-const historical = await optionalJson(path.join(reportsDir, 'visionpsy-three-way-realworldqa-765.json'))
-const promptAblation = await optionalJson(path.join(reportsDir, 'visionpsy-realworldqa-prompt-ablation-120-qvac-sdk-unified.json'))
 const cases = SHOWCASE_CASES.filter(item => Number.isInteger(item.sourceIndex))
 const caseLookup = new Map(cases.map(item => [item.id, item]))
 const providerIds = ['qvac-visionpsy-standard-q8', 'qvac-visionpsy', 'qvac-visionpsy-flash-q4']
@@ -34,15 +32,15 @@ const questionInventory = buildInventory()
 const report = {
   schemaVersion: 2,
   generatedAt: new Date().toISOString(),
-  title: 'VisionPsy · RealWorldQA 765 · unified QVAC audit',
+  title: 'VisionPsy · RealWorldQA 765 · upstream-prompt QVAC audit',
   statisticalVerdict: minimumAdjustedP < 0.05 ? 'SIGNIFICANT_DIFFERENCE_AFTER_HOLM' : 'NO_CLEAR_WINNER_AFTER_HOLM',
   realPairwise: pairwise,
   verdict: {
     ranking: providers.map(item => item.providerId),
     statisticalVerdict: minimumAdjustedP < 0.05 ? 'SIGNIFICANT_DIFFERENCE_AFTER_HOLM' : 'NO_CLEAR_WINNER_AFTER_HOLM',
-    summary: 'Standard Q8 finishes first by six answers, but the paired differences are not statistically significant. Treat the ordering as a local corroboration of the official direction, not proof that Standard is categorically better.',
-    qualityConclusion: 'The three variants are statistically tied on this local run; Standard trades substantially higher TTFT for a small, uncertain quality edge.',
-    publicationSafeClaim: 'On the complete 765-question RealWorldQA set, using the same local QVAC SDK/backend and exact option scoring, Standard Q8 scored 57.3% and both Flash variants 56.5%. Standard ranked first, but paired tests found no significant winner.'
+    summary: verdictSummary(providers, minimumAdjustedP),
+    qualityConclusion: minimumAdjustedP < 0.05 ? 'At least one paired model difference remains significant after Holm correction.' : 'The observed rank order is not statistically decisive in this local run.',
+    publicationSafeClaim: publicationSafeClaim(providers, minimumAdjustedP)
   },
   methodology: {
     dataset: 'RealWorldQA',
@@ -50,7 +48,7 @@ const report = {
     uniqueRealImages: questionInventory.uniqueImageHashes,
     sourceMd5: run.dataset.sourceMd5,
     scoring: 'Exact multiple-choice option accuracy; one point per question; no cross-suite aggregation.',
-    prompt: run.dataset.prompt,
+    prompt: run.dataset.promptTemplate,
     providerOrder: run.dataset.orderPolicy,
     warmup: run.dataset.warmupPolicy,
     runtime: '@qvac/sdk 0.18.2',
@@ -62,11 +60,13 @@ const report = {
       'qvac-visionpsy-flash-q4': 'native-resolution-no-upscale'
     },
     scorerParity: {
-      implementation: 'VLMEvalKit-compatible deterministic can_infer audit',
-      extractionDifferences: scorerParity.totalExtractionDisagreements,
+      implementation: 'Direct checksum-verified OpenCompass VLMEvalKit can_infer source execution',
+      revision: scorerParity.implementation.revision,
+      scorerSha256: scorerParity.implementation.scorerSha256,
+      extractionDifferences: scorerParity.totalExtractionDifferences,
       passVerdictChanges: scorerParity.totalPassVerdictChanges
     },
-    officialDifference: 'Tether reports a single VLMEvalKit harness and official benchmark metrics. This run matches the public dataset, checksum, option scoring, model quantizations and QVAC-native serving stack, but does not establish bit-for-bit parity of VLMEvalKit version, generation parameters, prompt template, image decoder/resize path, or hardware.'
+    officialDifference: 'This run freezes the public VLMEvalKit prompt/scorer revision, dataset checksum, generation values, artifact hashes and QVAC-native stack. It cannot establish parity with unavailable vendor-internal environment details, hardware or numerical kernels.'
   },
   officialReferences: {
     standardGguf: 'https://huggingface.co/qvac/VisionPsy-Nano-460M-GGUFs',
@@ -82,24 +82,11 @@ const report = {
     observedWeakness('Flash sensitivity on high-resolution OCR', 'Not isolated by RealWorldQA capability labels; requires OCRBench/DocVQA/InfoVQA or a dedicated high-resolution OCR slice.', 'NOT_TESTED'),
     observedWeakness('Quality degradation at lower quantization', 'Not visible in aggregate here: Flash Q8 and Flash Q4 both scored 432/765, but each uniquely won 35 cases, so equal totals hide different errors.', 'NOT_OBSERVED_IN_AGGREGATE')
   ],
-  promptAblation: promptAblation ? {
-    cases: promptAblation.selection.cases,
-    uniqueImages: promptAblation.selection.uniqueImages,
-    decision: 'KEEP_CURRENT_765_NO_FULL_RERUN',
-    conclusion: 'The VLMEvalKit prompt changes individual answers but produces no significant aggregate improvement on the controlled 120-case sample.',
-    providers: Object.fromEntries(Object.entries(promptAblation.providers).map(([providerId, item]) => [providerId, {
-      current: item.current,
-      vlmeval: item.vlmeval,
-      deltaAnswers: item.deltaAnswers,
-      gained: item.gained,
-      lost: item.lost,
-      exactMcNemarP: item.exactMcNemarP
-    }]))
-  } : null,
+  promptAblation: null,
   criticalities: [
-    criticality(1, 'Prompt and generation parity are not bit-for-bit proven', 'High', 'Small models can flip answers with formatting, option punctuation, image/text ordering, stop tokens and decoding settings.', 'Freeze and publish the exact local prompt/runtime configuration.', 'Run an A/B parity replication using the pinned upstream VLMEvalKit prompt and generation config.', 'B', 'Without this, compare direction and distance cautiously; do not call the run an exact reproduction.'),
+    criticality(1, 'Vendor-internal environment is not public', 'Medium', 'The public prompt and scorer can be frozen, but unavailable vendor hardware and full internal invocation cannot be reconstructed.', 'Call the result an exact reproduction.', 'Call it an independent local corroboration with a fully frozen local protocol.', 'B', 'The local run is auditable without overstating vendor parity.'),
     criticality(2, 'Preprocessing differs intentionally between Standard and Flash', 'High', 'Standard consumes tiled/upscaled views while Flash consumes the native view; this is part of the model design but prevents attributing every difference to weights alone.', 'Keep official per-model preprocessing for product-realistic comparison.', 'Add a preprocessing ablation while retaining the official run as primary.', 'A+B', 'Official preprocessing is the fair headline; the ablation explains whether tiling helps or hurts particular cases.'),
-    criticality(3, 'RealWorldQA is compositionally imbalanced', 'High', 'Counting, spatial relation and binary reasoning contribute 518/765 questions, while several named capabilities have 1–3 cases.', 'Report only the overall official metric.', 'Report overall plus category denominators and suppress strong claims for tiny groups.', 'B', 'Category percentages without denominators would look precise but be misleading.'),
+    criticality(3, 'Answer choices are imbalanced and category labels are heuristic', 'High', 'The majority answer letter is B (337/765); local capability labels are not an official RealWorldQA taxonomy.', 'Report only headline accuracy.', 'Publish majority/random baselines and label every category breakdown as local heuristic analysis.', 'B', 'This prevents category and letter-position artifacts from being mistaken for general visual skill.'),
     criticality(4, 'A single benchmark cannot validate all advertised capabilities', 'High', 'OCR, documents, charts, hallucination, instruction following and open-ended reasoning are weakly represented or absent.', 'Keep the claim strictly scoped to RealWorldQA.', 'Add official OCRBench, ChartQA, POPE and MM-IFEval replications later.', 'A now; B next', 'The X post must not generalize this score to overall VisionPsy quality.'),
     criticality(5, 'Exact one-letter scoring masks answer quality', 'Medium', 'It measures option selection, not explanations, calibration, hallucination or repetition.', 'Use exact scoring because that is the benchmark metric.', 'Add a separate open-answer qualitative audit with a frozen rubric.', 'A for benchmark; B as separate evidence', 'Do not mix qualitative grades into the official accuracy denominator.'),
     criticality(6, 'The score gaps are statistically weak', 'High', 'Standard leads each Flash by 6/765, while paired exact McNemar p-values are about 0.70.', 'Publish the raw ranking only.', 'Publish counts, confidence intervals and paired tests together.', 'B', 'The defensible conclusion is “no clear local winner”, despite the rank order.'),
@@ -107,17 +94,21 @@ const report = {
     criticality(8, 'Equal aggregate scores can hide different failure sets', 'Medium', 'Flash Q8 and Q4 tie overall but disagree on 70 questions.', 'Rank by total accuracy only.', 'Publish paired disagreement counts and inspect recurrent clusters.', 'B', 'The Q4 result does not prove quantization is lossless on individual cases.'),
     criticality(9, 'Official-number provenance changes with precision and table revision', 'Medium', 'FP32/model-card headlines and matching GGUF rows are not interchangeable.', 'Compare against the family headline.', 'Compare each local file only against its matching GGUF column and record source URLs/date.', 'B', 'This avoids claiming a gain or loss against the wrong precision.'),
     criticality(10, 'No repeated-seed variance estimate', 'Medium', 'A deterministic run reveals paired case differences but not sensitivity to stochastic decoding or implementation nondeterminism.', 'Use temperature-zero once.', 'Repeat a stratified subset and hash outputs/configuration.', 'A for this exact benchmark; B for robustness audit', 'One deterministic run is valid for the fixed protocol, not a universal variance estimate.'),
-    criticality(11, 'Execution order is balanced but deterministically tied to case order', 'Medium', 'Each provider runs first, second and third exactly 255 times, but cyclic assignment can correlate with dataset ordering and case difficulty.', 'Keep cyclic rotation and report it.', 'Shuffle cases with a published seed, then apply a balanced Latin-square provider order.', 'B for the next replication', 'This run controls unequal position counts, but cannot cleanly estimate a causal cache/order effect from the position subsets.')
+    criticality(11, 'Execution remains sequential on one device', 'Low', 'The seeded shuffle and Latin rotation balance positions, but thermal drift can still affect performance KPIs.', 'Ignore run position.', 'Publish order and temperature-independent quality separately from device-specific performance.', 'B', 'Accuracy remains paired; latency is explicitly local-device evidence.')
   ],
   questionInventory,
   agreement,
   pairwise,
   providers,
-  migrationComparison: buildMigrationComparison(historical),
+  sanityBaselines: buildSanityBaselines(questionInventory),
+  categoryLabels: { provenance: 'LOCAL_HEURISTIC', publicationRule: 'Never describe these labels as an official RealWorldQA taxonomy.' },
+  migrationComparison: null,
   artifacts: {
     rawRun: inputName,
     scorerParity: parityName,
-    checkpoint: '.visionpsy-three-way-realworldqa-765-qvac-sdk-unified-0182.checkpoint.ndjson'
+    checkpoint: '.visionpsy-three-way-realworldqa-765-qvac-sdk-vlmevalkit-470e517.checkpoint.ndjson',
+    inputManifestEmbedded: Boolean(run.dataset.inputManifest?.length === 765),
+    reproducibility: run.reproducibility
   }
 }
 
@@ -142,8 +133,6 @@ function buildProvider(providerId) {
     officialRealWorldQaAccuracy: reference.matchingGguf,
     officialFp32RealWorldQaAccuracy: reference.fp32Table,
     deviationFromOfficial: real.accuracy - reference.matchingGguf,
-    officialRemainder: summarizeRows(rows.filter(item => item.caseIndex >= 270)),
-    priorReal: summarizeRows(rows.filter(item => item.caseIndex < 270)),
     performance: {
       ttftMs: summary.ttftMs,
       latencyMs: summary.latencyMs,
@@ -225,11 +214,11 @@ function buildMigrationComparison(oldReport) {
 }
 
 function markdown(audit) {
-  const lines = ['# VisionPsy · RealWorldQA 765 · unified QVAC audit', '', `Generated: ${audit.generatedAt}`, '', audit.verdict.summary, '', '| Rank | Model | Local | Official matching GGUF | Delta | Wilson 95% | Mean TTFT | Mean latency |', '|---:|---|---:|---:|---:|---:|---:|---:|']
+  const lines = ['# VisionPsy · RealWorldQA 765 · frozen-protocol QVAC audit', '', `Generated: ${audit.generatedAt}`, '', audit.verdict.summary, '', '| Rank | Model | Local | Official matching GGUF | Delta | Wilson 95% | Mean TTFT | Mean latency |', '|---:|---|---:|---:|---:|---:|---:|---:|']
   audit.providers.forEach((provider, index) => lines.push(`| ${index + 1} | ${provider.label} | ${cell(provider.real)} | ${percent(provider.officialRealWorldQaAccuracy)} | ${signedPoints(provider.deviationFromOfficial)} | ${provider.real.interval.map(value => `${value.toFixed(1)}%`).join('–')} | ${duration(provider.performance.ttftMs.mean)} | ${duration(provider.performance.latencyMs.mean)} |`))
-  lines.push('', `Statistical verdict: **${audit.verdict.statisticalVerdict.replaceAll('_', ' ')}**.`, '', 'Paired exact McNemar tests (Holm-adjusted):', '')
+  lines.push('', `Statistical verdict: **${audit.verdict.statisticalVerdict.replaceAll('_', ' ')}**.`, '', `Sanity baselines: majority letter ${percent(audit.sanityBaselines.majorityLetterBaseline)}; option-count-weighted random choice ${percent(audit.sanityBaselines.weightedRandomOptionBaseline)}.`, '', 'Paired exact McNemar tests (Holm-adjusted):', '')
   for (const pair of audit.pairwise) lines.push(`- ${pair.leftLabel} vs ${pair.rightLabel}: unique wins ${pair.leftOnly}–${pair.rightOnly}; raw p=${pair.exactMcNemarP.toFixed(4)}; Holm p=${pair.holmAdjustedP.toFixed(4)}.`)
-  lines.push('', `Agreement: all correct ${audit.agreement.allCorrect}; all wrong ${audit.agreement.allWrong}; exactly one correct ${audit.agreement.exactlyOneCorrect}; exactly two correct ${audit.agreement.exactlyTwoCorrect}.`, '', '## Methodology versus official', '', `- Same public scope: ${audit.methodology.questions} questions, ${audit.methodology.uniqueRealImages} unique real images, source MD5 \`${audit.methodology.sourceMd5}\`.`, `- Same native stack across local variants: ${audit.methodology.runtime}; ${audit.methodology.backend}.`, `- Scorer audit: ${audit.methodology.scorerParity.extractionDifferences} extraction differences and ${audit.methodology.scorerParity.passVerdictChanges} pass/fail changes.`, `- Remaining caveat: ${audit.methodology.officialDifference}`, '', '## Audit criticalities', '')
+  lines.push('', `Agreement: all correct ${audit.agreement.allCorrect}; all wrong ${audit.agreement.allWrong}; exactly one correct ${audit.agreement.exactlyOneCorrect}; exactly two correct ${audit.agreement.exactlyTwoCorrect}.`, '', '## Methodology versus official', '', `- Same public scope: ${audit.methodology.questions} questions, ${audit.methodology.uniqueRealImages} unique real images, source MD5 \`${audit.methodology.sourceMd5}\`.`, `- Prompt frozen verbatim from the pinned public VLMEvalKit revision; image is supplied before text.`, `- Same native stack across local variants: ${audit.methodology.runtime}; ${audit.methodology.backend}.`, `- Direct upstream scorer audit: ${audit.methodology.scorerParity.extractionDifferences} extraction differences and ${audit.methodology.scorerParity.passVerdictChanges} pass/fail changes (revision \`${audit.methodology.scorerParity.revision}\`).`, `- Remaining caveat: ${audit.methodology.officialDifference}`, '', '## Audit criticalities', '')
   for (const item of audit.criticalities) lines.push(`${item.id}. **${item.title} (${item.severity})** — ${item.consequence} Recommended: ${item.recommended}.`)
   lines.push('', '## Publication-safe claim', '', audit.verdict.publicationSafeClaim, '')
   return lines.join('\n')
@@ -237,7 +226,31 @@ function markdown(audit) {
 
 function observedWeakness(claim, localFinding, status) { return { claim, localFinding, status } }
 function criticality(id, title, severity, risk, solutionA, solutionB, recommended, consequence) { return { id, title, severity, risk, solutionA, solutionB, recommended, consequence } }
-function summarizeRows(rows) { const passed = rows.filter(item => item.evaluation?.status === 'PASS').length; return { passed, failed: rows.length - passed, cases: rows.length, accuracy: passed / rows.length } }
+function buildSanityBaselines(inventory) {
+  const total = inventory.questions
+  const majorityCount = Math.max(...Object.values(inventory.answerLetters))
+  const weightedRandom = Object.entries(inventory.optionCounts)
+    .reduce((sum, [optionCount, casesForCount]) => sum + (casesForCount / Number(optionCount)), 0) / total
+  return {
+    majorityLetter: Object.entries(inventory.answerLetters).sort((left, right) => right[1] - left[1])[0][0],
+    majorityLetterBaseline: majorityCount / total,
+    weightedRandomOptionBaseline: weightedRandom,
+    note: 'These are sanity checks, not competing model scores.'
+  }
+}
+function verdictSummary(rankedProviders, minimumP) {
+  const [leader, runnerUp] = rankedProviders
+  const margin = leader.real.passed - runnerUp.real.passed
+  const significance = minimumP < 0.05
+    ? 'At least one paired difference remains significant after Holm correction.'
+    : 'No paired difference remains significant after Holm correction.'
+  return `${leader.label} ranks first locally by ${margin} answer${margin === 1 ? '' : 's'} over ${runnerUp.label}. ${significance}`
+}
+function publicationSafeClaim(rankedProviders, minimumP) {
+  const results = rankedProviders.map(provider => `${provider.label} ${provider.real.passed}/${provider.real.cases} (${percent(provider.real.accuracy)})`).join('; ')
+  const inference = minimumP < 0.05 ? 'At least one paired difference was statistically significant after Holm correction.' : 'The local rank order was not statistically decisive after paired Holm-corrected tests.'
+  return `Independent local RealWorldQA corroboration on the public 765-question split, using a frozen upstream prompt/scorer revision and one QVAC-native runtime/backend: ${results}. ${inference} This is not a claim of byte-for-byte replication of Tether's internal environment.`
+}
 function groupSummary(rows, group) { const groups = new Map(); for (const row of rows) { const key = String(group(row)); const value = groups.get(key) || { passed: 0, cases: 0 }; value.cases += 1; if (row.evaluation?.status === 'PASS') value.passed += 1; groups.set(key, value) } return Object.fromEntries([...groups].sort(([a], [b]) => a.localeCompare(b)).map(([key, value]) => [key, { ...value, failed: value.cases - value.passed, accuracy: value.passed / value.cases }])) }
 function countBy(rows, group) { const counts = {}; for (const row of rows) { const key = String(group(row)); counts[key] = (counts[key] || 0) + 1 } return Object.fromEntries(Object.entries(counts).sort(([a], [b]) => a.localeCompare(b))) }
 function rowFor(caseId, providerId) { return run.results.find(item => item.caseId === caseId && item.providerId === providerId) }

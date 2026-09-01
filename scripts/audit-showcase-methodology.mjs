@@ -1,147 +1,120 @@
-import { readFile, writeFile } from 'node:fs/promises'
+import { access, readFile, writeFile } from 'node:fs/promises'
 import path from 'node:path'
 
 const root = path.resolve(import.meta.dirname, '..')
-const report = await readJson('reports/visionpsy-three-way-realworldqa-765.json')
-const parity = await readJson('reports/visionpsy-realworldqa-vlmeval-parity.json')
+const reportsDir = path.join(root, 'reports')
+const preferredRun = 'visionpsy-three-way-realworldqa-765-qvac-sdk-vlmevalkit-470e517.json'
+const legacyRun = 'visionpsy-three-way-realworldqa-765-qvac-sdk-unified-0182.json'
+const runName = process.env.QVAC_METHODOLOGY_INPUT || await firstExisting(preferredRun, legacyRun)
+const run = JSON.parse(await readFile(path.join(reportsDir, runName), 'utf8'))
+if (run.dataset?.caseCount !== 765 || run.results?.length !== 2295) throw new Error('Methodology audit requires exactly 765 cases and 2,295 model outputs.')
 
-const runtimeMatrix = [
-  {
-    providerId: 'visionpsy-patched-base',
-    model: 'VisionPsy-Nano-460M Standard Q8_0',
-    orchestration: 'Local HTTP llama-server managed directly by QVAC Vision Lab',
-    nativeBackend: 'Patched llama.cpp MTMD on Metal',
-    preprocessing: 'Standard tiled upscale',
-    qvacSdk: false
-  },
-  {
-    providerId: 'qvac-visionpsy',
-    model: 'VisionPsy-Nano-460M-Flash Q8_0',
-    orchestration: 'QVAC SDK 0.18.2 with a managed Bare worker',
-    nativeBackend: '@qvac/llm-llamacpp 0.47.0 / llama.cpp MTMD on Metal',
-    preprocessing: 'Flash native resolution / no upscale',
-    qvacSdk: true
-  },
-  {
-    providerId: 'visionpsy-patched',
-    model: 'VisionPsy-Nano-460M-Flash Q4_K_M imatrix',
-    orchestration: 'Local HTTP llama-server managed directly by QVAC Vision Lab',
-    nativeBackend: 'Patched llama.cpp MTMD on Metal',
-    preprocessing: 'Flash native resolution / no upscale',
-    qvacSdk: false
-  }
-]
-
-const decisions = [
-  decision(1, 'Cross-benchmark aggregation', 'RESOLVED',
-    'Experiment 06 now exposes and aggregates only all 765 RealWorldQA questions with one binary exact-option metric.',
-    'Keep the 765-question score as the sole quality headline.',
-    'The result is directly interpretable against the matching published RealWorldQA GGUF values; no mixed 1,000-image score remains.'),
-  decision(2, 'Gold-answer or consensus filtering', 'NOT_APPLICABLE',
-    'The removed TextVQA/VizWiz subsets were the only components selected by answer consensus. RealWorldQA is now used in full without filtering by correctness, answer, difficulty or model output.',
-    'Use the full official split; do not choose between answer-based sampling schemes.',
-    'No easier-subset selection bias remains in the primary score.'),
-  decision(3, 'Sampling and byte-range selection', 'RESOLVED_FOR_PRIMARY_SCORE',
-    'The primary result is a census of all 765 source rows. The historical 20/50/50/150/495 groups are only execution partitions whose union is the complete set.',
-    'Recommended option A: retain the checksum-locked full TSV and enumerate every row. If a quick diagnostic is ever needed, sample uniformly from the complete row-ID list with a published seed. Do not use byte-window sampling.',
-    'The final score has no sampling error from row selection. Quick subsets remain exploratory and must never replace the complete result.'),
-  decision(4, 'VLMEvalKit scorer', 'VERIFIED_WITH_LIMIT',
-    `The local RealWorldQA extractor was compared with VLMEvalKit-compatible can_infer behavior over ${parity.totalCompared ?? 2295} outputs: ${parity.totalExtractionDisagreements} extraction differences and ${parity.totalPassVerdictChanges} pass/fail changes.`,
-    'Keep the audited local scorer for the interactive dashboard, pin the parity test as a release gate, and use a pinned direct VLMEvalKit run for any stronger end-to-end reproduction claim.',
-    'VLMEvalKit does affect RealWorldQA answer extraction in principle, but it changes none of the current 2,295 verdicts. Direct end-to-end use would additionally test prompt construction and preprocessing.'),
-  decision(5, 'Runtime/backend equivalence', 'OPEN_REPRODUCTION_GAP',
-    'All three local paths ultimately execute llama.cpp-family native inference on Apple Metal, but only Flash Q8 is orchestrated by QVAC SDK. Standard Q8 and Flash Q4 use the patched llama-server directly. Quantization and model-specific preprocessing also differ.',
-    'For the current post, describe this as a comparison of three pinned on-device stacks. For a model-only causal comparison, rerun the same quantization through one identical runtime where technically supported.',
-    'Current accuracy remains valid per stack, while TTFT/RAM differences cannot be attributed solely to model architecture or to QVAC SDK.'),
-  decision(6, 'Adaptive research sequence', 'CURRENT_RUN_EXPLORATORY_CORROBORATION',
-    'The experiment grew after intermediate results were observed, even though the final score now uses the full official dataset.',
-    'Keep the existing 765 run as local corroboration. Before a confirmatory claim, freeze model hashes, prompt, preprocessing, runtime versions, generation settings, scorer and analysis plan, then rerun all 765 from an empty result file.',
-    'No rerun is necessary for an honest descriptive X post. A fresh preregistered run is required before calling the work a confirmatory independent reproduction.'),
-  decision(7, 'Statistics', 'CORRECTED',
-    'RealWorldQA produces one binary verdict per model and question, so Wilson intervals and paired exact McNemar tests are appropriate. Three pairwise tests require multiplicity control.',
-    'Report absolute correct/765 and percentage for each model, Wilson 95% intervals, and exact McNemar p-values with Holm correction across the three pairs.',
-    'The raw Standard-vs-Flash-Q4 p=0.0313 does not survive Holm correction; the correct family-wise verdict is no clear pairwise winner at alpha 0.05.'),
-  decision(8, 'Retries and operational failures', 'FIXED_FOR_FUTURE_RUNS',
-    'Historical successful records did not preserve failed attempts, so their retry history cannot be reconstructed reliably.',
-    'Keep up to three retries only for transport/runtime failures, never for a valid wrong answer. Persist every attempt, retry count and full wall time; publish first-attempt completion rate separately.',
-    'Long runs remain resilient without silently improving model accuracy. Future latency and reliability figures include retry cost; the existing score must be labelled as lacking attempt-level retry evidence.')
-]
+const directScorerName = 'visionpsy-realworldqa-vlmevalkit-upstream-470e517.json'
+const directScorer = await readOptional(directScorerName)
+const providerIds = Object.keys(run.summaries)
+const published = {
+  'qvac-visionpsy-standard-q8': 0.591,
+  'qvac-visionpsy': 0.567,
+  'qvac-visionpsy-flash-q4': 0.549
+}
+const labels = {
+  'qvac-visionpsy-standard-q8': 'VisionPsy Standard Q8_0',
+  'qvac-visionpsy': 'VisionPsy Flash Q8_0',
+  'qvac-visionpsy-flash-q4': 'VisionPsy Flash Q4_K_M imatrix'
+}
+const uniqueCases = [...new Map(run.results.map(item => [item.caseId, item])).values()]
+const answerLetters = countBy(uniqueCases, item => item.expectedLetter)
+const optionCounts = await installedOptionCounts()
+const majorityBaseline = Math.max(...Object.values(answerLetters)) / uniqueCases.length
+const weightedRandomBaseline = optionCounts ? Object.entries(optionCounts).reduce((sum, [count, rows]) => sum + Number(rows) / Number(count), 0) / uniqueCases.length : null
 
 const audit = {
-  schemaVersion: 2,
+  schemaVersion: 3,
   generatedAt: new Date().toISOString(),
-  scope: 'Complete official RealWorldQA only',
-  dataset: {
-    questions: report.questionInventory.questions,
-    uniqueImages: report.questionInventory.uniqueImageHashes,
-    sourceMd5: report.suites.officialRealWorldQa.sourceMd5,
-    metric: report.suites.officialRealWorldQa.scoring,
-    optionCounts: report.questionInventory.optionCounts,
-    answerLetters: report.questionInventory.answerLetters,
-    capabilities: report.questionInventory.capabilities
-  },
-  results: report.providers.map(provider => ({
-    providerId: provider.providerId,
-    label: provider.label,
-    correct: provider.real.passed,
-    total: provider.real.cases,
-    accuracy: provider.real.accuracy,
-    publishedMatchingGgufAccuracy: provider.officialRealWorldQaAccuracy,
-    deltaPercentagePoints: (provider.real.accuracy - provider.officialRealWorldQaAccuracy) * 100
+  sourceRun: runName,
+  verdict: run.dataset.promptTemplate ? 'UPSTREAM_PROMPT_LOCAL_CORROBORATION' : 'LOCAL_CORROBORATION_WITH_PROMPT_GAP',
+  results: providerIds.map(providerId => ({
+    providerId,
+    label: labels[providerId] || providerId,
+    correct: run.summaries[providerId].passed,
+    total: run.summaries[providerId].cases,
+    accuracy: run.summaries[providerId].accuracy,
+    publishedMatchingGgufAccuracy: published[providerId],
+    deltaPercentagePoints: (run.summaries[providerId].accuracy - published[providerId]) * 100
   })),
-  scorerParity: report.scorerParity,
-  runtimeMatrix,
-  methodologyComparison: [
-    { dimension: 'Dataset', tether: 'Complete RealWorldQA sample set within the published VLMEvalKit evaluation', local: 'The same complete 765-row RealWorldQA set; checksum-locked source', residualGap: 'None in row coverage' },
-    { dimension: 'Metric', tether: 'RealWorldQA official multiple-choice accuracy', local: 'Exact option accuracy with an audited VLMEval-compatible extractor', residualGap: 'No current verdict difference; direct end-to-end harness still not identical' },
-    { dimension: 'Artifacts', tether: 'FP32 table plus separate GGUF quantization grid', local: 'Matching Standard Q8, Flash Q8 and Flash Q4 imatrix GGUF variants', residualGap: 'Compare local scores only with matching GGUF rows, not FP32 rows' },
-    { dimension: 'Harness', tether: 'In-house VLMEvalKit adapter using checkpoint-resolved preprocessing and Transformers/vLLM paths', local: 'Custom Node harness using QVAC SDK for Flash Q8 and patched llama-server for the other two', residualGap: 'Prompt/runtime/preprocessing are not bit-for-bit identical' },
-    { dimension: 'Inference device', tether: 'Official evaluation hardware is not established by the cited model cards', local: 'Apple Silicon Metal on this Mac', residualGap: 'Performance KPIs are local-device measurements only' },
-    { dimension: 'Independence', tether: 'Vendor in-house results; related VLMEvalKit changes presented in open PRs', local: 'Independent local hardware execution but custom harness', residualGap: 'Corroboration of one benchmark, not reproduction of the full 17-benchmark table' }
-  ],
-  decisions,
-  publicationWording: 'I ran the complete 765-question RealWorldQA set locally on the matching VisionPsy GGUF variants. Standard Q8 scored 451/765 (58.95%) versus the published 59.1%; Flash Q8 scored 432/765 (56.47%) versus 56.7%; Flash Q4 imatrix scored 421/765 (55.03%) versus 54.9%. The scorer produced zero verdict differences against the audited VLMEvalKit-compatible extraction over all 2,295 outputs. This is close local corroboration on Apple Metal, not a bit-for-bit reproduction of Tether’s full evaluation, because the local runtime and preprocessing paths are not identical.'
+  sanityBaselines: { answerLetters, majorityLetterBaseline: majorityBaseline, optionCounts, weightedRandomOptionBaseline: weightedRandomBaseline },
+  reproducibility: run.reproducibility || null,
+  scorerAudit: directScorer ? {
+    kind: 'DIRECT_PINNED_VLMEVALKIT_SOURCE', report: directScorerName,
+    revision: directScorer.implementation.revision, scorerSha256: directScorer.implementation.scorerSha256,
+    extractionDifferences: directScorer.totalExtractionDifferences, passVerdictChanges: directScorer.totalPassVerdictChanges
+  } : { kind: 'NOT_YET_RUN', consequence: 'Do not claim direct VLMEvalKit scorer parity until the pinned upstream audit has completed.' },
+  controls: {
+    dataset: 'Complete checksum-locked RealWorldQA: 765 questions over 762 unique image hashes.',
+    prompt: run.dataset.promptTemplate || 'Legacy local answer-letter suffix; differs from upstream VLMEvalKit.',
+    runtime: 'All three providers use QVAC SDK and @qvac/llm-llamacpp; preprocessing remains model-specific by design.',
+    order: run.dataset.orderPolicy,
+    retries: run.reproducibility?.retryPolicy || 'Attempt evidence is persisted; valid wrong answers are not retried.',
+    categories: 'Capability/category labels are local heuristics and are not an official RealWorldQA taxonomy.'
+  },
+  residualLimitations: [
+    'Tether reports in-house results; an exact vendor environment and all internal generation details are not publicly frozen.',
+    'This is one benchmark and does not reproduce the complete 17-benchmark VisionPsy table.',
+    'One deterministic full run does not estimate implementation nondeterminism; repeat-run variance remains a separate robustness question.',
+    'Exact multiple-choice accuracy does not measure open-ended prose quality, safety, calibration or usefulness.',
+    'Performance KPIs are local-device measurements and are not comparable with unpublished vendor hardware.'
+  ]
 }
 
-await writeFile(path.join(root, 'reports/visionpsy-methodology-audit.json'), `${JSON.stringify(audit, null, 2)}\n`)
-await writeFile(path.join(root, 'reports/visionpsy-methodology-audit.md'), markdown(audit))
+audit.publicationWording = publicationWording(audit)
+await writeFile(path.join(reportsDir, 'visionpsy-methodology-audit.json'), `${JSON.stringify(audit, null, 2)}\n`)
+await writeFile(path.join(reportsDir, 'visionpsy-methodology-audit.md'), markdown(audit))
 process.stdout.write(markdown(audit))
 
-function decision(number, title, status, evidence, recommendation, consequence) {
-  return { number, title, status, evidence, recommendation, consequence }
+async function firstExisting(...names) {
+  for (const name of names) { try { await access(path.join(reportsDir, name)); return name } catch {} }
+  throw new Error(`No canonical RealWorldQA run found (${names.join(', ')}).`)
 }
 
-async function readJson(relativePath) {
-  return JSON.parse(await readFile(path.join(root, relativePath), 'utf8'))
+async function readOptional(name) {
+  try { return JSON.parse(await readFile(path.join(reportsDir, name), 'utf8')) } catch (error) { if (error.code === 'ENOENT') return null; throw error }
+}
+
+async function installedOptionCounts() {
+  const directories = ['realworldqa', 'realworldqa-validation-50', 'realworldqa-validation-50-b', 'realworldqa-validation-150-c', 'realworldqa-remainder-495']
+  const counts = {}
+  let total = 0
+  for (const directory of directories) {
+    try {
+      const manifest = JSON.parse(await readFile(path.join(root, 'public', 'showcase', directory, 'manifest.json'), 'utf8'))
+      for (const item of manifest.cases || []) { const count = Object.keys(item.options || {}).length; counts[count] = (counts[count] || 0) + 1; total += 1 }
+    } catch (error) { if (error.code !== 'ENOENT') throw error }
+  }
+  return total === 765 ? counts : null
+}
+
+function countBy(items, key) {
+  const counts = {}
+  for (const item of items) { const value = key(item); counts[value] = (counts[value] || 0) + 1 }
+  return counts
+}
+
+function publicationWording(value) {
+  const scores = value.results.map(item => `${item.label} ${item.correct}/${item.total} (${percent(item.accuracy)}) versus ${percent(item.publishedMatchingGgufAccuracy)}`).join('; ')
+  const scorer = value.scorerAudit.kind === 'DIRECT_PINNED_VLMEVALKIT_SOURCE'
+    ? `The checksum-pinned upstream VLMEvalKit scorer produced ${value.scorerAudit.extractionDifferences} extraction differences and ${value.scorerAudit.passVerdictChanges} pass/fail changes.`
+    : 'Direct pinned VLMEvalKit scorer verification is still pending.'
+  return `I ran the complete 765-question RealWorldQA set locally on matching VisionPsy GGUF variants: ${scores}. ${scorer} This is an independent local corroboration on Apple Metal, not a reproduction of Tether's complete in-house evaluation.`
 }
 
 function markdown(value) {
-  const lines = [
-    '# VisionPsy methodology audit · RealWorldQA-only', '',
-    `Generated: ${value.generatedAt}`, '',
-    '## Verdict', '',
-    'Experiment 06 now has one benchmark perimeter: all 765 RealWorldQA questions, 762 unique real images and exact multiple-choice scoring. The former external, synthetic and mixed aggregates are outside the experiment and are not publication results.', '',
-    '## Results against matching published GGUF rows', '',
-    '| Model | Local | Published | Delta |', '|---|---:|---:|---:|'
-  ]
+  const lines = ['# VisionPsy methodology audit · adversarial release view', '', `Generated: ${value.generatedAt}`, '', `Verdict: **${value.verdict}**.`, '', '| Model | Local | Matching published GGUF | Delta |', '|---|---:|---:|---:|']
   for (const item of value.results) lines.push(`| ${item.label} | ${item.correct}/${item.total} (${percent(item.accuracy)}) | ${percent(item.publishedMatchingGgufAccuracy)} | ${signed(item.deltaPercentagePoints)} pp |`)
-  lines.push('', '## Tether methodology versus local methodology', '', '| Dimension | Tether / published method | Local method | Residual gap |', '|---|---|---|---|')
-  for (const item of value.methodologyComparison) lines.push(`| ${item.dimension} | ${item.tether} | ${item.local} | ${item.residualGap} |`)
-  lines.push('', '## Runtime and backend map', '', '| Model | Orchestration/runtime layer | Native inference backend | Preprocessing | QVAC SDK |', '|---|---|---|---|---|')
-  for (const item of value.runtimeMatrix) lines.push(`| ${item.model} | ${item.orchestration} | ${item.nativeBackend} | ${item.preprocessing} | ${item.qvacSdk ? 'Yes' : 'No'} |`)
-  lines.push('', '## Audit decisions', '')
-  for (const item of value.decisions) {
-    lines.push(`### ${item.number}. ${item.title} · ${item.status}`, '', item.evidence, '', `**Recommendation:** ${item.recommendation}`, '', `**Consequence:** ${item.consequence}`, '')
-  }
-  lines.push('## Publication wording', '', `> ${value.publicationWording}`, '', '## Primary references', '',
-    '- Tether Standard model card: https://huggingface.co/qvac/VisionPsy-Nano-460M',
-    '- Tether Standard GGUF table: https://huggingface.co/qvac/VisionPsy-Nano-460M-GGUFs',
-    '- Tether Flash model card: https://huggingface.co/qvac/VisionPsy-Nano-460M-Flash',
-    '- Tether Flash GGUF table: https://huggingface.co/qvac/VisionPsy-Nano-460M-Flash-GGUFs',
-    '- VLMEvalKit quickstart: https://github.com/open-compass/VLMEvalKit/blob/main/docs/en/Quickstart.md',
-    '- VisionPsy VLMEvalKit adapter PR: https://github.com/open-compass/VLMEvalKit/pull/1613', '')
+  lines.push('', '## Sanity baselines', '', `- Majority answer-letter baseline: ${percent(value.sanityBaselines.majorityLetterBaseline)}.`, `- Weighted random-option baseline: ${Number.isFinite(value.sanityBaselines.weightedRandomOptionBaseline) ? percent(value.sanityBaselines.weightedRandomOptionBaseline) : 'unavailable until all manifests are installed'}.`, `- Answer letters: ${Object.entries(value.sanityBaselines.answerLetters).map(([key, count]) => `${key}=${count}`).join(', ')}.`, '', '## Publication wording', '', `> ${value.publicationWording}`, '', '## Residual limitations', '')
+  for (const item of value.residualLimitations) lines.push(`- ${item}`)
+  lines.push('', 'Primary references:', '', '- https://huggingface.co/qvac/VisionPsy-Nano-460M-GGUFs', '- https://huggingface.co/qvac/VisionPsy-Nano-460M-Flash-GGUFs', '- https://github.com/open-compass/VLMEvalKit', '')
   return lines.join('\n')
 }
 
-function percent(value) { return `${(value * 100).toFixed(2)}%` }
-function signed(value) { return `${value >= 0 ? '+' : ''}${value.toFixed(2)}` }
+function percent(value) { return `${(Number(value) * 100).toFixed(2)}%` }
+function signed(value) { return `${value >= 0 ? '+' : ''}${Number(value).toFixed(2)}` }

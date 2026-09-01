@@ -25,6 +25,7 @@ import { JUDGE_PROVIDER_BOUNDARIES } from './arena/judges.mjs'
 import { buildArenaBundle, buildPrivateMappingBundle } from './arena/export.mjs'
 import { EVIDENCE_TIERS, addQuestion, addQuestionToSet, applyBlindReviewImport, applyQuestionImport, benchmarkCoverage, benchmarkDiff, blindReviewTemplate, buildReviewQueue, changeDatasetMembership, cloneBenchmarkVersion, createBenchmarkSet, createDataset, createRunSelection, csvTemplate, datasetBuilderView, duplicateQuestion, lockBenchmarkSet, lockPreview, previewBlindReviewImport, previewQuestionImport, removeQuestionFromSet, updateDataset, updateQuestion, validateBenchmarkSet } from './arena/builder.mjs'
 import { REALWORLDQA_DATASET_STATUS, ResourceSampler, SHOWCASE_CASES, SHOWCASE_PROVIDER_IDS, buildShowcaseConversationPrompt, scoreShowcaseAnswer } from './showcase/index.mjs'
+import { assertLocalRequest } from './http/local-request-policy.mjs'
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..')
 const publicDir = path.join(root, 'public')
@@ -60,6 +61,7 @@ const MIME = { '.html': 'text/html; charset=utf-8', '.js': 'text/javascript; cha
 
 const server = createServer(async (request, response) => {
   try {
+    assertLocalRequest(request)
     const url = new URL(request.url, 'http://127.0.0.1')
     if (url.pathname.startsWith('/api/')) return await handleApi(request, response, url)
     if (url.pathname.startsWith('/photos/')) return await servePhoto(response, url.pathname.slice(8))
@@ -1161,6 +1163,7 @@ async function runShowcase(request, response) {
         gpuLayers: result.runtimeStats?.gpuLayers ?? null,
         promptTokens: result.runtimeStats?.nativeTimings?.promptTokens ?? result.runtimeStats?.promptTokens ?? null,
         preprocessPolicy: result.runtimeStats?.preprocessPolicy ?? null,
+        generation: result.runtimeStats?.generation ?? null,
         nativeTimings: result.runtimeStats?.nativeTimings ?? null,
         resources
       },

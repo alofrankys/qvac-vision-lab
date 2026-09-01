@@ -25,7 +25,10 @@ async function downloadPost(path, payload, filename) {
 }
 
 async function load(runId = state.selectedRunId) {
-  ;[state.data, dogBenchmark] = await Promise.all([api(`/api/state${runId ? `?runId=${encodeURIComponent(runId)}` : ''}`), api('/api/benchmarks/dog-count')])
+  ;[state.data, dogBenchmark] = await Promise.all([
+    api(`/api/state${runId ? `?runId=${encodeURIComponent(runId)}` : ''}`),
+    api('/api/benchmarks/dog-count').catch(() => null)
+  ])
   if (!routeInitialized) { configureExperimentRoute(); routeInitialized = true }
   state.selectedRunId = state.data.currentRun?.id || null
   const previousPresetId = state.activePresetId

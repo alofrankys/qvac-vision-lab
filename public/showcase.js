@@ -153,6 +153,19 @@ const localFrameCapture = {
 
 window.qvacShowcase = { open: openShowcase, startRecordingAssist, startLiveDemo, startLiveDemo3, startLiveDemo3Replay }
 
+function confirmLiveDemoStart(mode) {
+  const replay = mode === 'dogs-replay'
+  const dogMode = mode === 'dogs' || replay
+  if (!dogMode && !showcase.dataset?.complete) {
+    window.alert('Install the checksum-locked complete RealWorldQA dataset before starting this scenario.')
+    return false
+  }
+  if (replay) return window.confirm('Start a recorded-results replay?\n\nNo new model inference will run. The recording will remain visibly marked REPLAY.')
+  const inferences = dogMode ? 12 : 9
+  const photos = dogMode ? 4 : 3
+  return window.confirm(`Start ${photos} real images and ${inferences} sequential local inferences?\n\nAll three VisionPsy models will run through QVAC SDK. This can use substantial CPU, GPU and RAM. You can stop the run at any time.`)
+}
+
 async function initialize() {
   bindEvents()
   try {
@@ -167,6 +180,10 @@ async function initialize() {
     clearComparison()
     updateSuiteUi()
     selectCase(showcase.selectedCaseId, { clearQuestion: true })
+    const benchmarkButton = $('#showcase-live-demo')
+    benchmarkButton.disabled = !showcase.dataset?.complete
+    benchmarkButton.title = showcase.dataset?.complete ? 'Run three new RealWorldQA scenes locally' : 'Install the complete checksum-locked RealWorldQA dataset first'
+    $('#showcase-live-demo-3').title = useRecordedDemo3Replay ? 'Replay previously recorded local results' : 'Run twelve new local dog-photo inferences'
   } catch (error) {
     setRuntime(false, error.message)
     setStage('RUNTIME UNAVAILABLE', 'error')
@@ -186,18 +203,20 @@ async function loadVerifiedBenchmark() {
     const minimumP = Math.min(...report.realPairwise.map(item => item.holmAdjustedP ?? item.exactMcNemarP))
     const realScores = report.providers.map(provider => provider.real.passed)
     const realSpread = Math.max(...realScores) - Math.min(...realScores)
+    const majorityBaseline = report.sanityBaselines?.majorityLetterBaseline
+    const randomBaseline = report.sanityBaselines?.weightedRandomOptionBaseline
     $('#showcase-verified-summary').innerHTML = report.providers.map((provider, index) => `<article class="showcase-cycle-summary-card">
       <header><div><span>OFFICIAL-765 RANK ${index + 1} · ${escapeHtml(PROVIDER_BADGES[provider.providerId] || provider.providerId)}</span><h3>${escapeHtml(provider.label)}</h3></div><b>${provider.real.passed}/${provider.real.cases}</b></header>
       <div class="showcase-cycle-summary-kpis">
-        <span>Final remainder 495<b>${scoreCell(provider.officialRemainder)}</b></span>
-        <span>Official total 765<b>${scoreCell(provider.real)}</b></span>
-        <span>Failures on official 765<b>${provider.real.failed}</b></span>
-        <span>Previous real 270<b>${scoreCell(provider.priorReal)}</b></span>
+        <span>Local RealWorldQA 765<b>${scoreCell(provider.real)}</b></span>
+        <span>Published matching GGUF<b>${(provider.officialRealWorldQaAccuracy * 100).toFixed(1)}%</b></span>
+        <span>Local vs published<b>${provider.deviationFromOfficial >= 0 ? '+' : ''}${(provider.deviationFromOfficial * 100).toFixed(2)} pp</b></span>
+        <span>Incorrect answers<b>${provider.real.failed}/${provider.real.cases}</b></span>
         <span>Mean TTFT<b>${durationCell(provider.performance.ttftMs.mean)}</b></span>
         <span>Mean latency<b>${durationCell(provider.performance.latencyMs.mean)}</b></span>
         <span>Peak process RSS<b>${bytesCell(provider.performance.processRssPeakBytes.max)}</b></span>
       </div>
-    </article>`).join('') + `<div class="showcase-pairwise"><span>STATISTICAL VERDICT · ${escapeHtml(report.statisticalVerdict.replaceAll('_', ' '))}</span><div><b>Paired quality result</b><small>Score spread ${realSpread} answers</small><small>Minimum Holm p ${minimumP.toFixed(3)}</small><small>${minimumP < 0.05 ? 'Significant pair found' : 'No significant pair'}</small><small>${minimumP < 0.05 ? 'Read pairwise details' : 'Do not claim a winner'}</small></div><div><b>Official quality ranking</b><small>Complete RealWorldQA 765</small><small>Exact option scoring</small><small>Same source MD5</small><small>Order rotated</small></div><div><b>Prompt parity audit</b><small>${report.promptAblation ? `${report.promptAblation.cases} controlled cases` : 'Not available'}</small><small>${report.promptAblation ? 'No significant gain' : '—'}</small><small>${report.promptAblation ? 'Keep verified 765' : '—'}</small><small>Individual answers can change</small></div><div><b>Interpretation</b><small>One dataset</small><small>One binary metric</small><small>No cross-suite aggregate</small><small>Local protocol corroboration</small></div></div>`
+    </article>`).join('') + `<div class="showcase-pairwise"><span>STATISTICAL VERDICT · ${escapeHtml(report.statisticalVerdict.replaceAll('_', ' '))}</span><div><b>Paired quality result</b><small>Score spread ${realSpread} answers</small><small>Minimum Holm p ${minimumP.toFixed(3)}</small><small>${minimumP < 0.05 ? 'Significant pair found' : 'No significant pair'}</small><small>${minimumP < 0.05 ? 'Read pairwise details' : 'Do not claim a winner'}</small></div><div><b>Frozen benchmark protocol</b><small>Complete RealWorldQA 765</small><small>Exact option scoring</small><small>Seeded shuffle + rotated order</small><small>Input hashes embedded</small></div><div><b>Direct upstream scorer</b><small>VLMEvalKit ${escapeHtml(report.methodology?.scorerParity?.revision?.slice(0, 8) || 'pinned')}</small><small>${report.methodology?.scorerParity?.extractionDifferences ?? '—'} extraction differences</small><small>${report.methodology?.scorerParity?.passVerdictChanges ?? '—'} verdict changes</small><small>Checksum verified</small></div><div><b>Sanity baselines</b><small>Majority letter ${Number.isFinite(majorityBaseline) ? `${(majorityBaseline * 100).toFixed(1)}%` : 'pending rerun'}</small><small>Weighted random ${Number.isFinite(randomBaseline) ? `${(randomBaseline * 100).toFixed(1)}%` : 'pending rerun'}</small><small>Categories are local heuristics</small><small>Local corroboration, not vendor replica</small></div></div>`
   } catch {}
 }
 
@@ -234,8 +253,15 @@ function bindEvents() {
   $('#showcase-compare').addEventListener('click', () => { void runComparison().catch(() => {}) })
   $('#showcase-cancel').addEventListener('click', cancelRun)
   $('#showcase-autoplay').addEventListener('click', () => { void startRecordingAssist() })
-  $('#showcase-live-demo').addEventListener('click', () => { void startLiveDemo().catch(error => showLiveDemoError(error)) })
-  $('#showcase-live-demo-3').addEventListener('click', () => { void (useRecordedDemo3Replay ? startLiveDemo3Replay() : startLiveDemo3()).catch(error => showLiveDemoError(error)) })
+  $('#showcase-live-demo').addEventListener('click', () => {
+    if (!confirmLiveDemoStart('benchmark')) return
+    void startLiveDemo().catch(error => showLiveDemoError(error))
+  })
+  $('#showcase-live-demo-3').addEventListener('click', () => {
+    const mode = useRecordedDemo3Replay ? 'dogs-replay' : 'dogs'
+    if (!confirmLiveDemoStart(mode)) return
+    void (useRecordedDemo3Replay ? startLiveDemo3Replay() : startLiveDemo3()).catch(error => showLiveDemoError(error))
+  })
   $('#showcase-demo-stop').addEventListener('click', stopLiveDemo)
   $('#showcase-demo-close').addEventListener('click', closeLiveDemo)
   $('#showcase-demo-replay').addEventListener('click', replayLiveDemo)
@@ -745,6 +771,8 @@ async function startLiveDemo(mode = 'benchmark') {
   $('#showcase-demo-download').classList.add('hidden')
   for (const button of ['#showcase-live-demo', '#showcase-live-demo-3']) $(button).disabled = true
   $('#showcase-demo-heading').textContent = dogMode ? 'Scenario 1 · Dog stories' : 'Scenario 2 · RealWorldQA cycle'
+  $('#showcase-demo-mode-label').lastChild.textContent = replayingDogResults ? 'REPLAY · PREVIOUSLY RECORDED RESULTS' : 'LIVE · NEW LOCAL INFERENCE'
+  $('.showcase-demo-window').classList.toggle('replay', replayingDogResults)
   $('#showcase-demo-note').textContent = `Preparing ${expectedSceneCount} real images…`
   document.body.classList.add('showcase-demo-open')
   startLiveDemoRenderLoop()
@@ -839,11 +867,11 @@ async function startLiveDemo(mode = 'benchmark') {
       liveDemo.completedElapsedMs = replayingDogResults ? 73_700 : performance.now() - liveDemo.startedAt
       liveDemo.popupStartedAtMs = performance.now() - liveDemo.recordingStartedAt
       liveDemo.finalCard = 'kpis'
-      liveDemo.phase = 'FINAL POPUP · MEASURED FOUR-SCENE KPIS'
+      liveDemo.phase = replayingDogResults ? 'FINAL POPUP · RECORDED FOUR-SCENE KPIS' : 'FINAL POPUP · MEASURED FOUR-SCENE KPIS'
       await moveLiveDemoCursor(1470, 70, 520)
       await waitForLiveDemo(8500)
     }
-    liveDemo.phase = dogMode ? 'SCENARIO 1 COMPLETE · 4 PERSONAL PHOTOS · 12 LIVE INFERENCES' : 'SCENARIO 2 COMPLETE · 3 IMAGES · 9 LIVE INFERENCES'
+    liveDemo.phase = replayingDogResults ? 'REPLAY COMPLETE · 4 PERSONAL PHOTOS · 12 RECORDED RESULTS' : dogMode ? 'SCENARIO 1 COMPLETE · 4 PERSONAL PHOTOS · 12 LIVE INFERENCES' : 'SCENARIO 2 COMPLETE · 3 IMAGES · 9 LIVE INFERENCES'
     await waitForLiveDemo(2200)
     $('#showcase-demo-note').textContent = 'Complete · the downloadable recording was generated locally.'
   } catch (error) {
@@ -861,7 +889,8 @@ async function startLiveDemo(mode = 'benchmark') {
     stopLiveDemoRecording()
     liveDemo.running = false
     $('#showcase-demo-stop').classList.add('hidden')
-    for (const button of ['#showcase-live-demo', '#showcase-live-demo-3']) $(button).disabled = false
+    $('#showcase-live-demo').disabled = !showcase.dataset?.complete
+    $('#showcase-live-demo-3').disabled = false
     drawLiveDemoFrame()
     await stopLocalFrameCapture()
   }
@@ -1316,7 +1345,8 @@ function showLiveDemoError(error) {
   $('#showcase-demo-overlay').classList.remove('hidden')
   $('#showcase-demo-note').textContent = error.message
   $('#showcase-demo-stop').classList.add('hidden')
-  for (const button of ['#showcase-live-demo', '#showcase-live-demo-3']) $(button).disabled = false
+  $('#showcase-live-demo').disabled = !showcase.dataset?.complete
+  $('#showcase-live-demo-3').disabled = false
   drawLiveDemoFrame()
 }
 
@@ -1377,20 +1407,21 @@ function drawLiveDemoFrame() {
   ctx.fillStyle = '#f5f5f7'
   ctx.font = '800 24px ui-monospace, SFMono-Regular, Menlo, monospace'
   ctx.fillText('QVAC VISION LAB', 48, 52)
+  const replaying = liveDemo.mode === 'dogs-replay'
   ctx.fillStyle = '#ff9f0a'
   ctx.font = '800 13px ui-monospace, SFMono-Regular, Menlo, monospace'
-  ctx.fillText('EXPERIMENT 06 · AUTOMATED LIVE DEMO', 48, 77)
+  ctx.fillText(replaying ? 'EXPERIMENT 06 · AUTOMATED RECORDED REPLAY' : 'EXPERIMENT 06 · AUTOMATED LIVE DEMO', 48, 77)
   ctx.fillStyle = '#8e8e93'
   ctx.fillText(`SCENE ${Math.min(cases.length, liveDemo.sceneIndex + 1)} / ${cases.length} · SAME IMAGE · SAME QUESTION`, 590, 55)
-  ctx.fillStyle = '#ff453a'
+  ctx.fillStyle = replaying ? '#0a84ff' : '#ff453a'
   ctx.beginPath(); ctx.arc(1335, 49, 7, 0, Math.PI * 2); ctx.fill()
   ctx.fillStyle = '#f5f5f7'
-  ctx.fillText(liveDemo.recorder?.state === 'recording' || localFrameCapture.running ? 'REC' : 'LIVE', 1352, 54)
+  ctx.fillText(replaying ? 'REPLAY' : liveDemo.recorder?.state === 'recording' || localFrameCapture.running ? 'REC' : 'LIVE', 1352, 54)
   ctx.fillStyle = '#8e8e93'
   const elapsed = liveDemo.startedAt ? (performance.now() - liveDemo.startedAt) / 1000 : 0
   ctx.fillText(`${elapsed.toFixed(1)} s`, 1430, 54)
   ctx.fillStyle = '#5ee478'
-  ctx.fillText('LOCAL · QVAC SDK', 1420, 77)
+  ctx.fillText(replaying ? 'RECORDED · QVAC SDK' : 'LOCAL · QVAC SDK', replaying ? 1370 : 1420, 77)
 
   if (liveDemo.introCard) {
     drawLiveDemoIntroCard(ctx)
@@ -1657,7 +1688,7 @@ function drawLiveDemoQuestion(ctx, item) {
   ctx.fillStyle = '#fff'
   ctx.font = '800 13px ui-monospace, SFMono-Regular, Menlo, monospace'
   ctx.textAlign = 'center'
-  ctx.fillText('RUN ALL 3 MODELS · LIVE', 298, 809)
+  ctx.fillText(liveDemo.mode === 'dogs-replay' ? 'REPLAY ALL 3 RECORDED RESULTS' : 'RUN ALL 3 MODELS · LIVE', 298, 809)
   ctx.textAlign = 'left'
 }
 
@@ -1792,7 +1823,7 @@ function drawLiveDemoKpiCard(ctx) {
 
   ctx.fillStyle = '#ffb340'
   ctx.font = '800 12px ui-monospace, SFMono-Regular, Menlo, monospace'
-  ctx.fillText('FINAL POPUP · MEASURED AFTER EVERY INFERENCE COMPLETED', 82, 153)
+  ctx.fillText(liveDemo.mode === 'dogs-replay' ? 'FINAL POPUP · PREVIOUSLY RECORDED RUN' : 'FINAL POPUP · MEASURED AFTER EVERY INFERENCE COMPLETED', 82, 153)
   ctx.fillStyle = '#f5f5f7'
   ctx.font = '800 47px -apple-system, BlinkMacSystemFont, sans-serif'
   ctx.fillText('4 personal photos · 12 local inferences', 82, 210)
@@ -1804,8 +1835,8 @@ function drawLiveDemoKpiCard(ctx) {
   const cycleItems = [
     ['FULL WALL-CLOCK CYCLE', formatDuration(elapsed)],
     ['REAL PHOTOS', `${liveDemo.results.length}`],
-    ['SEQUENTIAL INFERENCES', `${totalInferences}`],
-    ['RUNTIME', 'QVAC SDK · LOCAL']
+    [liveDemo.mode === 'dogs-replay' ? 'RECORDED RESULTS' : 'SEQUENTIAL INFERENCES', `${totalInferences}`],
+    ['SOURCE', liveDemo.mode === 'dogs-replay' ? 'RECORDED · QVAC SDK' : 'QVAC SDK · LOCAL']
   ]
   cycleItems.forEach(([label, value], index) => {
     const x = 108 + (index * 350)

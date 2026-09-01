@@ -9,7 +9,7 @@ QVAC npm packages are installed from their published package distributions. Visi
 
 ## RealWorldQA
 
-RealWorldQA is published by xAI under CC BY-ND 4.0. The repository includes 20 unmodified display-sample images/questions with source attribution; the remaining 745 cases are reconstructed locally from the official checksum-locked TSV and are not committed.
+RealWorldQA is published by xAI under CC BY-ND 4.0. No RealWorldQA image or question is redistributed in this repository. Users reconstruct the complete dataset locally from the official checksum-locked TSV; generated assets are ignored by Git.
 
 - Dataset: https://huggingface.co/datasets/xai-org/RealworldQA
 - License: https://creativecommons.org/licenses/by-nd/4.0/

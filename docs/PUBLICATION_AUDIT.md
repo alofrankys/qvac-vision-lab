@@ -14,7 +14,7 @@ The public repository tells two distinct stories:
 | Finding | Severity | Resolution |
 | --- | --- | --- |
 | `sharp` dependency had published high-severity libvips advisories | High | Pinned `sharp` 0.35.4; production dependency audit returns zero known vulnerabilities. |
-| Clean clones required locally generated 745-image partitions at server import time | High | Manifests are optional; the public 20-case sample starts cleanly and unavailable partitions are disabled in the UI. A checksum-locked full installer is provided. |
+| Redistributed RealWorldQA samples created avoidable licensing ambiguity | High | No RealWorldQA image/question is committed. The complete checksum-locked dataset is reconstructed locally and ignored by Git. |
 | Old 600-case diagnostic material could be mistaken for RealWorldQA evidence | High | Removed from the public Experiment 06 surface and aggregate; only canonical 765-case artifacts are allow-listed. |
 | “Replica” language overstated parity with an in-house harness | High | README, UI and methodology use “local corroboration” and enumerate every known mismatch. |
 | Recording endpoint could write arbitrary volumes of local frame files | High | Disabled by default and gated behind `QVAC_ENABLE_FRAME_CAPTURE=1`; filenames and payload sizes remain bounded. |
@@ -23,7 +23,7 @@ The public repository tells two distinct stories:
 
 ## Remaining limitations
 
-- No software license is granted yet. Public visibility permits viewing/forking under GitHub’s terms but does not grant a general reuse license. The owner should choose a code license separately.
+- Source code is licensed under Apache-2.0. Dataset, model and personal-photo rights remain separate under `THIRD_PARTY_NOTICES.md`.
 - The four personal dog photos are intentionally included but remain copyright of the repository owner.
 - Full RealWorldQA reconstruction requires the official source TSV and about 130 MB of generated local assets.
 - Model weights are external, large and downloaded on first use.

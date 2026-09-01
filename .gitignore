@@ -40,9 +40,19 @@ reports/*
 !reports/visionpsy-realworldqa-vlmeval-parity-qvac-sdk-unified-0182.md
 !reports/visionpsy-standard-preprocess-ablation.json
 !reports/visionpsy-standard-preprocess-ablation.md
+!reports/visionpsy-three-way-realworldqa-765-qvac-sdk-vlmevalkit-470e517.json
+!reports/visionpsy-three-way-realworldqa-765-qvac-sdk-vlmevalkit-470e517.md
+!reports/visionpsy-realworldqa-vlmevalkit-upstream-470e517.json
+!reports/visionpsy-realworldqa-vlmevalkit-upstream-470e517.md
+!reports/visionpsy-realworldqa-765-qvac-sdk-vlmevalkit-audit.json
+!reports/visionpsy-realworldqa-765-qvac-sdk-vlmevalkit-audit.md
+!reports/visionpsy-realworldqa-repeatability-100x3.json
+!reports/visionpsy-realworldqa-repeatability-100x3.md
+!reports/visionpsy-methodology-audit.json
+!reports/visionpsy-methodology-audit.md
 
-# The public repository vendors only the small 20-case display sample.
-# Full RealWorldQA partitions are generated locally from the checksum-locked source.
+# RealWorldQA assets are generated locally from the checksum-locked source and never redistributed.
+public/showcase/realworldqa/
 public/showcase/realworldqa-validation-50/
 public/showcase/realworldqa-validation-50-b/
 public/showcase/realworldqa-validation-150-c/

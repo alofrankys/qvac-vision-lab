@@ -7,14 +7,14 @@ import { buildShowcaseConversationPrompt, extractMultipleChoiceLetter, formatMul
 import { buildPatchedChatRequest, buildPatchedServerEnvironment, readChatCompletionStream } from '../src/vision/visionpsy-patched-provider.mjs'
 import { parseQvacWorkerPid } from '../src/vision/qvac-provider.mjs'
 
-test('live showcase ships a public 20-case sample and optionally the checksum-locked complete RealWorldQA set', () => {
+test('live showcase ships no third-party dataset and optionally loads the checksum-locked complete RealWorldQA set', () => {
   assert.equal(EXPERIMENTS.at(-1).id, 'experiment_06_showcase')
   assert.equal(EXPERIMENTS.at(-1).number, 'Experiment 06')
-  assert.equal(REALWORLDQA_CASES.length, 20)
-  assert.ok([20, 765].includes(SHOWCASE_CASES.length))
+  assert.ok([0, 20].includes(REALWORLDQA_CASES.length))
+  assert.ok([0, 765].includes(SHOWCASE_CASES.length))
   assert.equal(REALWORLDQA_DATASET_STATUS.installedCases, SHOWCASE_CASES.length)
   assert.equal(REALWORLDQA_DATASET_STATUS.complete, SHOWCASE_CASES.length === 765)
-  assert.equal(SHOWCASE_CASES.filter(item => item.group === 'official-real').length, 20)
+  assert.ok([0, 20].includes(SHOWCASE_CASES.filter(item => item.group === 'official-real').length))
   if (REALWORLDQA_DATASET_STATUS.complete) {
     assert.equal(REALWORLDQA_VALIDATION_CASES.length, 50)
     assert.equal(REALWORLDQA_VALIDATION_B_CASES.length, 50)
@@ -23,16 +23,18 @@ test('live showcase ships a public 20-case sample and optionally the checksum-lo
   } else {
     assert.equal(REALWORLDQA_VALIDATION_CASES.length + REALWORLDQA_VALIDATION_B_CASES.length + REALWORLDQA_VALIDATION_C_CASES.length + REALWORLDQA_REMAINDER_CASES.length, 0)
   }
-  assert.equal(SHOWCASE_CASES[0].id, 'realworldqa-5')
+  if (SHOWCASE_CASES.length) assert.equal(SHOWCASE_CASES[0].id, 'realworldqa-5')
   for (const item of [...REALWORLDQA_CASES, ...REALWORLDQA_VALIDATION_CASES, ...REALWORLDQA_VALIDATION_B_CASES, ...REALWORLDQA_VALIDATION_C_CASES, ...REALWORLDQA_REMAINDER_CASES]) {
     assert.equal(item.scoring, 'multiple_choice')
-    assert.match(item.prompt, /Answer with only the letter/)
+    assert.match(item.prompt, /^Question:/)
+    assert.match(item.prompt, /Options:/)
+    assert.match(item.prompt, /Please select the correct answer from the options above\./)
     assert.match(item.imageUrl, /^\/showcase\/realworldqa(?:-validation-(?:50(?:-b)?|150-c)|-remainder-495)?\//)
   }
   const realCases = [...REALWORLDQA_CASES, ...REALWORLDQA_VALIDATION_CASES, ...REALWORLDQA_VALIDATION_B_CASES, ...REALWORLDQA_VALIDATION_C_CASES, ...REALWORLDQA_REMAINDER_CASES]
   assert.equal(new Set(realCases.map(item => item.sourceIndex)).size, SHOWCASE_CASES.length)
   if (REALWORLDQA_DATASET_STATUS.complete) assert.equal(new Set(realCases.map(item => item.imageSha256)).size, 762)
-  assert.deepEqual(new Set(SHOWCASE_CASES.map(item => item.sourceDataset)), new Set(['RealWorldQA']))
+  assert.deepEqual(new Set(SHOWCASE_CASES.map(item => item.sourceDataset)), SHOWCASE_CASES.length ? new Set(['RealWorldQA']) : new Set())
 })
 
 test('screen-recording demos expose one 16:9 canvas, two public scenarios, replay and download', () => {
@@ -67,11 +69,11 @@ test('local frame capture is disabled unless explicitly enabled', () => {
 })
 
 test('official RealWorldQA prompts and exact option scoring are deterministic', () => {
-  assert.equal(formatMultipleChoicePrompt('Which one?', { A: 'Cat', B: 'Dog' }), 'Which one?\nA. Cat\nB. Dog\nAnswer with only the letter of the correct option.')
+  assert.equal(formatMultipleChoicePrompt('Which one?', { A: 'Cat', B: 'Dog' }), 'Question: Which one?\nOptions:\nA. Cat\nB. Dog\nPlease select the correct answer from the options above. ')
   assert.equal(extractMultipleChoiceLetter('Answer: B', { A: 'Cat', B: 'Dog' }), 'B')
   assert.equal(extractMultipleChoiceLetter('dog', { A: 'Cat', B: 'Dog' }), 'B')
   assert.equal(extractMultipleChoiceLetter('It may be B or A.', { A: 'Cat', B: 'Dog' }), null)
-  const item = REALWORLDQA_CASES[0]
+  const item = REALWORLDQA_CASES[0] || { scoring: 'multiple_choice', expectedLetter: 'A', expectedAnswer: 'Cat', options: { A: 'Cat', B: 'Dog' } }
   assert.equal(scoreShowcaseAnswer(item, item.expectedLetter).status, 'PASS')
   assert.equal(scoreShowcaseAnswer(item, item.expectedLetter === 'A' ? 'B' : 'A').status, 'FAIL')
 })
