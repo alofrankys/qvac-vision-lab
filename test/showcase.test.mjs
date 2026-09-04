@@ -66,6 +66,10 @@ test('screen-recording demos expose one 16:9 canvas, two public scenarios, repla
   const [, startX, step, width, firstModelX] = compactLayout.map(Number)
   const fourthThumbnailRightEdge = startX + (3 * step) + width
   assert.ok(fourthThumbnailRightEdge < firstModelX, `fourth thumbnail edge ${fourthThumbnailRightEdge} must not overlap first model at ${firstModelX}`)
+  const thumbnailRenderer = script.slice(script.indexOf('function drawLiveDemoThumbnails'), script.indexOf('function drawLiveDemoImage'))
+  assert.doesNotMatch(thumbnailRenderer, /item\.title/, 'compact thumbnails must remain image-and-number only')
+  assert.match(script, /LIVE_DEMO_RUNTIME = Object\.freeze\(\{ sdk: '0\.18\.2', backend: '0\.47\.0', accelerator: 'Apple Metal' \}\)/)
+  assert.match(script, /primary: '#16e3c1'/, 'the video should use the official QVAC green accent')
 })
 
 test('public RealWorldQA audit exposes canonical scores, uncertainty and repeatability separately', () => {

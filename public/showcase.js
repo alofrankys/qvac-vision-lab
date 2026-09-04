@@ -15,6 +15,18 @@ const PROVIDER_BADGES = Object.freeze({
 const OFFICIAL_REAL_GROUPS = Object.freeze(['official-real', 'validation-real', 'validation-real-b', 'validation-real-c', 'official-remainder'])
 const LIVE_DEMO_CASE_IDS = Object.freeze(['realworldqa-48', 'realworldqa-41', 'realworldqa-53'])
 const LIVE_DEMO_COMPACT_LAYOUT = Object.freeze({ thumbnailStartX: 50, thumbnailStep: 96, thumbnailWidth: 90, thumbnailImageWidth: 34, firstModelX: 460 })
+const LIVE_DEMO_RUNTIME = Object.freeze({ sdk: '0.18.2', backend: '0.47.0', accelerator: 'Apple Metal' })
+const LIVE_DEMO_THEME = Object.freeze({
+  background: '#070a09',
+  surface: '#101412',
+  surfaceRaised: '#171817',
+  border: '#29332f',
+  primary: '#16e3c1',
+  primaryMuted: 'rgba(22,227,193,.28)',
+  blue: '#4bb8ff',
+  text: '#f5f7f6',
+  muted: '#9aa5a1'
+})
 const LIVE_DEMO_3_SCENES = Object.freeze([
   {
     id: 'personal-dog-3',
@@ -1406,33 +1418,32 @@ function drawLiveDemoFrame() {
   const item = liveDemo.activeCase
   const cases = liveDemo.scenes
   ctx.clearRect(0, 0, canvas.width, canvas.height)
-  ctx.fillStyle = '#050506'
+  ctx.fillStyle = LIVE_DEMO_THEME.background
   ctx.fillRect(0, 0, canvas.width, canvas.height)
 
-  const glow = ctx.createRadialGradient(1510, 10, 0, 1510, 10, 430)
-  glow.addColorStop(0, 'rgba(255,159,10,.18)')
-  glow.addColorStop(1, 'rgba(255,159,10,0)')
-  ctx.fillStyle = glow
-  ctx.fillRect(1050, 0, 550, 450)
+  drawLiveDemoBackdrop(ctx)
 
-  ctx.fillStyle = '#f5f5f7'
+  ctx.fillStyle = LIVE_DEMO_THEME.text
   ctx.font = '800 24px ui-monospace, SFMono-Regular, Menlo, monospace'
   ctx.fillText('QVAC VISION LAB', 48, 52)
   const replaying = liveDemo.mode === 'dogs-replay'
-  ctx.fillStyle = '#ff9f0a'
+  ctx.fillStyle = LIVE_DEMO_THEME.primary
   ctx.font = '800 13px ui-monospace, SFMono-Regular, Menlo, monospace'
   ctx.fillText(replaying ? 'EXPERIMENT 06 · AUTOMATED RECORDED REPLAY' : 'EXPERIMENT 06 · AUTOMATED LIVE DEMO', 48, 77)
   ctx.fillStyle = '#8e8e93'
   ctx.fillText(`SCENE ${Math.min(cases.length, liveDemo.sceneIndex + 1)} / ${cases.length} · SAME IMAGE · SAME QUESTION`, 590, 55)
-  ctx.fillStyle = replaying ? '#0a84ff' : '#ff453a'
+  ctx.fillStyle = replaying ? LIVE_DEMO_THEME.blue : '#ff453a'
   ctx.beginPath(); ctx.arc(1335, 49, 7, 0, Math.PI * 2); ctx.fill()
-  ctx.fillStyle = '#f5f5f7'
+  ctx.fillStyle = LIVE_DEMO_THEME.text
   ctx.fillText(replaying ? 'REPLAY' : liveDemo.recorder?.state === 'recording' || localFrameCapture.running ? 'REC' : 'LIVE', 1352, 54)
   ctx.fillStyle = '#8e8e93'
   const elapsed = liveDemo.startedAt ? (performance.now() - liveDemo.startedAt) / 1000 : 0
   ctx.fillText(`${elapsed.toFixed(1)} s`, 1430, 54)
-  ctx.fillStyle = '#5ee478'
-  ctx.fillText(replaying ? 'RECORDED · QVAC SDK' : 'LOCAL · QVAC SDK', replaying ? 1370 : 1420, 77)
+  ctx.fillStyle = LIVE_DEMO_THEME.primary
+  ctx.font = '800 11px ui-monospace, SFMono-Regular, Menlo, monospace'
+  ctx.textAlign = 'right'
+  ctx.fillText(`QVAC SDK ${LIVE_DEMO_RUNTIME.sdk} · LLAMA.CPP ${LIVE_DEMO_RUNTIME.backend} · ${LIVE_DEMO_RUNTIME.accelerator.toUpperCase()}`, 1552, 78)
+  ctx.textAlign = 'left'
 
   if (liveDemo.introCard) {
     drawLiveDemoIntroCard(ctx)
@@ -1456,6 +1467,31 @@ function drawLiveDemoFrame() {
   ctx.font = '800 12px ui-monospace, SFMono-Regular, Menlo, monospace'
   ctx.fillText(liveDemo.phase, 590, 88)
   drawLiveDemoCursor(ctx)
+}
+
+function drawLiveDemoBackdrop(ctx) {
+  const primaryGlow = ctx.createRadialGradient(1510, 20, 0, 1510, 20, 470)
+  primaryGlow.addColorStop(0, 'rgba(22,227,193,.15)')
+  primaryGlow.addColorStop(1, 'rgba(22,227,193,0)')
+  ctx.fillStyle = primaryGlow
+  ctx.fillRect(1010, 0, 590, 480)
+
+  const blueGlow = ctx.createRadialGradient(40, 880, 0, 40, 880, 520)
+  blueGlow.addColorStop(0, 'rgba(75,184,255,.08)')
+  blueGlow.addColorStop(1, 'rgba(75,184,255,0)')
+  ctx.fillStyle = blueGlow
+  ctx.fillRect(0, 420, 600, 480)
+
+  ctx.save()
+  ctx.strokeStyle = 'rgba(22,227,193,.035)'
+  ctx.lineWidth = 1
+  for (let x = 0; x <= 1600; x += 80) {
+    ctx.beginPath(); ctx.moveTo(x, 92); ctx.lineTo(x, 900); ctx.stroke()
+  }
+  for (let y = 100; y <= 900; y += 80) {
+    ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(1600, y); ctx.stroke()
+  }
+  ctx.restore()
 }
 
 function drawLiveDemoIntroCard(ctx) {
@@ -1491,10 +1527,10 @@ function drawLiveDemoIntroCard(ctx) {
     liveDemo.scenes.forEach((item, index) => {
       const x = 58 + (index * 381)
       drawLiveDemoIntroBlock(ctx, x, 290, 350, 432, .30 + (index * .85), index, () => {
-        drawLiveDemoPanel(ctx, x, 290, 350, 432, 24, '#0b0b0d', index === 0 ? '#ff9f0a' : '#2c2c2e', index === 0 ? 2 : 1)
+        drawLiveDemoPanel(ctx, x, 290, 350, 432, 24, LIVE_DEMO_THEME.surface, index === 0 ? LIVE_DEMO_THEME.primary : LIVE_DEMO_THEME.border, index === 0 ? 2 : 1)
         const image = liveDemo.images.get(item.id)
         if (image) drawLiveDemoImageCover(ctx, image, x + 12, 302, 326, 242, 16)
-        ctx.fillStyle = '#ffb340'
+        ctx.fillStyle = LIVE_DEMO_THEME.primary
         ctx.font = '800 11px ui-monospace, SFMono-Regular, Menlo, monospace'
         ctx.fillText(`0${index + 1} · PERSONAL REAL PHOTO`, x + 24, 578)
         ctx.fillStyle = '#f5f5f7'
@@ -1511,7 +1547,7 @@ function drawLiveDemoIntroCard(ctx) {
     })
 
     drawLiveDemoIntroReveal(ctx, 4.05, 58, 790, () => {
-      ctx.fillStyle = '#64d2ff'
+      ctx.fillStyle = LIVE_DEMO_THEME.blue
       ctx.font = '800 13px ui-monospace, SFMono-Regular, Menlo, monospace'
       ctx.fillText('NEXT · THE FOUR LOCAL VARIANTS', 58, 790)
       ctx.fillStyle = '#8e8e93'
@@ -1536,12 +1572,12 @@ function drawLiveDemoIntroCard(ctx) {
   })
   const samePhotoWidth = ctx.measureText(`${samePhoto} `).width
   drawLiveDemoIntroReveal(ctx, .65, 58 + samePhotoWidth, 200, () => {
-    ctx.fillStyle = '#ffb340'
+    ctx.fillStyle = LIVE_DEMO_THEME.primary
     ctx.fillText(sameQuestion, 58 + samePhotoWidth, 200)
   })
   const sameQuestionWidth = ctx.measureText(`${sameQuestion} `).width
   drawLiveDemoIntroReveal(ctx, 1.05, 58 + samePhotoWidth + sameQuestionWidth, 200, () => {
-    ctx.fillStyle = '#64d2ff'
+    ctx.fillStyle = LIVE_DEMO_THEME.blue
     ctx.fillText('Four local variants.', 58 + samePhotoWidth + sameQuestionWidth, 200)
   })
   drawLiveDemoIntroReveal(ctx, 1.35, 60, 239, () => {
@@ -1554,8 +1590,8 @@ function drawLiveDemoIntroCard(ctx) {
     const x = 58 + (index * 381)
     const provider = showcase.providers.find(item => item.id === providerId)
     drawLiveDemoIntroBlock(ctx, x, 286, 350, 260, 1.65 + (index * .70), index, () => {
-      drawLiveDemoPanel(ctx, x, 286, 350, 260, 23, '#0b0b0d', index === 0 ? '#ff9f0a' : '#2c2c2e', index === 0 ? 2 : 1)
-      ctx.fillStyle = index === 0 ? '#ffb340' : '#64d2ff'
+      drawLiveDemoPanel(ctx, x, 286, 350, 260, 23, LIVE_DEMO_THEME.surface, index === 0 ? LIVE_DEMO_THEME.primary : LIVE_DEMO_THEME.border, index === 0 ? 2 : 1)
+      ctx.fillStyle = index === 0 ? LIVE_DEMO_THEME.primary : LIVE_DEMO_THEME.blue
       ctx.font = '800 13px ui-monospace, SFMono-Regular, Menlo, monospace'
       ctx.fillText(PROVIDER_BADGES[providerId], x + 28, 327)
       ctx.fillStyle = '#f5f5f7'
@@ -1572,8 +1608,8 @@ function drawLiveDemoIntroCard(ctx) {
   })
 
   drawLiveDemoIntroReveal(ctx, 4.20, 58, 588, () => {
-    drawLiveDemoPanel(ctx, 58, 588, 1484, 100, 20, 'rgba(100,210,255,.08)', 'rgba(100,210,255,.30)', 1)
-    ctx.fillStyle = '#64d2ff'
+    drawLiveDemoPanel(ctx, 58, 588, 1484, 100, 20, 'rgba(22,227,193,.07)', LIVE_DEMO_THEME.primaryMuted, 1)
+    ctx.fillStyle = LIVE_DEMO_THEME.primary
     ctx.font = '800 11px ui-monospace, SFMono-Regular, Menlo, monospace'
     ctx.fillText('WHAT HAPPENS NEXT', 86, 622)
     ctx.fillStyle = '#d1d1d6'
@@ -1588,7 +1624,7 @@ function drawLiveDemoIntroCard(ctx) {
     ctx.translate(800, 756)
     ctx.scale(buttonScale, buttonScale)
     ctx.translate(-800, -756)
-    drawLiveDemoPanel(ctx, 526, 718, 548, 76, 18, '#0a84ff', '#64d2ff', 2)
+    drawLiveDemoPanel(ctx, 526, 718, 548, 76, 18, '#0c8f7b', LIVE_DEMO_THEME.primary, 2)
     ctx.fillStyle = '#fff'
     ctx.font = '900 18px ui-monospace, SFMono-Regular, Menlo, monospace'
     ctx.textAlign = 'center'
@@ -1599,7 +1635,7 @@ function drawLiveDemoIntroCard(ctx) {
   drawLiveDemoIntroReveal(ctx, 5.55, 58, 837, () => {
     ctx.fillStyle = '#8e8e93'
     ctx.font = '600 14px -apple-system, BlinkMacSystemFont, sans-serif'
-    ctx.fillText('All inference runs locally through QVAC SDK on this Mac.', 58, 837)
+    ctx.fillText(`Local inference · QVAC SDK ${LIVE_DEMO_RUNTIME.sdk} · llama.cpp ${LIVE_DEMO_RUNTIME.backend} · ${LIVE_DEMO_RUNTIME.accelerator}`, 58, 837)
   })
   ctx.restore()
 }
@@ -1655,17 +1691,18 @@ function drawLiveDemoThumbnails(ctx, cases) {
   cases.forEach((item, index) => {
     const x = startX + (index * step)
     const selected = item.id === liveDemo.activeCase?.id
-    drawLiveDemoPanel(ctx, x, 98, width, 61, 12, '#111113', selected ? '#ff9f0a' : '#2c2c2e', selected ? 3 : 1)
+    drawLiveDemoPanel(ctx, x, 98, width, 61, 12, LIVE_DEMO_THEME.surfaceRaised, selected ? LIVE_DEMO_THEME.primary : LIVE_DEMO_THEME.border, selected ? 3 : 1)
     const image = liveDemo.images.get(item.id)
-    const imageWidth = compact ? LIVE_DEMO_COMPACT_LAYOUT.thumbnailImageWidth : 65
-    if (image) drawLiveDemoImageCover(ctx, image, x + 4, 102, imageWidth, 53, 9)
-    ctx.fillStyle = selected ? '#ffb340' : '#a1a1a6'
-    ctx.font = '800 9px ui-monospace, SFMono-Regular, Menlo, monospace'
-    const textX = x + imageWidth + (compact ? 8 : 11)
-    ctx.fillText(`0${index + 1}`, textX, 120)
-    ctx.fillStyle = '#f5f5f7'
-    ctx.font = `${compact ? '700 9px' : '700 10px'} -apple-system, BlinkMacSystemFont, sans-serif`
-    wrapLiveDemoText(ctx, item.title, textX, 138, width - imageWidth - (compact ? 12 : 16), 13, 2)
+    if (image) drawLiveDemoImageCover(ctx, image, x + 4, 102, width - 8, 53, 9)
+    ctx.beginPath()
+    ctx.arc(x + 17, 115, 10, 0, Math.PI * 2)
+    ctx.fillStyle = selected ? LIVE_DEMO_THEME.primary : 'rgba(7,10,9,.82)'
+    ctx.fill()
+    ctx.fillStyle = selected ? '#07100d' : LIVE_DEMO_THEME.text
+    ctx.font = '900 9px ui-monospace, SFMono-Regular, Menlo, monospace'
+    ctx.textAlign = 'center'
+    ctx.fillText(`0${index + 1}`, x + 17, 118)
+    ctx.textAlign = 'left'
   })
 }
 
@@ -1675,7 +1712,7 @@ function drawLiveDemoImage(ctx, item) {
   if (image) drawLiveDemoImageCover(ctx, image, 58, 184, 370, 272, 15)
   ctx.fillStyle = 'rgba(0,0,0,.72)'
   ctx.fillRect(58, 404, 370, 52)
-  ctx.fillStyle = '#ffb340'
+  ctx.fillStyle = LIVE_DEMO_THEME.primary
   ctx.font = '800 11px ui-monospace, SFMono-Regular, Menlo, monospace'
   ctx.fillText(item?.sourceLabel || 'REALWORLDQA · REAL IMAGE', 76, 427)
   ctx.fillStyle = '#f5f5f7'
@@ -1685,7 +1722,7 @@ function drawLiveDemoImage(ctx, item) {
 
 function drawLiveDemoQuestion(ctx, item) {
   drawLiveDemoPanel(ctx, 48, 480, 390, 370, 22, '#0b0b0d', '#2c2c2e', 1)
-  ctx.fillStyle = '#ffb340'
+  ctx.fillStyle = LIVE_DEMO_THEME.primary
   ctx.font = '800 11px ui-monospace, SFMono-Regular, Menlo, monospace'
   ctx.fillText(item?.questionLabel || 'OFFICIAL QUESTION · INSERTED AUTOMATICALLY', 72, 510)
   ctx.fillStyle = '#f5f5f7'
@@ -1696,7 +1733,7 @@ function drawLiveDemoQuestion(ctx, item) {
   ctx.font = '800 11px ui-monospace, SFMono-Regular, Menlo, monospace'
   const expectedLabel = item?.demoKind === 'official' ? `EXPECTED · ${item.expectedLetter || item.expectedAnswer || '—'}` : item?.demoKind === 'open' ? item.expectedAnswer : `EXPECTED · ${item?.expectedAnswer || '—'}`
   wrapLiveDemoText(ctx, expectedLabel, 72, 744, 342, 16, 2)
-  drawLiveDemoPanel(ctx, 72, 778, 342, 50, 13, '#0a84ff', '#2997ff', 1)
+  drawLiveDemoPanel(ctx, 72, 778, 342, 50, 13, '#0c8f7b', LIVE_DEMO_THEME.primary, 1)
   ctx.fillStyle = '#fff'
   ctx.font = '800 13px ui-monospace, SFMono-Regular, Menlo, monospace'
   ctx.textAlign = 'center'
@@ -1712,8 +1749,8 @@ function drawLiveDemoCard(ctx, providerId, index) {
   const card = liveDemo.cards[providerId] || { status: 'ready', output: '' }
   const provider = showcase.providers.find(item => item.id === providerId)
   const active = card.status === 'running'
-  drawLiveDemoPanel(ctx, x, y, width, height, 21, '#0b0b0d', active ? '#ff9f0a' : '#2c2c2e', active ? 3 : 1)
-  ctx.fillStyle = '#ffb340'
+  drawLiveDemoPanel(ctx, x, y, width, height, 21, LIVE_DEMO_THEME.surface, active ? LIVE_DEMO_THEME.primary : LIVE_DEMO_THEME.border, active ? 3 : 1)
+  ctx.fillStyle = LIVE_DEMO_THEME.primary
   ctx.font = '800 12px ui-monospace, SFMono-Regular, Menlo, monospace'
   ctx.fillText(PROVIDER_BADGES[providerId], x + 24, y + 31)
   ctx.fillStyle = '#f5f5f7'
@@ -1724,7 +1761,7 @@ function drawLiveDemoCard(ctx, providerId, index) {
   wrapLiveDemoText(ctx, compactVersion(provider?.modelVersion), x + 20, y + 97, width - 40, 15, 2)
 
   const verdict = card.evaluation?.status || (card.status === 'running' ? 'STREAMING' : card.status === 'error' ? 'ERROR' : card.status === 'complete' ? 'DONE' : 'READY')
-  ctx.fillStyle = ['PASS', '2/2'].includes(verdict) ? '#5ee478' : ['FAIL', 'ERROR', '0/2'].includes(verdict) ? '#ff6961' : verdict === '1/2' || active ? '#ffb340' : verdict === 'OPEN' ? '#64d2ff' : '#8e8e93'
+  ctx.fillStyle = ['PASS', '2/2'].includes(verdict) ? LIVE_DEMO_THEME.primary : ['FAIL', 'ERROR', '0/2'].includes(verdict) ? '#ff6961' : verdict === '1/2' || active ? '#ffd166' : verdict === 'OPEN' ? LIVE_DEMO_THEME.blue : '#8e8e93'
   ctx.font = '900 13px ui-monospace, SFMono-Regular, Menlo, monospace'
   ctx.textAlign = 'right'
   ctx.fillText(verdict, x + width - 20, y + 35)
@@ -1832,9 +1869,9 @@ function drawLiveDemoKpiCard(ctx) {
 
   ctx.fillStyle = 'rgba(0,0,0,.68)'
   ctx.fillRect(0, 92, 1600, 808)
-  drawLiveDemoPanel(ctx, 48, 112, 1504, 744, 28, '#0b0b0d', '#ff9f0a', 2)
+  drawLiveDemoPanel(ctx, 48, 112, 1504, 744, 28, LIVE_DEMO_THEME.surface, LIVE_DEMO_THEME.primary, 2)
 
-  ctx.fillStyle = '#ffb340'
+  ctx.fillStyle = LIVE_DEMO_THEME.primary
   ctx.font = '800 12px ui-monospace, SFMono-Regular, Menlo, monospace'
   ctx.fillText(liveDemo.mode === 'dogs-replay' ? 'FINAL POPUP · PREVIOUSLY RECORDED RUN' : 'FINAL POPUP · MEASURED AFTER EVERY INFERENCE COMPLETED', 82, 153)
   ctx.fillStyle = '#f5f5f7'
@@ -1849,7 +1886,7 @@ function drawLiveDemoKpiCard(ctx) {
     ['FULL WALL-CLOCK CYCLE', formatDuration(elapsed)],
     ['REAL PHOTOS', `${liveDemo.results.length}`],
     [liveDemo.mode === 'dogs-replay' ? 'RECORDED RESULTS' : 'SEQUENTIAL INFERENCES', `${totalInferences}`],
-    ['SOURCE', liveDemo.mode === 'dogs-replay' ? 'RECORDED · QVAC SDK' : 'QVAC SDK · LOCAL']
+    ['RUNTIME', `SDK ${LIVE_DEMO_RUNTIME.sdk} · LLAMA.CPP ${LIVE_DEMO_RUNTIME.backend}`]
   ]
   cycleItems.forEach(([label, value], index) => {
     const x = 108 + (index * 350)
@@ -1865,8 +1902,8 @@ function drawLiveDemoKpiCard(ctx) {
     const x = 82 + (index * 359)
     const y = 370
     const provider = showcase.providers.find(item => item.id === summary.providerId)
-    drawLiveDemoPanel(ctx, x, y, 335, 406, 19, '#111113', index === 0 ? '#ff9f0a' : '#2c2c2e', index === 0 ? 2 : 1)
-    ctx.fillStyle = index === 0 ? '#ffb340' : '#64d2ff'
+    drawLiveDemoPanel(ctx, x, y, 335, 406, 19, LIVE_DEMO_THEME.surfaceRaised, index === 0 ? LIVE_DEMO_THEME.primary : LIVE_DEMO_THEME.border, index === 0 ? 2 : 1)
+    ctx.fillStyle = index === 0 ? LIVE_DEMO_THEME.primary : LIVE_DEMO_THEME.blue
     ctx.font = '800 11px ui-monospace, SFMono-Regular, Menlo, monospace'
     ctx.fillText(PROVIDER_BADGES[summary.providerId], x + 24, y + 32)
     ctx.fillStyle = '#f5f5f7'
@@ -1888,7 +1925,7 @@ function drawLiveDemoKpiCard(ctx) {
       ctx.fillStyle = '#6e6e73'
       ctx.font = '800 9px ui-monospace, SFMono-Regular, Menlo, monospace'
       ctx.fillText(label, x + 24, metricY)
-      ctx.fillStyle = metricIndex === 0 ? '#5ee478' : '#f5f5f7'
+      ctx.fillStyle = metricIndex === 0 ? LIVE_DEMO_THEME.primary : '#f5f5f7'
       ctx.font = '900 15px ui-monospace, SFMono-Regular, Menlo, monospace'
       ctx.textAlign = 'right'
       ctx.fillText(value, x + 311, metricY)
