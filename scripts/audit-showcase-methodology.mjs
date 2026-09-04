@@ -23,6 +23,8 @@ const directScorerName = 'visionpsy-realworldqa-vlmevalkit-upstream-470e517.json
 const directScorer = await readOptional(directScorerName)
 const repeatabilityName = 'visionpsy-realworldqa-repeatability-100x3.json'
 const repeatability = await readOptional(repeatabilityName)
+const performanceName = 'visionpsy-four-way-performance-realworldqa-validation-50-counterbalanced-50.json'
+const performance = await readOptional(performanceName)
 const providerIds = ['qvac-visionpsy-standard-q8', 'qvac-visionpsy-standard-q4', 'qvac-visionpsy', 'qvac-visionpsy-flash-q4']
 const published = {
   'qvac-visionpsy-standard-q8': 0.591,
@@ -70,15 +72,28 @@ const audit = {
     report: repeatabilityName,
     cases: repeatability.selection.cases,
     repeats: 3,
-    newInferences: repeatability.selection.cases * 3 * 2,
+    newInferences: repeatability.selection.cases * Object.keys(repeatability.providers).length * 2,
     coveredProviderIds: Object.keys(repeatability.providers),
     excludedProviderIds: providerIds.filter(providerId => !repeatability.providers[providerId]),
     maximumAccuracySwingPoints: Math.max(...Object.values(repeatability.providers).map(item => item.maximumAccuracySwingPoints)),
     minimumExactOutputAgreement: Math.min(...Object.values(repeatability.providers).map(item => item.identicalOutputs.rate)),
     minimumPassFailAgreement: Math.min(...Object.values(repeatability.providers).map(item => item.identicalPassFailVerdicts.rate))
   } : null,
+  controlledPerformanceAudit: performance ? {
+    report: performanceName,
+    cases: performance.dataset?.caseCount,
+    measuredInferences: performance.results?.length,
+    excludedWarmups: performance.warmups?.length,
+    orderPolicy: performance.dataset?.orderPolicy,
+    providers: providerIds.map(providerId => ({
+      providerId,
+      meanTtftMs: performance.summaries?.[providerId]?.ttftMs?.mean,
+      meanLatencyMs: performance.summaries?.[providerId]?.latencyMs?.mean,
+      meanTokensPerSecond: performance.summaries?.[providerId]?.tokensPerSecond?.mean
+    }))
+  } : null,
   controls: {
-    dataset: 'Complete checksum-locked RealWorldQA: 765 questions over 762 unique image hashes.',
+    dataset: 'Complete checksum-locked RealWorldQA: 765 scored questions.',
     prompt: run.dataset.promptTemplate || 'Legacy local answer-letter suffix; differs from upstream VLMEvalKit.',
     runtime: 'All four variants use QVAC SDK and @qvac/llm-llamacpp; preprocessing remains model-specific by design.',
     order: `${primaryRun.dataset.orderPolicy}; Standard Q4 is a later single-provider addendum over the exact same seeded case order.`,
@@ -87,16 +102,16 @@ const audit = {
   },
   comparability: {
     accuracy: 'Paired case-by-case across all four variants: same 765 source indices, image hashes, prompts, expected answers and scorer.',
-    performance: 'Not directly rankable across all four variants: Standard Q4 was measured later in a separately paced single-provider addendum.',
+    performance: performance ? 'The full-run telemetry is not directly rankable because Standard Q4 was a separately paced addendum. A separate 50-case four-way diagnostic uses excluded warm-ups and a balanced four-position rotation for descriptive local timing.' : 'Not directly rankable across all four variants: Standard Q4 was measured later in a separately paced single-provider addendum.',
     statisticalConclusion: 'All six pairwise accuracy comparisons are exploratory; the combined four-way report applies Holm correction.'
   },
   residualLimitations: [
     'Tether reports in-house results; an exact vendor environment and all internal generation details are not publicly frozen.',
     'This is one benchmark and does not reproduce the complete 17-benchmark VisionPsy table.',
-    repeatability ? 'The 100-case repeatability audit covers the original three variants only; Standard Q4 has no repeated-subset audit. It tests deterministic local implementation stability, not other prompts, stochastic settings, hardware or the full 765-case set.' : 'One deterministic full run does not estimate implementation nondeterminism; repeat-run variance remains a separate robustness question.',
+    repeatability && providerIds.every(providerId => repeatability.providers[providerId]) ? 'The 100-case repeatability audit covers all four variants. It tests deterministic local implementation stability, not other prompts, stochastic settings, hardware or the full 765-case set.' : repeatability ? 'The 100-case repeatability audit does not yet cover every variant. It tests deterministic local implementation stability, not other prompts, stochastic settings, hardware or the full 765-case set.' : 'One deterministic full run does not estimate implementation nondeterminism; repeat-run variance remains a separate robustness question.',
     'Exact multiple-choice accuracy does not measure open-ended prose quality, safety, calibration or usefulness.',
     'Performance KPIs are local-device measurements and are not comparable with unpublished vendor hardware.',
-    'Standard Q4 was added after the primary balanced three-model rotation. Its paired accuracy is comparable, but its timing and resource KPIs are not a controlled four-way performance experiment.'
+    performance ? 'The controlled four-way timing diagnostic covers 50 cases on one Mac. It is descriptive local evidence, not a portable hardware benchmark or a replacement for the full-run accuracy comparison.' : 'Standard Q4 was added after the primary balanced three-model rotation. Its paired accuracy is comparable, but its timing and resource KPIs are not a controlled four-way performance experiment.'
   ]
 }
 
@@ -151,12 +166,15 @@ function countBy(items, key) {
 function publicationWording(value) {
   const scores = value.results.map(item => `${item.label} ${item.correct}/${item.total} (${percent(item.accuracy)}) versus ${percent(item.publishedMatchingGgufAccuracy)}`).join('; ')
   const scorer = value.scorerAudit.kind === 'DIRECT_PINNED_VLMEVALKIT_SOURCE'
-    ? `The checksum-pinned upstream VLMEvalKit scorer produced ${value.scorerAudit.extractionDifferences} extraction differences and ${value.scorerAudit.passVerdictChanges} pass/fail changes.`
+    ? `The checksum-pinned upstream VLMEvalKit scorer produced ${value.scorerAudit.extractionDifferences} extraction ${value.scorerAudit.extractionDifferences === 1 ? 'difference' : 'differences'} and ${value.scorerAudit.passVerdictChanges} pass/fail ${value.scorerAudit.passVerdictChanges === 1 ? 'change' : 'changes'}.`
     : 'Direct pinned VLMEvalKit scorer verification is still pending.'
   const repeatability = value.repeatabilityAudit
     ? `A separate ${value.repeatabilityAudit.cases}-case, three-pass audit produced ${value.repeatabilityAudit.maximumAccuracySwingPoints.toFixed(2)} pp maximum score swing and ${(value.repeatabilityAudit.minimumExactOutputAgreement * 100).toFixed(1)}% minimum exact-output agreement.`
     : 'A repeated-subset robustness audit is still pending.'
-  return `I ran the complete 765-question RealWorldQA set locally on four matching VisionPsy GGUF variants: ${scores}. ${scorer} ${repeatability} Standard Q4 was a later single-provider addendum with identical cases, prompts and scoring, so its accuracy is paired but its performance KPIs are not directly comparable. This is an independent local corroboration on Apple Metal, not a reproduction of Tether's complete in-house evaluation.`
+  const performance = value.controlledPerformanceAudit
+    ? `A separate ${value.controlledPerformanceAudit.cases}-case four-way run with excluded warm-ups and balanced execution order provides descriptive local timing without changing the quality score.`
+    : 'Four-way controlled timing remains separate from the quality score.'
+  return `I ran the complete 765-question RealWorldQA set locally on four matching VisionPsy GGUF variants: ${scores}. ${scorer} ${repeatability} Standard Q4 was a later single-provider addendum with identical cases, prompts and scoring, so its original full-run performance KPIs are not directly comparable. ${performance} This is an independent local corroboration on Apple Metal, not a reproduction of Tether's complete in-house evaluation.`
 }
 
 function markdown(value) {
@@ -165,6 +183,10 @@ function markdown(value) {
   lines.push('', '## Evidence design', '', `- Primary run: \`${value.sourceRuns.primaryThreeModelRun}\` (balanced three-position rotation).`, `- Standard Q4 addendum: \`${value.sourceRuns.standardQ4Addendum}\` (same 765 cases and seeded order, executed separately).`, `- Accuracy comparability: ${value.comparability.accuracy}`, `- Performance comparability: ${value.comparability.performance}`, `- Statistical interpretation: ${value.comparability.statisticalConclusion}`)
   lines.push('', '## Sanity baselines', '', `- Majority answer-letter baseline: ${percent(value.sanityBaselines.majorityLetterBaseline)}.`, `- Weighted random-option baseline: ${Number.isFinite(value.sanityBaselines.weightedRandomOptionBaseline) ? percent(value.sanityBaselines.weightedRandomOptionBaseline) : 'unavailable until all manifests are installed'}.`, `- Answer letters: ${Object.entries(value.sanityBaselines.answerLetters).map(([key, count]) => `${key}=${count}`).join(', ')}.`)
   if (value.repeatabilityAudit) lines.push('', '## Deterministic repeatability', '', `- ${value.repeatabilityAudit.cases} stratified cases × ${value.repeatabilityAudit.repeats} passes per covered model.`, `- Covered: ${value.repeatabilityAudit.coveredProviderIds.map(providerId => labels[providerId] || providerId).join(', ')}.`, `- Excluded: ${value.repeatabilityAudit.excludedProviderIds.map(providerId => labels[providerId] || providerId).join(', ')}.`, `- ${value.repeatabilityAudit.newInferences} new inferences in passes 2 and 3.`, `- Maximum accuracy swing: ${value.repeatabilityAudit.maximumAccuracySwingPoints.toFixed(2)} pp.`, `- Minimum exact-output agreement: ${(value.repeatabilityAudit.minimumExactOutputAgreement * 100).toFixed(1)}%.`, `- Minimum pass/fail agreement: ${(value.repeatabilityAudit.minimumPassFailAgreement * 100).toFixed(1)}%.`)
+  if (value.controlledPerformanceAudit) {
+    lines.push('', '## Controlled local performance diagnostic', '', `- ${value.controlledPerformanceAudit.cases} cases, ${value.controlledPerformanceAudit.measuredInferences} measured inferences and ${value.controlledPerformanceAudit.excludedWarmups} excluded warm-ups.`, `- ${value.controlledPerformanceAudit.orderPolicy}.`, '- These timings are descriptive for this Mac and are not merged into the 765-question quality score.', '', '| Model | Mean TTFT | Mean latency | Mean generation |', '|---|---:|---:|---:|')
+    for (const item of [...value.controlledPerformanceAudit.providers].sort((a, b) => a.meanLatencyMs - b.meanLatencyMs)) lines.push(`| ${labels[item.providerId] || item.providerId} | ${Math.round(item.meanTtftMs)} ms | ${Math.round(item.meanLatencyMs)} ms | ${item.meanTokensPerSecond.toFixed(1)} tok/s |`)
+  }
   lines.push('', '## Publication wording', '', `> ${value.publicationWording}`, '', '## Residual limitations', '')
   for (const item of value.residualLimitations) lines.push(`- ${item}`)
   lines.push('', 'Primary references:', '', '- https://huggingface.co/qvac/VisionPsy-Nano-460M-GGUFs', '- https://huggingface.co/qvac/VisionPsy-Nano-460M-Flash-GGUFs', '- https://github.com/open-compass/VLMEvalKit', '')

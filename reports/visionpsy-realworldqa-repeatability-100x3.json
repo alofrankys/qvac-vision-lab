@@ -1,8 +1,11 @@
 {
-  "schemaVersion": 1,
-  "generatedAt": "2026-09-01T23:37:09.478Z",
+  "schemaVersion": 2,
+  "generatedAt": "2026-09-04T20:17:17.040Z",
   "title": "VisionPsy RealWorldQA deterministic repeatability audit · 100 cases × 3 repeats",
-  "primaryRun": "visionpsy-three-way-realworldqa-765-qvac-sdk-vlmevalkit-470e517.json",
+  "sourceRuns": {
+    "primary": "visionpsy-three-way-realworldqa-765-qvac-sdk-vlmevalkit-470e517.json",
+    "standardQ4Addendum": "visionpsy-standard-q4-realworldqa-765-qvac-sdk-vlmevalkit-470e517.json"
+  },
   "selection": {
     "seed": "repeatability-20260901",
     "cases": 100,
@@ -260,6 +263,44 @@
       "accuracyRange": [
         0.6,
         0.6
+      ],
+      "maximumAccuracySwingPoints": 0,
+      "identicalOutputs": {
+        "cases": 100,
+        "total": 100,
+        "rate": 1
+      },
+      "identicalPassFailVerdicts": {
+        "cases": 100,
+        "total": 100,
+        "rate": 1
+      }
+    },
+    "qvac-visionpsy-standard-q4": {
+      "label": "VisionPsy Standard Q4 imatrix (QVAC SDK)",
+      "repeats": [
+        {
+          "repeat": 1,
+          "passed": 59,
+          "cases": 100,
+          "accuracy": 0.59
+        },
+        {
+          "repeat": 2,
+          "passed": 59,
+          "cases": 100,
+          "accuracy": 0.59
+        },
+        {
+          "repeat": 3,
+          "passed": 59,
+          "cases": 100,
+          "accuracy": 0.59
+        }
+      ],
+      "accuracyRange": [
+        0.59,
+        0.59
       ],
       "maximumAccuracySwingPoints": 0,
       "identicalOutputs": {

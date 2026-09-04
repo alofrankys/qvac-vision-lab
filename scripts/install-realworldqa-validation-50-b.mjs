@@ -45,7 +45,7 @@ const configurations = Object.freeze({
     titlePrefix: 'Final official scene',
     allowDuplicateImages: true,
     selection: 'Complete remainder of the official RealWorldQA source: all 495 source rows not present in the first 270 measured cases; selected by source index before inference.',
-    selectionMethod: 'Take every remaining source row exactly once. Answer counts A=188, B=250, C=57, D=0 complete the official source totals A=280, B=337, C=145, D=3. Repeated source images are retained because the official 765-question set contains 762 unique image hashes.'
+    selectionMethod: 'Take every remaining source row exactly once. Answer counts A=188, B=250, C=57, D=0 complete the official source totals A=280, B=337, C=145, D=3. Repeated source images are retained because every official scored question remains in scope.'
   }
 })
 const configuration = configurations[batchKey]

@@ -20,4 +20,8 @@ The four files under `public/showcase/personal-dogs/` are owner-supplied photogr
 
 ## Music and recorded media
 
-No third-party music track or recorded demo video is redistributed. The application uses a generated Web Audio fallback. Locally sourced preview tracks, recordings and frame captures are ignored by Git.
+The repository does not redistribute a third-party audio file or a rendered demo video. The browser application uses a generated Web Audio fallback when the optional local track is absent. Locally rendered promotional media may use **“Soul Jazz” by Francisco Alvear**, downloaded from Mixkit and used under the Mixkit Stock Music Free License; the source audio, recordings and frame captures remain ignored by Git. Source and license were verified on 2026-09-04.
+
+- Track listing: https://mixkit.co/free-stock-music/mood/friendly/
+- Mixkit music library: https://mixkit.co/free-stock-music/
+- License: https://mixkit.co/license/

@@ -50,6 +50,8 @@ reports/*
 !reports/visionpsy-realworldqa-765-qvac-sdk-vlmevalkit-audit.md
 !reports/visionpsy-realworldqa-repeatability-100x3.json
 !reports/visionpsy-realworldqa-repeatability-100x3.md
+!reports/visionpsy-four-way-performance-realworldqa-validation-50-counterbalanced-50.json
+!reports/visionpsy-four-way-performance-realworldqa-validation-50-counterbalanced-50.md
 !reports/visionpsy-methodology-audit.json
 !reports/visionpsy-methodology-audit.md
 

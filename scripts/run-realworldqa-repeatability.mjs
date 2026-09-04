@@ -7,10 +7,14 @@ const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..')
 const reportsDir = path.join(root, 'reports')
 const baseUrl = process.env.QVAC_SHOWCASE_URL || 'http://127.0.0.1:8878'
 const primaryName = process.env.QVAC_REPEATABILITY_INPUT || 'visionpsy-three-way-realworldqa-765-qvac-sdk-vlmevalkit-470e517.json'
+const addendumName = process.env.QVAC_REPEATABILITY_ADDENDUM || 'visionpsy-standard-q4-realworldqa-765-qvac-sdk-vlmevalkit-470e517.json'
 const stem = 'visionpsy-realworldqa-repeatability-100x3'
 const checkpointPath = path.join(reportsDir, `.${stem}.checkpoint.ndjson`)
-const providerIds = ['qvac-visionpsy-standard-q8', 'qvac-visionpsy', 'qvac-visionpsy-flash-q4']
+const providerIds = ['qvac-visionpsy-standard-q8', 'qvac-visionpsy-standard-q4', 'qvac-visionpsy', 'qvac-visionpsy-flash-q4']
 const primary = JSON.parse(await readFile(path.join(reportsDir, primaryName), 'utf8'))
+const addendum = JSON.parse(await readFile(path.join(reportsDir, addendumName), 'utf8'))
+const sourceRuns = [primary, addendum]
+const summaries = Object.assign({}, ...sourceRuns.map(run => run.summaries))
 
 await mkdir(reportsDir, { recursive: true })
 const response = await fetch(`${baseUrl}/api/showcase`)
@@ -20,8 +24,8 @@ const allCases = catalog.cases.filter(item => Number.isInteger(item.sourceIndex)
 if (allCases.length !== 765) throw new Error(`Expected 765 installed RealWorldQA cases, found ${allCases.length}`)
 const selected = stratifiedSample(allCases, 100, 'repeatability-20260901')
 const selectedIds = new Set(selected.map(item => item.id))
-const primaryRows = primary.results.filter(item => selectedIds.has(item.caseId))
-if (primaryRows.length !== 300) throw new Error(`Expected 300 primary rows for the subset, found ${primaryRows.length}`)
+const primaryRows = sourceRuns.flatMap(run => run.results.filter(item => selectedIds.has(item.caseId)))
+if (primaryRows.length !== 400) throw new Error(`Expected 400 canonical rows for the subset, found ${primaryRows.length}`)
 
 let reruns = []
 try {
@@ -33,7 +37,8 @@ try {
 const validKeys = new Set(selected.flatMap(item => [2, 3].flatMap(repeat => providerIds.map(providerId => `${repeat}:${item.id}:${providerId}`))))
 const seen = new Set()
 reruns = reruns.filter(item => validKeys.has(keyFor(item)) && !seen.has(keyFor(item)) && seen.add(keyFor(item)))
-if (reruns.length) process.stdout.write(`Resuming repeatability audit from ${reruns.length}/600 rerun inferences.\n`)
+const expectedReruns = selected.length * providerIds.length * 2
+if (reruns.length) process.stdout.write(`Resuming repeatability audit from ${reruns.length}/${expectedReruns} rerun inferences.\n`)
 
 for (const repeat of [2, 3]) {
   for (const [caseIndex, showcaseCase] of selected.entries()) {
@@ -41,7 +46,7 @@ for (const repeat of [2, 3]) {
     for (const [orderIndex, providerId] of order.entries()) {
       const key = `${repeat}:${showcaseCase.id}:${providerId}`
       if (reruns.some(item => keyFor(item) === key)) continue
-      process.stdout.write(`[repeat ${repeat}/3 · ${caseIndex + 1}/100 · ${orderIndex + 1}/3] ${showcaseCase.id} → ${providerId}\n`)
+      process.stdout.write(`[repeat ${repeat}/3 · ${caseIndex + 1}/100 · ${orderIndex + 1}/${providerIds.length}] ${showcaseCase.id} → ${providerId}\n`)
       const result = await runWithRetries(showcaseCase, providerId)
       const row = { repeat, caseIndex, orderIndex, executionOrder: order, ...result }
       reruns.push(row)
@@ -57,10 +62,10 @@ const rows = [
 ]
 const providers = Object.fromEntries(providerIds.map(providerId => [providerId, summarize(providerId)]))
 const report = {
-  schemaVersion: 1,
+  schemaVersion: 2,
   generatedAt: new Date().toISOString(),
   title: 'VisionPsy RealWorldQA deterministic repeatability audit · 100 cases × 3 repeats',
-  primaryRun: primaryName,
+  sourceRuns: { primary: primaryName, standardQ4Addendum: addendumName },
   selection: {
     seed: 'repeatability-20260901',
     cases: 100,
@@ -135,7 +140,7 @@ function summarize(providerId) {
   }
   const accuracies = repeats.map(item => item.accuracy)
   return {
-    label: primary.summaries[providerId].label,
+    label: summaries[providerId].label,
     repeats,
     accuracyRange: [Math.min(...accuracies), Math.max(...accuracies)],
     maximumAccuracySwingPoints: (Math.max(...accuracies) - Math.min(...accuracies)) * 100,

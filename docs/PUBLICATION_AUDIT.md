@@ -17,10 +17,10 @@ The completed public evidence covers Standard Q8_0, Standard Q4_K_M imatrix, Fla
 | --- | --- | --- |
 | `sharp` dependency had published high-severity libvips advisories | High | Pinned `sharp` 0.35.4; production dependency audit returns zero known vulnerabilities. |
 | Redistributed RealWorldQA samples created avoidable licensing ambiguity | High | No RealWorldQA image/question is committed. The complete checksum-locked dataset is reconstructed locally and ignored by Git. |
-| Old diagnostic and superseded RealWorldQA material could be mistaken for canonical evidence | High | Removed from the public Experiment 06 surface and aggregate; the reports index names only the frozen 765-case run, direct scorer audit, methodology audit and repeatability audit as canonical. |
+| Old diagnostic and superseded RealWorldQA material could be mistaken for canonical evidence | High | Removed from the public Experiment 06 surface and aggregate; the reports index separates the frozen quality run, direct scorer audit, methodology/repeatability audits and controlled local timing diagnostic. |
 | “Replica” language overstated parity with an in-house harness | High | README, UI and methodology use “local corroboration” and enumerate every known mismatch. |
 | Recording endpoint could write arbitrary volumes of local frame files | High | Disabled by default and gated behind `QVAC_ENABLE_FRAME_CAPTURE=1`; filenames and payload sizes remain bounded. |
-| Third-party music had no recorded redistribution grant | High | Excluded from Git; the demo falls back to locally generated Web Audio. |
+| Third-party music provenance was not recorded | High | “Soul Jazz” by Francisco Alvear is documented with its Mixkit source and Stock Music Free License; the source audio and rendered media remain excluded from Git, and the app falls back to generated Web Audio. |
 | Large raw datasets, checkpoints and videos risked accidental publication | High | Explicit ignore policy plus a staged-content and secret scan before push. |
 
 ## Remaining limitations
@@ -30,9 +30,9 @@ The completed public evidence covers Standard Q8_0, Standard Q4_K_M imatrix, Fla
 - Full RealWorldQA reconstruction requires the official source TSV and about 130 MB of generated local assets.
 - Model weights are external, large and downloaded on first use.
 - The browser dashboard is local-only and has not been hardened for exposure to an untrusted network.
-- The checked-in benchmark is from one machine. A 100-case, three-pass audit found 100% exact-output agreement, but it does not estimate behavior across other prompts, stochastic settings, hardware or the full benchmark under repeated execution.
+- The checked-in benchmark is from one machine. A 100-case, three-pass audit covering all four variants found 100% exact-output agreement, but it does not estimate behavior across other prompts, stochastic settings, hardware or the full benchmark under repeated execution.
 - Standard Q4 was collected as a separate addendum and its low-resource pacing was relaxed during execution. Its paired accuracy remains valid; wall-clock, latency and resource telemetry are unsuitable for direct ranking against the primary run.
-- The 100-case repeatability audit covers the original three variants and does not yet cover Standard Q4.
+- A separate 50-case timing diagnostic corrects that performance-comparison gap: all four variants ran sequentially on the same Mac, with one excluded warm-up each and a balanced four-position rotation. Mean latency was 2.26 s for Flash Q4, 2.27 s for Flash Q8, 3.97 s for Standard Q4 and 4.02 s for Standard Q8. These are descriptive local timings, not portable hardware claims and not part of the 765-question quality score.
 
 ## Publication decision
 
