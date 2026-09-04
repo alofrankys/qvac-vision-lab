@@ -9,6 +9,8 @@ The public repository tells two distinct stories:
 1. **Dog stories:** approachable, natural visual Q&A over four owner-supplied photos. It explains what local inference looks like; it makes no benchmark claim.
 2. **RealWorldQA corroboration:** a fixed 765-question, exact-scored comparison against matching published VisionPsy GGUF values. It is evidence, not entertainment, and is labelled as local rather than official.
 
+The completed public evidence currently covers Standard Q8_0, Flash Q8_0 and Flash Q4_K_M imatrix. A separately preregistered Standard Q4_K_M imatrix addendum completes the 2×2 architecture/quantization grid without rewriting those records. Partial addendum scores are not publication-ready.
+
 ## Resolved high-priority findings
 
 | Finding | Severity | Resolution |
@@ -29,6 +31,7 @@ The public repository tells two distinct stories:
 - Model weights are external, large and downloaded on first use.
 - The browser dashboard is local-only and has not been hardened for exposure to an untrusted network.
 - The checked-in benchmark is from one machine. A 100-case, three-pass audit found 100% exact-output agreement, but it does not estimate behavior across other prompts, stochastic settings, hardware or the full benchmark under repeated execution.
+- Low-resource pauses in the Standard Q4 addendum reduce average duty cycle but make its wall-clock and latency telemetry unsuitable for direct performance ranking against the original run.
 
 ## Publication decision
 

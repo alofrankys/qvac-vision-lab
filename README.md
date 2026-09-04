@@ -2,7 +2,7 @@
 
 QVAC Vision Lab is a local-first, evidence-driven workspace for finding the real capability boundaries of small vision-language models on private, real-world images. It turns repeatable questions, raw outputs, timings, provenance, and explicit review into durable experiment evidence.
 
-The public story has two layers: a friendly four-photo dog demo that makes local visual inference understandable, followed by an audited 765-question RealWorldQA corroboration against the matching published VisionPsy GGUF results.
+The public story has two layers: a friendly four-photo dog demo that makes local visual inference understandable, followed by an audited 765-case RealWorldQA corroboration against matching published VisionPsy GGUF results. This is the evaluation and prototyping layer for a larger privacy-first application built around real dog photos, natural visual questions and on-device intelligence.
 
 ## Why this exists
 
@@ -17,13 +17,14 @@ Model demos are easy; reliable product assumptions are not. The Lab keeps explor
 | 03 — Screenshot Understanding | Ready | Q&A for app, web, settings, dashboard, and warning screenshots |
 | 04 — Documents & Charts | Ready | Q&A about visible text, tables, values, documents, and charts |
 | 05 — Small Vision Model Arena | Experimental | Same image and exact question through explicitly selected providers |
-| 06 — VisionPsy Live Showcase | Ready | Real-image, three-model live comparison with streaming, per-run KPIs and aggregate paired statistics |
+| 06 — VisionPsy Live Showcase | Benchmark extension running | Real-image live comparison with streaming, per-run KPIs and aggregate paired statistics |
 
 PawVault remains intact as Experiment 01. Its old run IDs, photo IDs, prompts, raw outputs, reviews, and diagnostic evidence are not rewritten. The schema-v5 migration adds Arena records, judgments, question sets, and provenance fields only.
 
 ## Providers
 
 - `qvac-visionpsy-standard-q8`: VisionPsy-Nano-460M Q8_0 through QVAC SDK 0.18.2 and `@qvac/llm-llamacpp` 0.47.0, using the official tiled-upscale preprocessing path.
+- `qvac-visionpsy-standard-q4`: VisionPsy-Nano-460M Q4_K_M imatrix through the same QVAC SDK/backend, Standard Q8 vision projector and tiled-upscale preprocessing path.
 - `qvac-visionpsy`: VisionPsy-Nano-460M-Flash Q8_0 through QVAC SDK 0.18.2 and `@qvac/llm-llamacpp` 0.47.0.
 - `qvac-visionpsy-flash-q4`: VisionPsy-Nano-460M-Flash Q4_K_M imatrix through the same QVAC SDK/backend and native-resolution preprocessing.
 - `lfm2.5-vl-450m`: pinned official LFM2.5-VL-450M Q8_0 primary peer on the persistent patched Metal server.
@@ -36,9 +37,9 @@ Provider choice is explicit. There is no silent fallback, and provider/runtime/m
 Experiment 06 exposes two public scenarios:
 
 1. **Dog stories** — four personal photographs, four natural questions and 12 live local inferences. This is an explanatory demo, not a benchmark.
-2. **RealWorldQA corroboration** — the official 765 questions over 762 unique real images from the checksum-locked TSV (`MD5 4de008f55dc4fd008ca9e15321dc44b7`). Questions and options are preserved and scored by exact answer letter. No synthetic or external suite enters the aggregate.
+2. **RealWorldQA corroboration** — all 765 official scored cases reconstructed from the checksum-locked TSV (`MD5 4de008f55dc4fd008ca9e15321dc44b7`). Questions and options are preserved and scored by exact answer letter. No synthetic or external suite enters the aggregate.
 
-All three variants use QVAC SDK and the same QVAC llama.cpp backend on Apple Metal; preprocessing remains model-specific. The confirmatory protocol uses the checksum-pinned upstream VLMEvalKit prompt, deterministic case shuffling with a published seed, and a balanced three-position provider rotation. Recording Assist shows raw answers, Pass/Fail, TTFT, latency, throughput, tokens, process RSS/CPU, and system-wide macOS GPU samples.
+The completed three-variant run uses QVAC SDK and the same QVAC llama.cpp backend on Apple Metal; preprocessing remains model-specific. Its confirmatory protocol uses the checksum-pinned upstream VLMEvalKit prompt, deterministic case shuffling with a published seed, and a balanced three-position provider rotation. Recording Assist shows raw answers, Pass/Fail, TTFT, latency, throughput, tokens, process RSS/CPU, and system-wide macOS GPU samples.
 
 | Variant | Local exact | Matching published GGUF | Delta |
 | --- | ---: | ---: | ---: |
@@ -47,6 +48,7 @@ All three variants use QVAC SDK and the same QVAC llama.cpp backend on Apple Met
 | Flash Q4_K_M imatrix | 428/765 · 55.95% | 54.9% | +1.05 pp |
 
 Standard finished eight answers ahead of Flash Q8, but paired exact McNemar tests with Holm correction found no clear winner. A separate 100-case stratified repeatability audit produced identical outputs in all three passes for every model (0.00 pp score swing); that verifies this deterministic local implementation, not other prompts, hardware or stochastic settings. This is a **local corroboration**, not a bit-for-bit reproduction of Tether’s in-house evaluation. Read the [methodology](docs/REALWORLDQA_METHODOLOGY.md), [publication audit](docs/PUBLICATION_AUDIT.md), [canonical result](reports/visionpsy-three-way-realworldqa-765-qvac-sdk-vlmevalkit-470e517.md), and [repeatability audit](reports/visionpsy-realworldqa-repeatability-100x3.md).
+A preregistered 765-case **Standard Q4_K_M imatrix** addendum is being run to complete a 2×2 Standard/Flash × Q8/Q4 comparison. It adds new records and never rewrites the canonical 2,295 inferences. Its official comparison target is frozen at 60.3%; no local Standard Q4 result will be published before all cases and integrity checks are complete. See the [extension preregistration](docs/STANDARD_Q4_EXTENSION_PREREGISTRATION.md).
 
 ## Reusable Visual Q&A workflow
 
@@ -111,7 +113,15 @@ The repository includes the four owner-supplied dog photos but redistributes no 
 npm run showcase:install:realworldqa -- /absolute/path/to/RealWorldQA.tsv
 ```
 
-The installer refuses a source whose MD5 is not `4de008f55dc4fd008ca9e15321dc44b7`. Then use `npm run showcase:test:official-all-vlmevalkit` for the complete three-model cycle. Models are downloaded by the configured QVAC providers on first use and are not stored in Git.
+The installer refuses a source whose MD5 is not `4de008f55dc4fd008ca9e15321dc44b7`. Then use `npm run showcase:test:official-all-vlmevalkit` to reproduce the frozen three-model cycle. Models are downloaded by the configured QVAC providers on first use and are not stored in Git.
+
+To run only the preregistered Standard Q4 addendum with low average hardware duty cycle, append-only checkpointing, a 30-second pause between inferences, an extra three-minute pause every 25 cases and a load gate that waits whenever the one-minute system load exceeds the ten logical CPU cores:
+
+```bash
+npm run showcase:test:standard-q4-vlmevalkit-low-resource
+```
+
+The pacing is intended to leave the Mac responsive for other work. It makes wall-clock and latency figures unsuitable for a direct speed comparison with the original run; accuracy inputs and scoring remain unchanged.
 
 For the checksum-pinned upstream scorer audit:
 
@@ -151,6 +161,8 @@ Source code is licensed under the Apache License 2.0; see [LICENSE](LICENSE). Re
 - Inference is sequential to keep memory and runtime behavior predictable.
 - Dataset size and review coverage are limited; comparison results remain exploratory until thresholds are met.
 - The 765-case result is one deterministic run on one Mac and one benchmark; it is not a universal model ranking.
+- The committed result covers one of 17 public VisionPsy benchmarks and is an independent local corroboration, not Tether's internal harness or an official leaderboard submission.
+- The dog demo is deliberately illustrative and must not be described as benchmark evidence.
 - Exact-option scoring does not measure prose quality, safety, or open-ended usefulness.
 - QVAC process metrics are isolated where possible; macOS GPU metrics are system-wide.
 - Search, albums, YOLO, DINOv2, automatic identity, and cloud sharing are outside this migration.

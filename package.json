@@ -19,6 +19,7 @@
     "showcase:test:official-all-three-way": "QVAC_SHOWCASE_SUITE=official-all node scripts/run-showcase-three-way-api.mjs",
     "showcase:test:official-all-qvac-unified": "QVAC_SHOWCASE_SUITE=official-all QVAC_SHOWCASE_RUN_ID=qvac-sdk-unified-0182 QVAC_SHOWCASE_RESUME=1 node scripts/run-showcase-three-way-api.mjs",
     "showcase:test:official-all-vlmevalkit": "QVAC_SHOWCASE_SUITE=official-all QVAC_SHOWCASE_RUN_ID=qvac-sdk-vlmevalkit-470e517 QVAC_SHOWCASE_SHUFFLE_SEED=20260901 QVAC_SHOWCASE_RESUME=1 node scripts/run-showcase-three-way-api.mjs",
+    "showcase:test:standard-q4-vlmevalkit-low-resource": "QVAC_SHOWCASE_SUITE=official-all QVAC_SHOWCASE_PROVIDER_IDS=qvac-visionpsy-standard-q4 QVAC_SHOWCASE_REPORT_PREFIX=visionpsy-standard-q4 QVAC_SHOWCASE_RUN_ID=qvac-sdk-vlmevalkit-470e517 QVAC_SHOWCASE_SHUFFLE_SEED=20260901 QVAC_SHOWCASE_RESUME=1 QVAC_SHOWCASE_INTER_INFERENCE_DELAY_MS=30000 QVAC_SHOWCASE_BATCH_PAUSE_EVERY=25 QVAC_SHOWCASE_BATCH_PAUSE_MS=180000 QVAC_SHOWCASE_MAX_LOAD1=10 QVAC_SHOWCASE_LOAD_POLL_MS=60000 node scripts/run-showcase-three-way-api.mjs",
     "showcase:install:realworldqa": "node scripts/install-realworldqa-complete.mjs",
     "showcase:report:realworldqa-765-vlmevalkit": "node scripts/build-showcase-realworldqa-unified-audit.mjs",
     "showcase:setup:vlmevalkit-scorer": "sh scripts/setup-vlmevalkit-scorer.sh",

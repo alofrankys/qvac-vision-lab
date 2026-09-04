@@ -5,7 +5,7 @@ import { promisify } from 'node:util'
 
 const execFileAsync = promisify(execFile)
 
-export const SHOWCASE_PROVIDER_IDS = Object.freeze(['qvac-visionpsy-standard-q8', 'qvac-visionpsy', 'qvac-visionpsy-flash-q4'])
+export const SHOWCASE_PROVIDER_IDS = Object.freeze(['qvac-visionpsy-standard-q8', 'qvac-visionpsy-standard-q4', 'qvac-visionpsy', 'qvac-visionpsy-flash-q4'])
 
 const realWorldQaManifest = readOptionalManifest('../../public/showcase/realworldqa/manifest.json')
 const realWorldQaValidationManifest = readOptionalManifest('../../public/showcase/realworldqa-validation-50/manifest.json')

@@ -2,6 +2,8 @@
 
 Only the final frozen-protocol QVAC SDK evidence is committed here. Older exploratory runs, checkpoints and generated diagnostic suites remain local and ignored.
 
+The Standard Q4_K_M imatrix extension is preregistered in `docs/STANDARD_Q4_EXTENSION_PREREGISTRATION.md`. Its checkpoint remains local and append-only; no partial score is canonical or publication-ready.
+
 - `visionpsy-three-way-realworldqa-765-qvac-sdk-vlmevalkit-470e517.{json,md}` — raw 2,295 inference records and summary for all 765 cases.
 - `visionpsy-realworldqa-765-qvac-sdk-vlmevalkit-audit.{json,md}` — official-value comparison, paired statistics, repeatability summary and publication-safe interpretation.
 - `visionpsy-realworldqa-vlmevalkit-upstream-470e517.{json,md}` — direct checksum-pinned upstream scorer audit.
