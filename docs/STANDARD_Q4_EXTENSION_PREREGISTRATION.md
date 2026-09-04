@@ -27,7 +27,7 @@ The matching published RealWorldQA reference is 60.3% for Standard Q4_K_M imatri
 
 ## Low-resource pacing
 
-Inference remains strictly sequential. The default public command waits 30 seconds after each inference and adds a three-minute cooling pause after every 25 completed cases. These pauses reduce average hardware duty cycle but do not change model, prompt, image, generation or scoring settings. Latency collected during this deliberately paced addendum must not be compared directly with the earlier throughput-oriented run; a separate counterbalanced performance run is required for speed claims.
+Inference remains strictly sequential. The default public command waits 30 seconds after each inference, adds a three-minute cooling pause after every 25 completed cases, and checks the one-minute system load before every warm-up and scored request. It waits in 60-second intervals while load exceeds 10, matching the test Mac's ten logical CPU cores. These controls reduce average hardware duty cycle but do not change model, prompt, image, generation or scoring settings. Latency collected during this deliberately paced addendum must not be compared directly with the earlier throughput-oriented run; a separate counterbalanced performance run is required for speed claims.
 
 The runner writes one append-only checkpoint record after every completed inference and resumes by case/provider key. It must never delete or overwrite the canonical three-model evidence.
 

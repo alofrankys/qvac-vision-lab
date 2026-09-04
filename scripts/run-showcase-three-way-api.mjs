@@ -22,6 +22,8 @@ const reportPrefix = sanitizeRunId(process.env.QVAC_SHOWCASE_REPORT_PREFIX || 'v
 const interInferenceDelayMs = nonNegativeInteger(process.env.QVAC_SHOWCASE_INTER_INFERENCE_DELAY_MS, 0)
 const batchPauseEvery = nonNegativeInteger(process.env.QVAC_SHOWCASE_BATCH_PAUSE_EVERY, 0)
 const batchPauseMs = nonNegativeInteger(process.env.QVAC_SHOWCASE_BATCH_PAUSE_MS, 0)
+const maximumLoad1 = nonNegativeNumber(process.env.QVAC_SHOWCASE_MAX_LOAD1, 0)
+const loadPollMs = positiveInteger(process.env.QVAC_SHOWCASE_LOAD_POLL_MS, 60000)
 const vlmevalkitRevision = '470e51787a351764057869304e425bc76170bdc6'
 const vlmevalkitScorerSha256 = '06088ed4da68cd9d8c3018e7630d0503f1365e6dd31f651cbedd8aa44dc14466'
 const suites = Object.freeze({
@@ -71,6 +73,7 @@ for (const providerId of providerIds) {
 const startedAt = new Date().toISOString()
 const warmups = []
 for (const [index, providerId] of providerIds.entries()) {
+  await waitForLoadHeadroom(`warm-up ${index + 1}/${providerIds.length}`)
   process.stdout.write(`Warm-up ${index + 1}/${providerIds.length}: ${providerLabels[providerId]}\n`)
   warmups.push(await runCaseWithRetries(cases[0], providerId, true))
 }
@@ -98,6 +101,7 @@ for (const [caseIndex, showcaseCase] of cases.entries()) {
   const order = rotate(providerIds, caseIndex)
   for (const [orderIndex, providerId] of order.entries()) {
     if (results.some(item => item.caseId === showcaseCase.id && item.providerId === providerId)) continue
+    await waitForLoadHeadroom(`case ${caseIndex + 1}/${cases.length}`)
     process.stdout.write(`[${caseIndex + 1}/${cases.length} · ${orderIndex + 1}/${providerIds.length}] ${showcaseCase.id} → ${providerLabels[providerId]}\n`)
     const result = await runCaseWithRetries(showcaseCase, providerId, false)
     const checkpointed = { caseIndex, executionOrder: order, orderIndex, ...result }
@@ -184,6 +188,8 @@ const report = {
       interInferenceDelayMs,
       batchPauseEvery: batchPauseEvery || null,
       batchPauseMs: batchPauseMs || null,
+      maximumLoad1: maximumLoad1 || null,
+      loadPollMs: maximumLoad1 ? loadPollMs : null,
       note: 'Pacing changes wall-clock duty cycle only; model, prompt, generation and scoring settings remain frozen.'
     }
   },
@@ -398,6 +404,24 @@ function sanitizeRunId(value) {
 function nonNegativeInteger(value, fallback) {
   const parsed = Number(value)
   return Number.isInteger(parsed) && parsed >= 0 ? parsed : fallback
+}
+
+function positiveInteger(value, fallback) {
+  const parsed = Number(value)
+  return Number.isInteger(parsed) && parsed > 0 ? parsed : fallback
+}
+
+function nonNegativeNumber(value, fallback) {
+  const parsed = Number(value)
+  return Number.isFinite(parsed) && parsed >= 0 ? parsed : fallback
+}
+
+async function waitForLoadHeadroom(reason) {
+  if (!maximumLoad1) return
+  while (os.loadavg()[0] > maximumLoad1) {
+    process.stdout.write(`LOAD GATE · ${os.loadavg()[0].toFixed(2)} > ${maximumLoad1.toFixed(2)} · waiting ${Math.round(loadPollMs / 1000)}s before ${reason}\n`)
+    await new Promise(resolve => setTimeout(resolve, loadPollMs))
+  }
 }
 
 async function pacedPause(milliseconds, reason) {

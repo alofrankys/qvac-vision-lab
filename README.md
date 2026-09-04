@@ -116,7 +116,7 @@ npm run showcase:install:realworldqa -- /absolute/path/to/RealWorldQA.tsv
 
 The installer refuses a source whose MD5 is not `4de008f55dc4fd008ca9e15321dc44b7`. Then use `npm run showcase:test:official-all-vlmevalkit` to reproduce the frozen three-model cycle. Models are downloaded by the configured QVAC providers on first use and are not stored in Git.
 
-To run only the preregistered Standard Q4 addendum with low average hardware duty cycle, append-only checkpointing, a 30-second pause between inferences and an extra three-minute pause every 25 cases:
+To run only the preregistered Standard Q4 addendum with low average hardware duty cycle, append-only checkpointing, a 30-second pause between inferences, an extra three-minute pause every 25 cases and a load gate that waits whenever the one-minute system load exceeds the ten logical CPU cores:
 
 ```bash
 npm run showcase:test:standard-q4-vlmevalkit-low-resource
