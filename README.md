@@ -17,7 +17,7 @@ Model demos are easy; reliable product assumptions are not. The Lab keeps explor
 | 03 — Screenshot Understanding | Ready | Q&A for app, web, settings, dashboard, and warning screenshots |
 | 04 — Documents & Charts | Ready | Q&A about visible text, tables, values, documents, and charts |
 | 05 — Small Vision Model Arena | Experimental | Same image and exact question through explicitly selected providers |
-| 06 — VisionPsy Live Showcase | Benchmark extension running | Real-image live comparison with streaming, per-run KPIs and aggregate paired statistics |
+| 06 — VisionPsy Live Showcase | Four-variant audit complete | Real-image live comparison with streaming, per-run KPIs and aggregate paired statistics |
 
 PawVault remains intact as Experiment 01. Its old run IDs, photo IDs, prompts, raw outputs, reviews, and diagnostic evidence are not rewritten. The schema-v5 migration adds Arena records, judgments, question sets, and provenance fields only.
 
@@ -36,19 +36,19 @@ Provider choice is explicit. There is no silent fallback, and provider/runtime/m
 
 Experiment 06 exposes two public scenarios:
 
-1. **Dog stories** — four personal photographs, four natural questions and 12 live local inferences. This is an explanatory demo, not a benchmark.
+1. **Dog stories** — four personal photographs, four natural questions and 16 live local inferences across the 2×2 Standard/Flash × Q8/Q4 grid. This is an explanatory demo, not a benchmark.
 2. **RealWorldQA corroboration** — all 765 official scored cases reconstructed from the checksum-locked TSV (`MD5 4de008f55dc4fd008ca9e15321dc44b7`). Questions and options are preserved and scored by exact answer letter. No synthetic or external suite enters the aggregate.
 
-The completed three-variant run uses QVAC SDK and the same QVAC llama.cpp backend on Apple Metal; preprocessing remains model-specific. Its confirmatory protocol uses the checksum-pinned upstream VLMEvalKit prompt, deterministic case shuffling with a published seed, and a balanced three-position provider rotation. Recording Assist shows raw answers, Pass/Fail, TTFT, latency, throughput, tokens, process RSS/CPU, and system-wide macOS GPU samples.
+All four variants use QVAC SDK and the same QVAC llama.cpp backend on Apple Metal; preprocessing remains model-specific. The primary three-variant run uses the checksum-pinned upstream VLMEvalKit prompt, deterministic case shuffling with a published seed, and a balanced three-position provider rotation. Standard Q4 was added later under a frozen preregistration over the identical 765 inputs, prompt, scorer, generation settings and case order. This makes the four-way **accuracy** comparison paired; its separately paced performance telemetry is not a direct speed ranking. Recording Assist shows raw answers, Pass/Fail, TTFT, latency, throughput, tokens, process RSS/CPU, and system-wide macOS GPU samples.
 
 | Variant | Local exact | Matching published GGUF | Delta |
 | --- | ---: | ---: | ---: |
 | Standard Q8_0 | 446/765 · 58.30% | 59.1% | -0.80 pp |
+| Standard Q4_K_M imatrix | 443/765 · 57.91% | 60.3% | -2.39 pp |
 | Flash Q8_0 | 438/765 · 57.25% | 56.7% | +0.55 pp |
 | Flash Q4_K_M imatrix | 428/765 · 55.95% | 54.9% | +1.05 pp |
 
-Standard finished eight answers ahead of Flash Q8, but paired exact McNemar tests with Holm correction found no clear winner. A separate 100-case stratified repeatability audit produced identical outputs in all three passes for every model (0.00 pp score swing); that verifies this deterministic local implementation, not other prompts, hardware or stochastic settings. This is a **local corroboration**, not a bit-for-bit reproduction of Tether’s in-house evaluation. Read the [methodology](docs/REALWORLDQA_METHODOLOGY.md), [publication audit](docs/PUBLICATION_AUDIT.md), [canonical result](reports/visionpsy-three-way-realworldqa-765-qvac-sdk-vlmevalkit-470e517.md), and [repeatability audit](reports/visionpsy-realworldqa-repeatability-100x3.md).
-A preregistered 765-case **Standard Q4_K_M imatrix** addendum is being run to complete a 2×2 Standard/Flash × Q8/Q4 comparison. It adds new records and never rewrites the canonical 2,295 inferences. Its official comparison target is frozen at 60.3%; no local Standard Q4 result will be published before all cases and integrity checks are complete. See the [extension preregistration](docs/STANDARD_Q4_EXTENSION_PREREGISTRATION.md).
+Standard Q8 finished three answers ahead of Standard Q4 and eight ahead of Flash Q8. None of the six paired exact McNemar comparisons remains significant after Holm correction, so the defensible conclusion is **no clear local winner**. The earlier repeatability audit covers the original three variants only: 100 stratified cases produced identical outputs in all three passes (0.00 pp score swing). Standard Q4 has not yet received that repeatability extension. This is a **local corroboration**, not a bit-for-bit reproduction of Tether’s in-house evaluation. Read the [methodology](docs/REALWORLDQA_METHODOLOGY.md), [publication audit](docs/PUBLICATION_AUDIT.md), [combined audit](reports/visionpsy-realworldqa-765-qvac-sdk-vlmevalkit-audit.md), [primary raw run](reports/visionpsy-three-way-realworldqa-765-qvac-sdk-vlmevalkit-470e517.md), and [Standard Q4 addendum](reports/visionpsy-standard-q4-realworldqa-765-qvac-sdk-vlmevalkit-470e517.md).
 
 ## Reusable Visual Q&A workflow
 
@@ -113,7 +113,7 @@ The repository includes the four owner-supplied dog photos but redistributes no 
 npm run showcase:install:realworldqa -- /absolute/path/to/RealWorldQA.tsv
 ```
 
-The installer refuses a source whose MD5 is not `4de008f55dc4fd008ca9e15321dc44b7`. Then use `npm run showcase:test:official-all-vlmevalkit` to reproduce the frozen three-model cycle. Models are downloaded by the configured QVAC providers on first use and are not stored in Git.
+The installer refuses a source whose MD5 is not `4de008f55dc4fd008ca9e15321dc44b7`. Then use `npm run showcase:test:official-all-vlmevalkit` for the frozen primary three-model cycle and the Standard Q4 command below for the preregistered fourth-variant addendum. Models are downloaded by the configured QVAC providers on first use and are not stored in Git.
 
 To run only the preregistered Standard Q4 addendum with low average hardware duty cycle, append-only checkpointing, a 30-second pause between inferences, an extra three-minute pause every 25 cases and a load gate that waits whenever the one-minute system load exceeds the ten logical CPU cores:
 

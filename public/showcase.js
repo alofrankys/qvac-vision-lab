@@ -3,9 +3,10 @@ const showcaseSearchParams = new URLSearchParams(window.location.search)
 const useRecordedDemo3Replay = showcaseSearchParams.get('demo3') === 'replay'
 const useLocalFrameCapture = showcaseSearchParams.get('captureFrames') === '1'
 const liveDemoReplaySpeed = Math.max(1, Number(showcaseSearchParams.get('replaySpeed')) || 1.5)
-const COMPARISON_PROVIDER_IDS = Object.freeze(['qvac-visionpsy-standard-q8', 'qvac-visionpsy', 'qvac-visionpsy-flash-q4'])
+const COMPARISON_PROVIDER_IDS = Object.freeze(['qvac-visionpsy-standard-q8', 'qvac-visionpsy-standard-q4', 'qvac-visionpsy', 'qvac-visionpsy-flash-q4'])
 const PROVIDER_BADGES = Object.freeze({
   'qvac-visionpsy-standard-q8': 'STANDARD Q8',
+  'qvac-visionpsy-standard-q4': 'STANDARD Q4',
   'visionpsy-patched-base': 'STANDARD Q8',
   'qvac-visionpsy': 'FLASH Q8',
   'qvac-visionpsy-flash-q4': 'FLASH Q4',
@@ -58,29 +59,34 @@ const LIVE_DEMO_3_SCENES = Object.freeze([
 const LIVE_DEMO_3_REPLAY_RESULTS = Object.freeze({
   'personal-dog-3': Object.freeze({
     'qvac-visionpsy-standard-q8': Object.freeze({ output: 'The dog on the left is the Cavalier King Charles Spaniel, identifiable by its white and brown coat. Its fur is soft and long, while the dog on the right has a short tan coat.', timeToFirstTokenMs: 2720, latencyMs: 3080, tokensPerSecond: 120.2, outputTokens: 43 }),
+    'qvac-visionpsy-standard-q4': Object.freeze({ output: 'The dog on the left is the Cavalier King Charles Spaniel. It has a white and brown coat, long floppy ears, and a fluffy tail.', timeToFirstTokenMs: 8222, latencyMs: 8650, tokensPerSecond: 73.5, outputTokens: 31 }),
     'qvac-visionpsy': Object.freeze({ output: 'The dog on the left has a white and brown coat, while the dog on the right has a tan and white coat.', timeToFirstTokenMs: 1880, latencyMs: 2100, tokensPerSecond: 113.1, outputTokens: 25 }),
     'qvac-visionpsy-flash-q4': Object.freeze({ output: 'The dog on the left has a white and brown coat, while the dog on the right has a brown and white coat.', timeToFirstTokenMs: 1860, latencyMs: 2050, tokensPerSecond: 132.8, outputTokens: 25 })
   }),
   'personal-dog-1': Object.freeze({
     'qvac-visionpsy-standard-q8': Object.freeze({ output: 'It is asleep.', timeToFirstTokenMs: 2310, latencyMs: 2360, tokensPerSecond: 89.2, outputTokens: 4 }),
+    'qvac-visionpsy-standard-q4': Object.freeze({ output: 'It is asleep. The dog is resting on a tiled floor.', timeToFirstTokenMs: 5027, latencyMs: 5231, tokensPerSecond: 69.4, outputTokens: 14 }),
     'qvac-visionpsy': Object.freeze({ output: 'The little dog is peacefully asleep on a clean, white tiled floor.', timeToFirstTokenMs: 2270, latencyMs: 2410, tokensPerSecond: 105.9, outputTokens: 15 }),
     'qvac-visionpsy-flash-q4': Object.freeze({ output: 'The little dog is peacefully asleep on a clean, white tiled floor.', timeToFirstTokenMs: 2260, latencyMs: 2360, tokensPerSecond: 145.3, outputTokens: 15 })
   }),
   'personal-dog-2': Object.freeze({
     'qvac-visionpsy-standard-q8': Object.freeze({ output: "The dog is resting on a colorful, patterned blanket adorned with elephants and intricate designs. It's wearing a vibrant orange harness.", timeToFirstTokenMs: 2480, latencyMs: 2700, tokensPerSecond: 113.2, outputTokens: 25 }),
+    'qvac-visionpsy-standard-q4': Object.freeze({ output: "The dog is lying on a colorful blanket adorned with elephants and patterns. It's wearing a bright orange harness.", timeToFirstTokenMs: 5863, latencyMs: 6185, tokensPerSecond: 69.3, outputTokens: 22 }),
     'qvac-visionpsy': Object.freeze({ output: "The dog is lying on a colorful, patterned blanket, and it's wearing an orange harness.", timeToFirstTokenMs: 1930, latencyMs: 2100, tokensPerSecond: 109.5, outputTokens: 19 }),
     'qvac-visionpsy-flash-q4': Object.freeze({ output: "The dog is lying on a colorful, patterned blanket, and it's wearing an orange harness. The scene is bathed in warm sunlight, making the nap look especially cozy.", timeToFirstTokenMs: 1880, latencyMs: 2190, tokensPerSecond: 134.1, outputTokens: 40 })
   }),
   'personal-dog-5': Object.freeze({
     'qvac-visionpsy-standard-q8': Object.freeze({ output: 'Two dogs are visible, and the item on the floor is a dog leash.', timeToFirstTokenMs: 3320, latencyMs: 3500, tokensPerSecond: 97.0, outputTokens: 17 }),
+    'qvac-visionpsy-standard-q4': Object.freeze({ output: 'There are two dogs visible in the cafe, and the item on the floor is a loop-shaped handle for a pet toy.', timeToFirstTokenMs: 5869, latencyMs: 6266, tokensPerSecond: 69.3, outputTokens: 27 }),
     'qvac-visionpsy': Object.freeze({ output: 'Two dogs are visible, and the item on the floor is a pet grooming brush.', timeToFirstTokenMs: 2060, latencyMs: 2230, tokensPerSecond: 100.8, outputTokens: 17 }),
     'qvac-visionpsy-flash-q4': Object.freeze({ output: 'Two dogs are visible, and the item on the floor is a pet grooming brush.', timeToFirstTokenMs: 2150, latencyMs: 2310, tokensPerSecond: 113.4, outputTokens: 17 })
   })
 })
 const LIVE_DEMO_OFFICIAL_RESULTS = Object.freeze([
-  { providerId: 'qvac-visionpsy-standard-q8', local: 57.25, official: 59.1, artifact: 'VisionPsy Standard Q8_0' },
-  { providerId: 'qvac-visionpsy', local: 56.47, official: 56.7, artifact: 'VisionPsy Flash Q8_0' },
-  { providerId: 'qvac-visionpsy-flash-q4', local: 56.47, official: 54.9, artifact: 'VisionPsy Flash Q4_K_M-i' }
+  { providerId: 'qvac-visionpsy-standard-q8', local: 58.30, official: 59.1, artifact: 'VisionPsy Standard Q8_0' },
+  { providerId: 'qvac-visionpsy-standard-q4', local: 57.91, official: 60.3, artifact: 'VisionPsy Standard Q4_K_M-i' },
+  { providerId: 'qvac-visionpsy', local: 57.25, official: 56.7, artifact: 'VisionPsy Flash Q8_0' },
+  { providerId: 'qvac-visionpsy-flash-q4', local: 55.95, official: 54.9, artifact: 'VisionPsy Flash Q4_K_M-i' }
 ])
 
 const showcase = {
@@ -161,9 +167,9 @@ function confirmLiveDemoStart(mode) {
     return false
   }
   if (replay) return window.confirm('Start a recorded-results replay?\n\nNo new model inference will run. The recording will remain visibly marked REPLAY.')
-  const inferences = dogMode ? 12 : 9
+  const inferences = dogMode ? 16 : 12
   const photos = dogMode ? 4 : 3
-  return window.confirm(`Start ${photos} real images and ${inferences} sequential local inferences?\n\nAll three VisionPsy models will run through QVAC SDK. This can use substantial CPU, GPU and RAM. You can stop the run at any time.`)
+  return window.confirm(`Start ${photos} real images and ${inferences} sequential local inferences?\n\nAll four VisionPsy variants will run through QVAC SDK. This can use substantial CPU, GPU and RAM. You can stop the run at any time.`)
 }
 
 async function initialize() {
@@ -182,8 +188,8 @@ async function initialize() {
     selectCase(showcase.selectedCaseId, { clearQuestion: true })
     const benchmarkButton = $('#showcase-live-demo')
     benchmarkButton.disabled = !showcase.dataset?.complete
-    benchmarkButton.title = showcase.dataset?.complete ? 'Run three new RealWorldQA scenes locally' : 'Install the complete checksum-locked RealWorldQA dataset first'
-    $('#showcase-live-demo-3').title = useRecordedDemo3Replay ? 'Replay previously recorded local results' : 'Run twelve new local dog-photo inferences'
+    benchmarkButton.title = showcase.dataset?.complete ? 'Run three RealWorldQA scenes across four local variants' : 'Install the complete checksum-locked RealWorldQA dataset first'
+    $('#showcase-live-demo-3').title = useRecordedDemo3Replay ? 'Replay sixteen previously recorded local results' : 'Run sixteen new local dog-photo inferences'
   } catch (error) {
     setRuntime(false, error.message)
     setStage('RUNTIME UNAVAILABLE', 'error')
@@ -194,7 +200,7 @@ async function initialize() {
 
 async function loadVerifiedBenchmark() {
   try {
-    const response = await fetch('/showcase/visionpsy-three-way-realworldqa-765.json', { cache: 'no-store' })
+    const response = await fetch('/showcase/visionpsy-four-way-realworldqa-765.json', { cache: 'no-store' })
     if (!response.ok) return
     const report = await response.json()
     const section = $('#showcase-verified')
@@ -208,7 +214,7 @@ async function loadVerifiedBenchmark() {
     const repeatability = report.repeatability
     const repeatabilityCard = repeatability ? `<div><b>Deterministic repeatability</b><small>${repeatability.cases} stratified cases × ${repeatability.repeats} passes</small><small>${repeatability.newInferences} new inferences</small><small>Max score swing ${repeatability.maximumAccuracySwingPoints.toFixed(2)} pp</small><small>Exact outputs ${(repeatability.minimumExactOutputAgreement * 100).toFixed(1)}% minimum</small></div>` : ''
     $('#showcase-verified-summary').innerHTML = report.providers.map((provider, index) => `<article class="showcase-cycle-summary-card">
-      <header><div><span>OFFICIAL-765 RANK ${index + 1} · ${escapeHtml(PROVIDER_BADGES[provider.providerId] || provider.providerId)}</span><h3>${escapeHtml(provider.label)}</h3></div><b>${provider.real.passed}/${provider.real.cases}</b></header>
+      <header><div><span>OFFICIAL-765 RANK ${index + 1} · ${escapeHtml(PROVIDER_BADGES[provider.providerId] || provider.providerId)}${provider.providerId === 'qvac-visionpsy-standard-q4' ? ' · SEPARATE ADDENDUM' : ''}</span><h3>${escapeHtml(provider.label)}</h3></div><b>${provider.real.passed}/${provider.real.cases}</b></header>
       <div class="showcase-cycle-summary-kpis">
         <span>Local RealWorldQA 765<b>${scoreCell(provider.real)}</b></span>
         <span>Published matching GGUF<b>${(provider.officialRealWorldQaAccuracy * 100).toFixed(1)}%</b></span>
@@ -218,7 +224,7 @@ async function loadVerifiedBenchmark() {
         <span>Mean latency<b>${durationCell(provider.performance.latencyMs.mean)}</b></span>
         <span>Peak process RSS<b>${bytesCell(provider.performance.processRssPeakBytes.max)}</b></span>
       </div>
-    </article>`).join('') + `<div class="showcase-pairwise"><span>STATISTICAL VERDICT · ${escapeHtml(report.statisticalVerdict.replaceAll('_', ' '))}</span><div><b>Paired quality result</b><small>Score spread ${realSpread} answers</small><small>Minimum Holm p ${minimumP.toFixed(3)}</small><small>${minimumP < 0.05 ? 'Significant pair found' : 'No significant pair'}</small><small>${minimumP < 0.05 ? 'Read pairwise details' : 'Do not claim a winner'}</small></div><div><b>Frozen benchmark protocol</b><small>Complete RealWorldQA 765</small><small>Exact option scoring</small><small>Seeded shuffle + rotated order</small><small>Input hashes embedded</small></div><div><b>Direct upstream scorer</b><small>VLMEvalKit ${escapeHtml(report.methodology?.scorerParity?.revision?.slice(0, 8) || 'pinned')}</small><small>${report.methodology?.scorerParity?.extractionDifferences ?? '—'} extraction differences</small><small>${report.methodology?.scorerParity?.passVerdictChanges ?? '—'} verdict changes</small><small>Checksum verified</small></div>${repeatabilityCard}<div><b>Sanity baselines</b><small>Majority letter ${Number.isFinite(majorityBaseline) ? `${(majorityBaseline * 100).toFixed(1)}%` : 'pending rerun'}</small><small>Weighted random ${Number.isFinite(randomBaseline) ? `${(randomBaseline * 100).toFixed(1)}%` : 'pending rerun'}</small><small>Categories are local heuristics</small><small>Local corroboration, not vendor replica</small></div></div>`
+    </article>`).join('') + `<div class="showcase-pairwise"><span>STATISTICAL VERDICT · ${escapeHtml(report.statisticalVerdict.replaceAll('_', ' '))}</span><div><b>Paired quality result</b><small>Score spread ${realSpread} answers</small><small>Minimum Holm p ${minimumP.toFixed(3)}</small><small>${minimumP < 0.05 ? 'Significant pair found' : 'No significant pair'}</small><small>${minimumP < 0.05 ? 'Read pairwise details' : 'Do not claim a winner'}</small></div><div><b>Frozen benchmark protocol</b><small>Complete RealWorldQA 765</small><small>Exact option scoring</small><small>Primary rotation + Q4 addendum</small><small>Performance not directly ranked</small></div><div><b>Direct upstream scorer</b><small>VLMEvalKit ${escapeHtml(report.methodology?.scorerParity?.revision?.slice(0, 8) || 'pinned')}</small><small>${report.methodology?.scorerParity?.extractionDifferences ?? '—'} extraction differences</small><small>${report.methodology?.scorerParity?.passVerdictChanges ?? '—'} verdict changes</small><small>Checksum verified</small></div>${repeatabilityCard}<div><b>Sanity baselines</b><small>Majority letter ${Number.isFinite(majorityBaseline) ? `${(majorityBaseline * 100).toFixed(1)}%` : 'pending rerun'}</small><small>Weighted random ${Number.isFinite(randomBaseline) ? `${(randomBaseline * 100).toFixed(1)}%` : 'pending rerun'}</small><small>Categories are local heuristics</small><small>Local corroboration, not vendor replica</small></div></div>`
   } catch {}
 }
 
@@ -392,7 +398,7 @@ function renderComparison() {
     const status = result.status || (provider?.ready ? 'ready' : 'unavailable')
     const evaluation = result.evaluation
     const verdict = evaluation?.status || (status === 'complete' ? 'UNSCORED' : status.toUpperCase())
-    const output = result.output ? escapeHtml(result.output) : status === 'running' ? 'Waiting for the first token…' : 'Run the same image and question through all three local models.'
+    const output = result.output ? escapeHtml(result.output) : status === 'running' ? 'Waiting for the first token…' : 'Run the same image and question through all four local variants.'
     const metrics = result.metrics || {}
     const resources = metrics.resources || {}
     return `<article class="showcase-compare-card ${status}">
@@ -466,7 +472,7 @@ async function runComparison({ orderOffset = null } = {}) {
   const providers = providerOrder
     .map(id => showcase.providers.find(item => item.id === id))
     .filter(item => item?.ready)
-  if (providers.length !== COMPARISON_PROVIDER_IDS.length) throw failUi('Standard Q8, Flash Q8 and Flash Q4 must all be ready for the three-way comparison.')
+  if (providers.length !== COMPARISON_PROVIDER_IDS.length) throw failUi('Standard Q8, Standard Q4, Flash Q8 and Flash Q4 must all be ready for the four-way comparison.')
 
   showcase.running = true
   showcase.controller = new AbortController()
@@ -517,7 +523,7 @@ async function runComparison({ orderOffset = null } = {}) {
       await wait(350)
     }
     $('#showcase-comparison-status').textContent = `COMPLETE · ORDER ${showcase.comparisonOrder.map(id => PROVIDER_BADGES[id]).join(' → ')}`
-    setStage('ALL 3 MODELS COMPLETE', 'complete')
+    setStage('ALL 4 VARIANTS COMPLETE', 'complete')
     return showcase.comparison
   } catch (error) {
     const active = Object.values(showcase.comparison).find(item => item.status === 'running')
@@ -743,7 +749,7 @@ async function startLiveDemo(mode = 'benchmark') {
   const readyProviders = COMPARISON_PROVIDER_IDS.map(id => showcase.providers.find(item => item.id === id)).filter(item => item?.ready)
   const expectedSceneCount = dogMode ? 4 : 3
   if (scenes.length !== expectedSceneCount) throw new Error(`The ${expectedSceneCount} prepared live-demo scenes are unavailable.`)
-  if (!replayingDogResults && readyProviders.length !== COMPARISON_PROVIDER_IDS.length) throw new Error('All three local VisionPsy models must be ready before the live demo starts.')
+  if (!replayingDogResults && readyProviders.length !== COMPARISON_PROVIDER_IDS.length) throw new Error('All four local VisionPsy variants must be ready before the live demo starts.')
 
   liveDemo.running = true
   liveDemo.mode = mode
@@ -807,7 +813,7 @@ async function startLiveDemo(mode = 'benchmark') {
       liveDemo.introPageStartedAt = performance.now()
       liveDemo.introTransition = 'in'
       liveDemo.introTransitionStartedAt = null
-      liveDemo.phase = 'INTRO · THREE LOCAL MODELS · ONE FAIR COMPARISON'
+      liveDemo.phase = 'INTRO · FOUR LOCAL VARIANTS · ONE FAIR COMPARISON'
       await waitForLiveDemo(7200)
       await moveLiveDemoCursor(800, 754, 820)
       await pulseLiveDemoClick()
@@ -836,13 +842,13 @@ async function startLiveDemo(mode = 'benchmark') {
           : item.demoKind === 'dog-rubric'
             ? 'INSERTING NATURAL PERSONAL-PHOTO QUESTION'
             : 'INSERTING TWO-POINT CHART QUESTION'
-      await moveLiveDemoCursor(300, 802, 720)
+      await moveLiveDemoCursor(205, 802, 720)
       await pulseLiveDemoClick()
       await typeLiveDemoQuestion(item.prompt)
       await waitForLiveDemo(350)
 
       liveDemo.phase = 'CLICKING RUN · SAME INPUT FOR ALL MODELS'
-      await moveLiveDemoCursor(454, 802, 620)
+      await moveLiveDemoCursor(360, 802, 620)
       await pulseLiveDemoClick()
       await waitForLiveDemo(300)
 
@@ -860,20 +866,20 @@ async function startLiveDemo(mode = 'benchmark') {
           return [providerId, { ...card, metrics: { ...(card.metrics || {}) }, evaluation: card.evaluation ? { ...card.evaluation } : null }]
         }))
       })
-      liveDemo.phase = `SCENE ${index + 1} COMPLETE · 3/3 LOCAL ANSWERS`
+      liveDemo.phase = `SCENE ${index + 1} COMPLETE · 4/4 LOCAL ANSWERS`
       await moveLiveDemoCursor(1470, 70, 520)
       await waitForLiveDemo(1500)
     }
 
     if (dogMode) {
-      liveDemo.completedElapsedMs = replayingDogResults ? 73_700 : performance.now() - liveDemo.startedAt
+      liveDemo.completedElapsedMs = replayingDogResults ? 99_740 : performance.now() - liveDemo.startedAt
       liveDemo.popupStartedAtMs = performance.now() - liveDemo.recordingStartedAt
       liveDemo.finalCard = 'kpis'
       liveDemo.phase = replayingDogResults ? 'FINAL POPUP · RECORDED FOUR-SCENE KPIS' : 'FINAL POPUP · MEASURED FOUR-SCENE KPIS'
       await moveLiveDemoCursor(1470, 70, 520)
       await waitForLiveDemo(8500)
     }
-    liveDemo.phase = replayingDogResults ? 'REPLAY COMPLETE · 4 PERSONAL PHOTOS · 12 RECORDED RESULTS' : dogMode ? 'SCENARIO 1 COMPLETE · 4 PERSONAL PHOTOS · 12 LIVE INFERENCES' : 'SCENARIO 2 COMPLETE · 3 IMAGES · 9 LIVE INFERENCES'
+    liveDemo.phase = replayingDogResults ? 'REPLAY COMPLETE · 4 PERSONAL PHOTOS · 16 RECORDED RESULTS' : dogMode ? 'SCENARIO 1 COMPLETE · 4 PERSONAL PHOTOS · 16 LIVE INFERENCES' : 'SCENARIO 2 COMPLETE · 3 IMAGES · 12 LIVE INFERENCES'
     await waitForLiveDemo(2200)
     $('#showcase-demo-note').textContent = 'Complete · the downloadable recording was generated locally.'
   } catch (error) {
@@ -1504,7 +1510,7 @@ function drawLiveDemoIntroCard(ctx) {
     drawLiveDemoIntroReveal(ctx, 4.05, 58, 790, () => {
       ctx.fillStyle = '#64d2ff'
       ctx.font = '800 13px ui-monospace, SFMono-Regular, Menlo, monospace'
-      ctx.fillText('NEXT · THE THREE LOCAL MODELS', 58, 790)
+      ctx.fillText('NEXT · THE FOUR LOCAL VARIANTS', 58, 790)
       ctx.fillStyle = '#8e8e93'
       ctx.font = '600 16px -apple-system, BlinkMacSystemFont, sans-serif'
       ctx.fillText('Each answer will be streamed and scored fact by fact.', 58, 820)
@@ -1533,7 +1539,7 @@ function drawLiveDemoIntroCard(ctx) {
   const sameQuestionWidth = ctx.measureText(`${sameQuestion} `).width
   drawLiveDemoIntroReveal(ctx, 1.05, 58 + samePhotoWidth + sameQuestionWidth, 200, () => {
     ctx.fillStyle = '#64d2ff'
-    ctx.fillText('Three local models.', 58 + samePhotoWidth + sameQuestionWidth, 200)
+    ctx.fillText('Four local variants.', 58 + samePhotoWidth + sameQuestionWidth, 200)
   })
   drawLiveDemoIntroReveal(ctx, 1.35, 60, 239, () => {
     ctx.fillStyle = '#a1a1a6'
@@ -1542,22 +1548,22 @@ function drawLiveDemoIntroCard(ctx) {
   })
 
   COMPARISON_PROVIDER_IDS.forEach((providerId, index) => {
-    const x = 58 + (index * 505)
+    const x = 58 + (index * 381)
     const provider = showcase.providers.find(item => item.id === providerId)
-    drawLiveDemoIntroBlock(ctx, x, 286, 470, 260, 1.65 + (index * .85), index, () => {
-      drawLiveDemoPanel(ctx, x, 286, 470, 260, 23, '#0b0b0d', index === 0 ? '#ff9f0a' : '#2c2c2e', index === 0 ? 2 : 1)
+    drawLiveDemoIntroBlock(ctx, x, 286, 350, 260, 1.65 + (index * .70), index, () => {
+      drawLiveDemoPanel(ctx, x, 286, 350, 260, 23, '#0b0b0d', index === 0 ? '#ff9f0a' : '#2c2c2e', index === 0 ? 2 : 1)
       ctx.fillStyle = index === 0 ? '#ffb340' : '#64d2ff'
       ctx.font = '800 13px ui-monospace, SFMono-Regular, Menlo, monospace'
       ctx.fillText(PROVIDER_BADGES[providerId], x + 28, 327)
       ctx.fillStyle = '#f5f5f7'
-      ctx.font = '800 25px -apple-system, BlinkMacSystemFont, sans-serif'
-      wrapLiveDemoText(ctx, provider?.model || providerId, x + 28, 370, 414, 31, 2)
+      ctx.font = '800 21px -apple-system, BlinkMacSystemFont, sans-serif'
+      wrapLiveDemoText(ctx, provider?.model || providerId, x + 28, 370, 294, 27, 2)
       ctx.fillStyle = '#6e6e73'
       ctx.font = '700 11px ui-monospace, SFMono-Regular, Menlo, monospace'
-      wrapLiveDemoText(ctx, compactVersion(provider?.modelVersion), x + 28, 439, 414, 18, 2)
+      wrapLiveDemoText(ctx, compactVersion(provider?.modelVersion), x + 28, 439, 294, 18, 2)
       ctx.fillStyle = '#a1a1a6'
       ctx.font = '600 15px -apple-system, BlinkMacSystemFont, sans-serif'
-      const notes = ['Higher precision · Q8_0', 'Fast model · Q8_0', 'Fast model · Q4_K_M imatrix']
+      const notes = ['Standard · Q8_0', 'Standard · Q4_K_M imatrix', 'Flash · Q8_0', 'Flash · Q4_K_M imatrix']
       ctx.fillText(notes[index], x + 28, 502)
     })
   })
@@ -1569,7 +1575,7 @@ function drawLiveDemoIntroCard(ctx) {
     ctx.fillText('WHAT HAPPENS NEXT', 86, 622)
     ctx.fillStyle = '#d1d1d6'
     ctx.font = '700 17px -apple-system, BlinkMacSystemFont, sans-serif'
-    ctx.fillText('Select photo  →  insert question  →  stream 3 answers  →  reveal aggregate KPI popup', 86, 660)
+    ctx.fillText('Select photo  →  insert question  →  stream 4 answers  →  reveal aggregate KPI popup', 86, 660)
   })
 
   const introElapsed = (performance.now() - (liveDemo.introPageStartedAt || performance.now())) / 1000
@@ -1660,11 +1666,11 @@ function drawLiveDemoThumbnails(ctx, cases) {
 }
 
 function drawLiveDemoImage(ctx, item) {
-  drawLiveDemoPanel(ctx, 48, 174, 500, 292, 22, '#0b0b0d', '#2c2c2e', 1)
+  drawLiveDemoPanel(ctx, 48, 174, 390, 292, 22, '#0b0b0d', '#2c2c2e', 1)
   const image = item ? liveDemo.images.get(item.id) : null
-  if (image) drawLiveDemoImageCover(ctx, image, 58, 184, 480, 272, 15)
+  if (image) drawLiveDemoImageCover(ctx, image, 58, 184, 370, 272, 15)
   ctx.fillStyle = 'rgba(0,0,0,.72)'
-  ctx.fillRect(58, 404, 480, 52)
+  ctx.fillRect(58, 404, 370, 52)
   ctx.fillStyle = '#ffb340'
   ctx.font = '800 11px ui-monospace, SFMono-Regular, Menlo, monospace'
   ctx.fillText(item?.sourceLabel || 'REALWORLDQA · REAL IMAGE', 76, 427)
@@ -1674,31 +1680,31 @@ function drawLiveDemoImage(ctx, item) {
 }
 
 function drawLiveDemoQuestion(ctx, item) {
-  drawLiveDemoPanel(ctx, 48, 480, 500, 370, 22, '#0b0b0d', '#2c2c2e', 1)
+  drawLiveDemoPanel(ctx, 48, 480, 390, 370, 22, '#0b0b0d', '#2c2c2e', 1)
   ctx.fillStyle = '#ffb340'
   ctx.font = '800 11px ui-monospace, SFMono-Regular, Menlo, monospace'
   ctx.fillText(item?.questionLabel || 'OFFICIAL QUESTION · INSERTED AUTOMATICALLY', 72, 510)
   ctx.fillStyle = '#f5f5f7'
   ctx.font = '600 17px ui-monospace, SFMono-Regular, Menlo, monospace'
   const shown = liveDemo.typedQuestion || (liveDemo.phase.includes('SELECTING') ? 'Waiting for the visible cursor…' : '')
-  wrapLiveDemoText(ctx, shown, 72, 546, 450, 25, 8)
+  wrapLiveDemoText(ctx, shown, 72, 546, 342, 24, 8)
   ctx.fillStyle = '#5ee478'
   ctx.font = '800 11px ui-monospace, SFMono-Regular, Menlo, monospace'
   const expectedLabel = item?.demoKind === 'official' ? `EXPECTED · ${item.expectedLetter || item.expectedAnswer || '—'}` : item?.demoKind === 'open' ? item.expectedAnswer : `EXPECTED · ${item?.expectedAnswer || '—'}`
-  ctx.fillText(expectedLabel, 72, 757, 450)
-  drawLiveDemoPanel(ctx, 72, 778, 452, 50, 13, '#0a84ff', '#2997ff', 1)
+  wrapLiveDemoText(ctx, expectedLabel, 72, 744, 342, 16, 2)
+  drawLiveDemoPanel(ctx, 72, 778, 342, 50, 13, '#0a84ff', '#2997ff', 1)
   ctx.fillStyle = '#fff'
   ctx.font = '800 13px ui-monospace, SFMono-Regular, Menlo, monospace'
   ctx.textAlign = 'center'
-  ctx.fillText(liveDemo.mode === 'dogs-replay' ? 'REPLAY ALL 3 RECORDED RESULTS' : 'RUN ALL 3 MODELS · LIVE', 298, 809)
+  ctx.fillText(liveDemo.mode === 'dogs-replay' ? 'REPLAY ALL 4 RECORDED RESULTS' : 'RUN ALL 4 VARIANTS · LIVE', 243, 809)
   ctx.textAlign = 'left'
 }
 
 function drawLiveDemoCard(ctx, providerId, index) {
-  const x = 575
-  const y = 112 + (index * 244)
-  const width = 975
-  const height = 224
+  const x = 460 + (index * 273)
+  const y = 112
+  const width = 263
+  const height = 738
   const card = liveDemo.cards[providerId] || { status: 'ready', output: '' }
   const provider = showcase.providers.find(item => item.id === providerId)
   const active = card.status === 'running'
@@ -1707,32 +1713,32 @@ function drawLiveDemoCard(ctx, providerId, index) {
   ctx.font = '800 12px ui-monospace, SFMono-Regular, Menlo, monospace'
   ctx.fillText(PROVIDER_BADGES[providerId], x + 24, y + 31)
   ctx.fillStyle = '#f5f5f7'
-  ctx.font = '800 21px -apple-system, BlinkMacSystemFont, sans-serif'
-  ctx.fillText(provider?.model || providerId, x + 24, y + 59)
+  ctx.font = '800 16px -apple-system, BlinkMacSystemFont, sans-serif'
+  wrapLiveDemoText(ctx, provider?.model || providerId, x + 20, y + 61, width - 40, 21, 2)
   ctx.fillStyle = '#6e6e73'
   ctx.font = '700 10px ui-monospace, SFMono-Regular, Menlo, monospace'
-  ctx.fillText(compactVersion(provider?.modelVersion), x + 24, y + 78)
+  wrapLiveDemoText(ctx, compactVersion(provider?.modelVersion), x + 20, y + 97, width - 40, 15, 2)
 
   const verdict = card.evaluation?.status || (card.status === 'running' ? 'STREAMING' : card.status === 'error' ? 'ERROR' : card.status === 'complete' ? 'DONE' : 'READY')
   ctx.fillStyle = ['PASS', '2/2'].includes(verdict) ? '#5ee478' : ['FAIL', 'ERROR', '0/2'].includes(verdict) ? '#ff6961' : verdict === '1/2' || active ? '#ffb340' : verdict === 'OPEN' ? '#64d2ff' : '#8e8e93'
   ctx.font = '900 13px ui-monospace, SFMono-Regular, Menlo, monospace'
   ctx.textAlign = 'right'
-  ctx.fillText(verdict, x + width - 24, y + 35)
+  ctx.fillText(verdict, x + width - 20, y + 35)
   ctx.textAlign = 'left'
 
   if (card.evaluation?.detail) {
     ctx.fillStyle = '#8e8e93'
     ctx.font = '700 10px ui-monospace, SFMono-Regular, Menlo, monospace'
-    ctx.fillText(card.evaluation.detail, x + 24, y + 96)
+    wrapLiveDemoText(ctx, card.evaluation.detail, x + 20, y + 137, width - 40, 15, 2)
   }
 
   ctx.fillStyle = '#f5f5f7'
-  ctx.font = '700 23px ui-monospace, SFMono-Regular, Menlo, monospace'
+  ctx.font = '700 15px ui-monospace, SFMono-Regular, Menlo, monospace'
   const output = card.output || (active ? 'Waiting for the first token…' : 'Same image and question queued.')
-  wrapLiveDemoText(ctx, output, x + 24, y + 116, width - 48, 31, 2)
+  wrapLiveDemoText(ctx, output, x + 20, y + 190, width - 40, 21, 15)
 
   ctx.strokeStyle = '#242426'
-  ctx.beginPath(); ctx.moveTo(x + 24, y + 173); ctx.lineTo(x + width - 24, y + 173); ctx.stroke()
+  ctx.beginPath(); ctx.moveTo(x + 20, y + 540); ctx.lineTo(x + width - 20, y + 540); ctx.stroke()
   const metrics = card.metrics || {}
   const metricItems = [
     ['TTFT', formatDuration(metrics.timeToFirstTokenMs)],
@@ -1741,13 +1747,14 @@ function drawLiveDemoCard(ctx, providerId, index) {
     ['OUTPUT', Number.isFinite(metrics.outputTokens) ? `${metrics.outputTokens} tok` : '—']
   ]
   metricItems.forEach(([label, value], metricIndex) => {
-    const metricX = x + 24 + (metricIndex * 224)
+    const metricX = x + 20 + ((metricIndex % 2) * 121)
+    const metricY = y + 580 + (Math.floor(metricIndex / 2) * 78)
     ctx.fillStyle = '#6e6e73'
     ctx.font = '800 9px ui-monospace, SFMono-Regular, Menlo, monospace'
-    ctx.fillText(label, metricX, y + 195)
+    ctx.fillText(label, metricX, metricY)
     ctx.fillStyle = '#d1d1d6'
     ctx.font = '800 14px ui-monospace, SFMono-Regular, Menlo, monospace'
-    ctx.fillText(value, metricX, y + 215)
+    ctx.fillText(value, metricX, metricY + 25)
   })
 }
 
@@ -1763,15 +1770,15 @@ function drawLiveDemoFinalCard(ctx) {
   ctx.fillText('RealWorldQA · 765 questions · accuracy · same GGUF quantization column', 50, 233)
 
   LIVE_DEMO_OFFICIAL_RESULTS.forEach((result, index) => {
-    const y = 282 + (index * 162)
+    const y = 270 + (index * 122)
     const delta = result.local - result.official
-    drawLiveDemoPanel(ctx, 48, y, 1504, 132, 21, '#0b0b0d', index === 0 ? '#ff9f0a' : '#2c2c2e', index === 0 ? 2 : 1)
+    drawLiveDemoPanel(ctx, 48, y, 1504, 102, 18, '#0b0b0d', index === 0 ? '#ff9f0a' : '#2c2c2e', index === 0 ? 2 : 1)
     ctx.fillStyle = index === 0 ? '#ffb340' : '#64d2ff'
     ctx.font = '800 12px ui-monospace, SFMono-Regular, Menlo, monospace'
     ctx.fillText(PROVIDER_BADGES[result.providerId], 76, y + 34)
     ctx.fillStyle = '#f5f5f7'
     ctx.font = '800 22px -apple-system, BlinkMacSystemFont, sans-serif'
-    ctx.fillText(result.artifact, 76, y + 69)
+    ctx.fillText(result.artifact, 76, y + 67)
 
     const columns = [
       ['OUR LOCAL RUN', `${result.local.toFixed(2)}%`],
@@ -1828,7 +1835,7 @@ function drawLiveDemoKpiCard(ctx) {
   ctx.fillText(liveDemo.mode === 'dogs-replay' ? 'FINAL POPUP · PREVIOUSLY RECORDED RUN' : 'FINAL POPUP · MEASURED AFTER EVERY INFERENCE COMPLETED', 82, 153)
   ctx.fillStyle = '#f5f5f7'
   ctx.font = '800 47px -apple-system, BlinkMacSystemFont, sans-serif'
-  ctx.fillText('4 personal photos · 12 local inferences', 82, 210)
+  ctx.fillText('4 personal photos · 16 local inferences', 82, 210)
   ctx.fillStyle = '#a1a1a6'
   ctx.font = '600 18px -apple-system, BlinkMacSystemFont, sans-serif'
   ctx.fillText('Fact points are summed. TTFT, latency and generation speed are averaged per model.', 84, 243)
@@ -1851,18 +1858,19 @@ function drawLiveDemoKpiCard(ctx) {
   })
 
   summaries.forEach((summary, index) => {
-    const y = 370 + (index * 139)
+    const x = 82 + (index * 359)
+    const y = 370
     const provider = showcase.providers.find(item => item.id === summary.providerId)
-    drawLiveDemoPanel(ctx, 82, y, 1436, 118, 19, '#111113', index === 0 ? '#ff9f0a' : '#2c2c2e', index === 0 ? 2 : 1)
+    drawLiveDemoPanel(ctx, x, y, 335, 406, 19, '#111113', index === 0 ? '#ff9f0a' : '#2c2c2e', index === 0 ? 2 : 1)
     ctx.fillStyle = index === 0 ? '#ffb340' : '#64d2ff'
     ctx.font = '800 11px ui-monospace, SFMono-Regular, Menlo, monospace'
-    ctx.fillText(PROVIDER_BADGES[summary.providerId], 108, y + 29)
+    ctx.fillText(PROVIDER_BADGES[summary.providerId], x + 24, y + 32)
     ctx.fillStyle = '#f5f5f7'
     ctx.font = '800 18px -apple-system, BlinkMacSystemFont, sans-serif'
-    ctx.fillText(provider?.model || summary.providerId, 108, y + 58)
+    wrapLiveDemoText(ctx, provider?.model || summary.providerId, x + 24, y + 64, 287, 22, 2)
     ctx.fillStyle = '#6e6e73'
     ctx.font = '700 9px ui-monospace, SFMono-Regular, Menlo, monospace'
-    ctx.fillText(compactVersion(provider?.modelVersion), 108, y + 79)
+    wrapLiveDemoText(ctx, compactVersion(provider?.modelVersion), x + 24, y + 108, 287, 15, 2)
 
     const metrics = [
       ['FACT POINTS', summary.maxPoints ? `${summary.points}/${summary.maxPoints} · ${((summary.points / summary.maxPoints) * 100).toFixed(1)}%` : '—'],
@@ -1872,13 +1880,15 @@ function drawLiveDemoKpiCard(ctx) {
       ['TOTAL OUTPUT', `${summary.totalTokens} tok`]
     ]
     metrics.forEach(([label, value], metricIndex) => {
-      const x = 600 + (metricIndex * 181)
+      const metricY = y + 165 + (metricIndex * 45)
       ctx.fillStyle = '#6e6e73'
       ctx.font = '800 9px ui-monospace, SFMono-Regular, Menlo, monospace'
-      ctx.fillText(label, x, y + 38)
+      ctx.fillText(label, x + 24, metricY)
       ctx.fillStyle = metricIndex === 0 ? '#5ee478' : '#f5f5f7'
-      ctx.font = '900 17px ui-monospace, SFMono-Regular, Menlo, monospace'
-      ctx.fillText(value, x, y + 70)
+      ctx.font = '900 15px ui-monospace, SFMono-Regular, Menlo, monospace'
+      ctx.textAlign = 'right'
+      ctx.fillText(value, x + 311, metricY)
+      ctx.textAlign = 'left'
     })
   })
 
@@ -1954,7 +1964,7 @@ async function startRecordingAssist() {
   const cycleCases = [...activeCases()]
   showcase.autoplay = true
   $('#showcase').classList.add('demo-mode')
-  $('#showcase-autoplay').textContent = `Running ${cycleCases.length}-scene · three-model cycle…`
+  $('#showcase-autoplay').textContent = `Running ${cycleCases.length}-scene · four-variant cycle…`
   showcase.history = []
   showcase.cycle = { results: [], startedAt: performance.now(), elapsedMs: null, total: cycleCases.length, suite: showcase.suite }
   renderHistory()
@@ -1994,7 +2004,7 @@ async function startRecordingAssist() {
     }
     showcase.cycle.elapsedMs = performance.now() - showcase.cycle.startedAt
     renderCycle()
-    setStage(`FULL ${cycleCases.length}-SCENE · THREE-MODEL CYCLE COMPLETE`, 'complete')
+    setStage(`FULL ${cycleCases.length}-SCENE · FOUR-VARIANT CYCLE COMPLETE`, 'complete')
   } catch (error) {
     showcase.cycle.elapsedMs = performance.now() - showcase.cycle.startedAt
     renderCycle()
@@ -2093,7 +2103,10 @@ function summarizeCycleProvider(results, providerId) {
 }
 
 function renderPairwiseComparisons(results) {
-  const pairs = [[COMPARISON_PROVIDER_IDS[0], COMPARISON_PROVIDER_IDS[1]], [COMPARISON_PROVIDER_IDS[0], COMPARISON_PROVIDER_IDS[2]], [COMPARISON_PROVIDER_IDS[1], COMPARISON_PROVIDER_IDS[2]]]
+  const pairs = []
+  for (let leftIndex = 0; leftIndex < COMPARISON_PROVIDER_IDS.length; leftIndex += 1) {
+    for (let rightIndex = leftIndex + 1; rightIndex < COMPARISON_PROVIDER_IDS.length; rightIndex += 1) pairs.push([COMPARISON_PROVIDER_IDS[leftIndex], COMPARISON_PROVIDER_IDS[rightIndex]])
+  }
   return pairs.map(([leftId, rightId]) => {
     let leftOnly = 0
     let rightOnly = 0

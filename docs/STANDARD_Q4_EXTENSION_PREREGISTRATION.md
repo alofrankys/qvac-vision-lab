@@ -1,6 +1,6 @@
 # Standard Q4 RealWorldQA extension · preregistration
 
-Status: protocol frozen; 765-inference addendum pending.
+Status: protocol frozen and addendum complete on 2026-09-04.
 
 ## Purpose
 
@@ -8,7 +8,7 @@ The canonical public run compared Standard Q8_0, Flash Q8_0 and Flash Q4_K_M ima
 
 | Family | Q8_0 | Q4_K_M imatrix |
 | --- | --- | --- |
-| VisionPsy Standard | Complete | This addendum |
+| VisionPsy Standard | Complete | Complete · 443/765 |
 | VisionPsy Flash | Complete | Complete |
 
 ## Frozen configuration
@@ -34,6 +34,12 @@ The runner writes one append-only checkpoint record after every completed infere
 ## Publication rule
 
 No Standard Q4 local accuracy is quoted until all 765 cases are complete and the checkpoint passes manifest, artifact, scorer and duplicate-key validation. After completion, the four configurations may be presented as a complete 2×2 comparison. The dog video remains an illustrative product demo rather than benchmark evidence.
+
+## Completion record
+
+All 765 unique case/provider keys completed with zero retries, zero incomplete rows and zero provider-identity mismatches. Standard Q4 scored **443/765 (57.91%)**, with a Wilson 95% interval of **54.38–61.36%**, versus the frozen matching published value of **60.3%** (-2.39 percentage points). The primary three-model evidence remains byte-for-byte separate.
+
+At the user's request, pacing was changed during the run: the initial low-resource delays were shortened and the final 560 cases ran without the load gate. Model artifact, projector, input order, prompt, generation values and scorer stayed frozen. Therefore the answer-level accuracy comparison remains paired and valid, while latency, throughput, RAM, CPU and GPU figures from this addendum must not be ranked directly against the earlier three-model run.
 
 ## Command
 

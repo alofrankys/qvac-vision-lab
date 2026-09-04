@@ -1,6 +1,6 @@
 # Public repository audit
 
-Audit date: 2026-09-02. Scope: repository history, runtime surface, dependencies, data provenance, benchmark methodology, public UX, reproducibility and publication contents.
+Audit date: 2026-09-04. Scope: repository history, runtime surface, dependencies, data provenance, benchmark methodology, public UX, reproducibility and publication contents.
 
 ## Publication contract
 
@@ -9,7 +9,7 @@ The public repository tells two distinct stories:
 1. **Dog stories:** approachable, natural visual Q&A over four owner-supplied photos. It explains what local inference looks like; it makes no benchmark claim.
 2. **RealWorldQA corroboration:** a fixed 765-question, exact-scored comparison against matching published VisionPsy GGUF values. It is evidence, not entertainment, and is labelled as local rather than official.
 
-The completed public evidence currently covers Standard Q8_0, Flash Q8_0 and Flash Q4_K_M imatrix. A separately preregistered Standard Q4_K_M imatrix addendum completes the 2×2 architecture/quantization grid without rewriting those records. Partial addendum scores are not publication-ready.
+The completed public evidence covers Standard Q8_0, Standard Q4_K_M imatrix, Flash Q8_0 and Flash Q4_K_M imatrix. The separately preregistered Standard Q4 addendum completed all 765 cases and completes the 2×2 architecture/quantization grid without rewriting the original records.
 
 ## Resolved high-priority findings
 
@@ -31,7 +31,8 @@ The completed public evidence currently covers Standard Q8_0, Flash Q8_0 and Fla
 - Model weights are external, large and downloaded on first use.
 - The browser dashboard is local-only and has not been hardened for exposure to an untrusted network.
 - The checked-in benchmark is from one machine. A 100-case, three-pass audit found 100% exact-output agreement, but it does not estimate behavior across other prompts, stochastic settings, hardware or the full benchmark under repeated execution.
-- Low-resource pauses in the Standard Q4 addendum reduce average duty cycle but make its wall-clock and latency telemetry unsuitable for direct performance ranking against the original run.
+- Standard Q4 was collected as a separate addendum and its low-resource pacing was relaxed during execution. Its paired accuracy remains valid; wall-clock, latency and resource telemetry are unsuitable for direct ranking against the primary run.
+- The 100-case repeatability audit covers the original three variants and does not yet cover Standard Q4.
 
 ## Publication decision
 
