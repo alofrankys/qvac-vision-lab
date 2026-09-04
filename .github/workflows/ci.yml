@@ -2,6 +2,7 @@ name: CI
 
 on:
   push:
+    branches: [main]
   pull_request:
 
 permissions:
@@ -23,6 +24,14 @@ jobs:
           node-version: 22.17.0
           cache: npm
       - run: npm ci
-      - run: npm audit --omit=dev
+      - name: Audit production dependencies
+        run: |
+          for attempt in 1 2 3; do
+            npm audit --omit=dev && exit 0
+            if [ "$attempt" -lt 3 ]; then
+              sleep $((attempt * 15))
+            fi
+          done
+          exit 1
       - run: npm test
       - run: npm run showcase:audit:methodology
