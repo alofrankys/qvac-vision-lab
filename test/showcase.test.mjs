@@ -48,7 +48,8 @@ test('screen-recording demos expose one 16:9 canvas, two public scenarios, repla
   assert.match(html, /id="showcase-demo-download"/)
   assert.match(script, /LIVE_DEMO_CASE_IDS = Object\.freeze\(\['realworldqa-48', 'realworldqa-41', 'realworldqa-53'\]\)/)
   assert.match(script, /LIVE_DEMO_3_SCENES = Object\.freeze/)
-  assert.match(script, /4 personal photos · 12 local inferences/)
+  assert.match(script, /4 personal photos · 16 local inferences/)
+  assert.match(script, /qvac-visionpsy-standard-q4/)
   assert.match(script, /drawLiveDemoIntroCard/)
   assert.match(script, /START LIVE COMPARISON/)
   assert.match(script, /createDogDemoMusicTrack/)
@@ -63,10 +64,11 @@ test('screen-recording demos expose one 16:9 canvas, two public scenarios, repla
 })
 
 test('public RealWorldQA audit exposes canonical scores, uncertainty and repeatability separately', () => {
-  const report = JSON.parse(readFileSync(new URL('../public/showcase/visionpsy-three-way-realworldqa-765.json', import.meta.url), 'utf8'))
+  const report = JSON.parse(readFileSync(new URL('../public/showcase/visionpsy-four-way-realworldqa-765.json', import.meta.url), 'utf8'))
   assert.equal(report.statisticalVerdict, 'NO_CLEAR_WINNER_AFTER_HOLM')
-  assert.deepEqual(report.providers.map(item => item.real.passed), [446, 438, 428])
-  assert.deepEqual(report.providers.map(item => item.officialRealWorldQaAccuracy), [0.591, 0.567, 0.549])
+  assert.deepEqual(report.providers.map(item => item.real.passed), [446, 443, 438, 428])
+  assert.deepEqual(report.providers.map(item => item.officialRealWorldQaAccuracy), [0.591, 0.603, 0.567, 0.549])
+  assert.equal(report.realPairwise.length, 6)
   assert.equal(report.methodology.questions, 765)
   assert.equal(report.methodology.uniqueRealImages, 762)
   assert.equal(report.methodology.scorerParity.extractionDifferences, 1)
@@ -76,6 +78,7 @@ test('public RealWorldQA audit exposes canonical scores, uncertainty and repeata
   assert.equal(report.repeatability.maximumAccuracySwingPoints, 0)
   assert.equal(report.repeatability.minimumExactOutputAgreement, 1)
   assert.equal(report.repeatability.minimumPassFailAgreement, 1)
+  assert.deepEqual(report.repeatability.excludedProviderIds, ['qvac-visionpsy-standard-q4'])
 })
 
 test('local frame capture is disabled unless explicitly enabled', () => {

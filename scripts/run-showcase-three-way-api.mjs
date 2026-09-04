@@ -440,12 +440,14 @@ function progressLine(results, completeCases, totalCases) {
 
 function markdownReport(report) {
   const mixedScoring = report.dataset.scoring.startsWith('mixed:')
+  const singleProvider = providerIds.length === 1
   const lines = [
-    `# VisionPsy ${providerIds.length === 1 ? 'single-provider addendum' : `${providerIds.length}-way`} · ${report.dataset.name}`,
+    `# VisionPsy ${singleProvider ? 'single-provider addendum' : `${providerIds.length}-way`} · ${report.dataset.name}`,
     '',
     `- Run: ${report.startedAt} → ${report.finishedAt}`,
     `- Dataset: ${report.dataset.caseCount} cases${report.dataset.sourceMd5 ? `; source MD5 \`${report.dataset.sourceMd5}\`` : ''}.`,
-    `- Protocol: ${report.dataset.scoring}, one excluded warm-up per model, rotating execution order.`,
+    `- Protocol: ${report.dataset.scoring}, one excluded warm-up per model, ${singleProvider ? 'single provider over the declared seeded case order' : 'rotating execution order'}.`,
+    ...(singleProvider ? ['- Comparability: accuracy may be paired against a matching frozen case set; performance requires a separately controlled comparison.'] : []),
     '',
     mixedScoring
       ? '| Model | Points | Any credit | Mixed score | Any-credit Wilson 95% | Mean TTFT | Mean latency | Mean tok/s | Mean prompt-eval tokens | Peak process RSS |'

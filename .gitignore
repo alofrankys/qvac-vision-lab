@@ -42,6 +42,8 @@ reports/*
 !reports/visionpsy-standard-preprocess-ablation.md
 !reports/visionpsy-three-way-realworldqa-765-qvac-sdk-vlmevalkit-470e517.json
 !reports/visionpsy-three-way-realworldqa-765-qvac-sdk-vlmevalkit-470e517.md
+!reports/visionpsy-standard-q4-realworldqa-765-qvac-sdk-vlmevalkit-470e517.json
+!reports/visionpsy-standard-q4-realworldqa-765-qvac-sdk-vlmevalkit-470e517.md
 !reports/visionpsy-realworldqa-vlmevalkit-upstream-470e517.json
 !reports/visionpsy-realworldqa-vlmevalkit-upstream-470e517.md
 !reports/visionpsy-realworldqa-765-qvac-sdk-vlmevalkit-audit.json
