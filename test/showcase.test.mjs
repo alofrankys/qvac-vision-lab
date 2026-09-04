@@ -61,6 +61,11 @@ test('screen-recording demos expose one 16:9 canvas, two public scenarios, repla
   assert.match(script, /canvas\.captureStream\(30\)/)
   assert.match(script, /await runLiveDemoProvider\(item, providerId\)/)
   assert.ok(script.indexOf("'video/webm;codecs=vp8'") < script.indexOf("'video/webm;codecs=vp9'"))
+  const compactLayout = script.match(/LIVE_DEMO_COMPACT_LAYOUT = Object\.freeze\(\{ thumbnailStartX: (\d+), thumbnailStep: (\d+), thumbnailWidth: (\d+), thumbnailImageWidth: \d+, firstModelX: (\d+) \}\)/)
+  assert.ok(compactLayout, 'compact four-photo layout must remain explicit and testable')
+  const [, startX, step, width, firstModelX] = compactLayout.map(Number)
+  const fourthThumbnailRightEdge = startX + (3 * step) + width
+  assert.ok(fourthThumbnailRightEdge < firstModelX, `fourth thumbnail edge ${fourthThumbnailRightEdge} must not overlap first model at ${firstModelX}`)
 })
 
 test('public RealWorldQA audit exposes canonical scores, uncertainty and repeatability separately', () => {

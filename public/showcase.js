@@ -14,6 +14,7 @@ const PROVIDER_BADGES = Object.freeze({
 })
 const OFFICIAL_REAL_GROUPS = Object.freeze(['official-real', 'validation-real', 'validation-real-b', 'validation-real-c', 'official-remainder'])
 const LIVE_DEMO_CASE_IDS = Object.freeze(['realworldqa-48', 'realworldqa-41', 'realworldqa-53'])
+const LIVE_DEMO_COMPACT_LAYOUT = Object.freeze({ thumbnailStartX: 50, thumbnailStep: 96, thumbnailWidth: 90, thumbnailImageWidth: 34, firstModelX: 460 })
 const LIVE_DEMO_3_SCENES = Object.freeze([
   {
     id: 'personal-dog-3',
@@ -830,8 +831,10 @@ async function startLiveDemo(mode = 'benchmark') {
       liveDemo.typedQuestion = ''
       liveDemo.cards = emptyLiveDemoCards()
       liveDemo.phase = `SCENE ${index + 1} · SELECTING REAL IMAGE`
-      const thumbnailStep = scenes.length > 3 ? 122 : 160
-      await moveLiveDemoCursor(104 + (index * thumbnailStep), 128, 650)
+      const compactThumbnails = scenes.length > 3
+      const thumbnailStep = compactThumbnails ? LIVE_DEMO_COMPACT_LAYOUT.thumbnailStep : 160
+      const firstThumbnailCenter = compactThumbnails ? LIVE_DEMO_COMPACT_LAYOUT.thumbnailStartX + (LIVE_DEMO_COMPACT_LAYOUT.thumbnailWidth / 2) : 104
+      await moveLiveDemoCursor(firstThumbnailCenter + (index * thumbnailStep), 128, 650)
       await pulseLiveDemoClick()
       await waitForLiveDemo(420)
 
@@ -1646,22 +1649,23 @@ function drawLiveDemoIntroReveal(ctx, delay, x, y, draw) {
 
 function drawLiveDemoThumbnails(ctx, cases) {
   const compact = cases.length > 3
-  const step = compact ? 122 : 160
-  const width = compact ? 112 : 145
+  const startX = compact ? LIVE_DEMO_COMPACT_LAYOUT.thumbnailStartX : 50
+  const step = compact ? LIVE_DEMO_COMPACT_LAYOUT.thumbnailStep : 160
+  const width = compact ? LIVE_DEMO_COMPACT_LAYOUT.thumbnailWidth : 145
   cases.forEach((item, index) => {
-    const x = 50 + (index * step)
+    const x = startX + (index * step)
     const selected = item.id === liveDemo.activeCase?.id
     drawLiveDemoPanel(ctx, x, 98, width, 61, 12, '#111113', selected ? '#ff9f0a' : '#2c2c2e', selected ? 3 : 1)
     const image = liveDemo.images.get(item.id)
-    const imageWidth = compact ? 47 : 65
+    const imageWidth = compact ? LIVE_DEMO_COMPACT_LAYOUT.thumbnailImageWidth : 65
     if (image) drawLiveDemoImageCover(ctx, image, x + 4, 102, imageWidth, 53, 9)
     ctx.fillStyle = selected ? '#ffb340' : '#a1a1a6'
     ctx.font = '800 9px ui-monospace, SFMono-Regular, Menlo, monospace'
-    const textX = x + imageWidth + 11
+    const textX = x + imageWidth + (compact ? 8 : 11)
     ctx.fillText(`0${index + 1}`, textX, 120)
     ctx.fillStyle = '#f5f5f7'
-    ctx.font = '700 10px -apple-system, BlinkMacSystemFont, sans-serif'
-    wrapLiveDemoText(ctx, item.title, textX, 138, width - imageWidth - 16, 13, 2)
+    ctx.font = `${compact ? '700 9px' : '700 10px'} -apple-system, BlinkMacSystemFont, sans-serif`
+    wrapLiveDemoText(ctx, item.title, textX, 138, width - imageWidth - (compact ? 12 : 16), 13, 2)
   })
 }
 
@@ -1701,7 +1705,7 @@ function drawLiveDemoQuestion(ctx, item) {
 }
 
 function drawLiveDemoCard(ctx, providerId, index) {
-  const x = 460 + (index * 273)
+  const x = LIVE_DEMO_COMPACT_LAYOUT.firstModelX + (index * 273)
   const y = 112
   const width = 263
   const height = 738
