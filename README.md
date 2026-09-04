@@ -48,7 +48,6 @@ The completed three-variant run uses QVAC SDK and the same QVAC llama.cpp backen
 | Flash Q4_K_M imatrix | 428/765 · 55.95% | 54.9% | +1.05 pp |
 
 Standard finished eight answers ahead of Flash Q8, but paired exact McNemar tests with Holm correction found no clear winner. A separate 100-case stratified repeatability audit produced identical outputs in all three passes for every model (0.00 pp score swing); that verifies this deterministic local implementation, not other prompts, hardware or stochastic settings. This is a **local corroboration**, not a bit-for-bit reproduction of Tether’s in-house evaluation. Read the [methodology](docs/REALWORLDQA_METHODOLOGY.md), [publication audit](docs/PUBLICATION_AUDIT.md), [canonical result](reports/visionpsy-three-way-realworldqa-765-qvac-sdk-vlmevalkit-470e517.md), and [repeatability audit](reports/visionpsy-realworldqa-repeatability-100x3.md).
-
 A preregistered 765-case **Standard Q4_K_M imatrix** addendum is being run to complete a 2×2 Standard/Flash × Q8/Q4 comparison. It adds new records and never rewrites the canonical 2,295 inferences. Its official comparison target is frozen at 60.3%; no local Standard Q4 result will be published before all cases and integrity checks are complete. See the [extension preregistration](docs/STANDARD_Q4_EXTENSION_PREREGISTRATION.md).
 
 ## Reusable Visual Q&A workflow
