@@ -1,5 +1,5 @@
 import { publicProviderStatus } from './provider-contract.mjs'
-import { QvacVisionPsyFlashQ4Provider, QvacVisionPsyProvider, QvacVisionPsyStandardQ8Provider } from './qvac-visionpsy-provider.mjs'
+import { QvacVisionPsyFlashQ4Provider, QvacVisionPsyProvider, QvacVisionPsyStandardQ4Provider, QvacVisionPsyStandardQ8Provider } from './qvac-visionpsy-provider.mjs'
 import { Lfm25VlProvider, VisionPsyPatchedProvider, VisionPsyPatchedBaseProvider } from './visionpsy-patched-provider.mjs'
 import { QvacSmolVlm2Provider } from './qvac-smolvlm2-provider.mjs'
 
@@ -11,6 +11,7 @@ export class VisionProviderRegistry {
     new Lfm25VlProvider(),
     new QvacSmolVlm2Provider(),
     new QvacVisionPsyStandardQ8Provider(),
+    new QvacVisionPsyStandardQ4Provider(),
     new QvacVisionPsyFlashQ4Provider()
   ]) {
     this.providers = new Map(providers.map(provider => [provider.definition.id, provider]))

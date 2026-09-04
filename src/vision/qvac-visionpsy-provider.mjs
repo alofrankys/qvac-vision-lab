@@ -2,6 +2,7 @@ import {
   MMPROJ_VISIONPSY_NANO_460M_MULTIMODAL_Q8_0,
   MMPROJ_VISIONPSY_NANO_460M_MULTIMODAL_Q8_0_1,
   VISIONPSY_NANO_460M_MULTIMODAL_Q4_K_M,
+  VISIONPSY_NANO_460M_MULTIMODAL_Q4_K_M_1,
   VISIONPSY_NANO_460M_MULTIMODAL_Q8_0,
   VISIONPSY_NANO_460M_MULTIMODAL_Q8_0_1
 } from '@qvac/sdk'
@@ -40,6 +41,24 @@ export class QvacVisionPsyStandardQ8Provider extends QvacMultimodalProvider {
         label: 'READY · QVAC NATIVE · STANDARD Q8_0 · METAL · OFFICIAL TILING', reason: null
       },
       modelSource: VISIONPSY_NANO_460M_MULTIMODAL_Q8_0_1,
+      projectionSource: MMPROJ_VISIONPSY_NANO_460M_MULTIMODAL_Q8_0_1,
+      preprocessPolicy: 'official-standard-tiled-upscale',
+      modelConfig: { 'mmproj-use-gpu': true }
+    })
+  }
+}
+
+export class QvacVisionPsyStandardQ4Provider extends QvacMultimodalProvider {
+  constructor() {
+    super({
+      status: {
+        id: 'qvac-visionpsy-standard-q4', name: 'QVAC VisionPsy — Standard Q4_K_M', kind: 'PRIMARY',
+        runtime: 'QVAC SDK · qvac-fabric-llm.cpp', runtimeVersion: RUNTIME_VERSION,
+        model: 'VisionPsy-Nano-460M Q4_K_M', modelVersion: `${STANDARD_COMMIT} · Q4_K_M · imatrix`,
+        projection: 'mmproj-visionpsy-nano-460m-q8.gguf', state: 'READY',
+        label: 'READY · QVAC NATIVE · STANDARD Q4_K_M · METAL · OFFICIAL TILING', reason: null
+      },
+      modelSource: VISIONPSY_NANO_460M_MULTIMODAL_Q4_K_M_1,
       projectionSource: MMPROJ_VISIONPSY_NANO_460M_MULTIMODAL_Q8_0_1,
       preprocessPolicy: 'official-standard-tiled-upscale',
       modelConfig: { 'mmproj-use-gpu': true }

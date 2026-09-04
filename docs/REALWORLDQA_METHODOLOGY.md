@@ -2,7 +2,7 @@
 
 ## What was run
 
-QVAC Vision Lab evaluated the three matching GGUF variants on all 765 official RealWorldQA questions (762 unique images) from source MD5 `4de008f55dc4fd008ca9e15321dc44b7`.
+QVAC Vision Lab evaluated three matching GGUF variants on all 765 official RealWorldQA scored cases from source MD5 `4de008f55dc4fd008ca9e15321dc44b7`.
 
 - VisionPsy Standard Q8_0
 - VisionPsy Flash Q8_0
@@ -37,6 +37,10 @@ The eight-answer lead for Standard over Flash Q8 is not statistically decisive. 
 - Behavior under different prompts, stochastic generation settings, hardware or numerical kernels.
 
 Therefore this project uses **local corroboration** or **method-aligned comparison**, not “official reproduction” or “new leaderboard result.” The canonical raw evidence is `reports/visionpsy-three-way-realworldqa-765-qvac-sdk-vlmevalkit-470e517.json`; older exploratory runs are intentionally excluded from the public repository.
+
+## Preregistered Standard Q4 extension
+
+The original roster is asymmetric across architecture and quantization. A frozen 765-case addendum adds VisionPsy Standard Q4_K_M imatrix without changing or replacing the original 2,295 inference records. When complete, this supplies a 2×2 Standard/Flash × Q8/Q4 comparison. The addendum uses the official Standard Q4 model and Q8 vision projector, the same Standard tiled-upscale preprocessing, dataset order, prompt, scorer, generation settings and QVAC runtime as the canonical run. Low-resource pauses alter only duty cycle; performance claims require a separate counterbalanced run. See [the preregistration](STANDARD_Q4_EXTENSION_PREREGISTRATION.md).
 
 ## Deterministic repeatability
 

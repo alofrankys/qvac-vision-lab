@@ -8,6 +8,7 @@ import {
   MMPROJ_VISIONPSY_NANO_460M_MULTIMODAL_Q8_0,
   MMPROJ_VISIONPSY_NANO_460M_MULTIMODAL_Q8_0_1,
   VISIONPSY_NANO_460M_MULTIMODAL_Q4_K_M,
+  VISIONPSY_NANO_460M_MULTIMODAL_Q4_K_M_1,
   VISIONPSY_NANO_460M_MULTIMODAL_Q8_0,
   VISIONPSY_NANO_460M_MULTIMODAL_Q8_0_1
 } from '@qvac/sdk'
@@ -17,6 +18,10 @@ const baseUrl = process.env.QVAC_SHOWCASE_URL || 'http://127.0.0.1:8878'
 const suiteId = process.env.QVAC_SHOWCASE_SUITE || 'official-real'
 const runId = sanitizeRunId(process.env.QVAC_SHOWCASE_RUN_ID || '')
 const shuffleSeed = String(process.env.QVAC_SHOWCASE_SHUFFLE_SEED || '')
+const reportPrefix = sanitizeRunId(process.env.QVAC_SHOWCASE_REPORT_PREFIX || 'visionpsy-three-way') || 'visionpsy-three-way'
+const interInferenceDelayMs = nonNegativeInteger(process.env.QVAC_SHOWCASE_INTER_INFERENCE_DELAY_MS, 0)
+const batchPauseEvery = nonNegativeInteger(process.env.QVAC_SHOWCASE_BATCH_PAUSE_EVERY, 0)
+const batchPauseMs = nonNegativeInteger(process.env.QVAC_SHOWCASE_BATCH_PAUSE_MS, 0)
 const vlmevalkitRevision = '470e51787a351764057869304e425bc76170bdc6'
 const vlmevalkitScorerSha256 = '06088ed4da68cd9d8c3018e7630d0503f1365e6dd31f651cbedd8aa44dc14466'
 const suites = Object.freeze({
@@ -31,17 +36,23 @@ const suite = suites[suiteId]
 if (!suite) throw new Error(`Unknown QVAC_SHOWCASE_SUITE: ${suiteId}`)
 const reportsDir = path.join(root, 'reports')
 await mkdir(reportsDir, { recursive: true })
-const reportStem = `visionpsy-three-way-${suite.slug}${runId ? `-${runId}` : ''}`
+const reportStem = `${reportPrefix}-${suite.slug}${runId ? `-${runId}` : ''}`
 const checkpointPath = path.join(reportsDir, `.${reportStem}.checkpoint.ndjson`)
 const resumeEnabled = process.env.QVAC_SHOWCASE_RESUME === '1'
-const providerIds = Object.freeze(['qvac-visionpsy-standard-q8', 'qvac-visionpsy', 'qvac-visionpsy-flash-q4'])
+const defaultProviderIds = Object.freeze(['qvac-visionpsy-standard-q8', 'qvac-visionpsy', 'qvac-visionpsy-flash-q4'])
+const availableProviderIds = Object.freeze([...defaultProviderIds, 'qvac-visionpsy-standard-q4'])
+const requestedProviderIds = String(process.env.QVAC_SHOWCASE_PROVIDER_IDS || '').split(',').map(value => value.trim()).filter(Boolean)
+const providerIds = Object.freeze(requestedProviderIds.length ? [...new Set(requestedProviderIds)] : [...defaultProviderIds])
+if (providerIds.some(providerId => !availableProviderIds.includes(providerId))) throw new Error(`Unknown QVAC_SHOWCASE_PROVIDER_IDS value; available providers: ${availableProviderIds.join(', ')}`)
 const providerLabels = Object.freeze({
   'qvac-visionpsy-standard-q8': 'VisionPsy Standard Q8 (QVAC SDK)',
+  'qvac-visionpsy-standard-q4': 'VisionPsy Standard Q4 imatrix (QVAC SDK)',
   'qvac-visionpsy': 'VisionPsy Flash Q8 (QVAC SDK)',
   'qvac-visionpsy-flash-q4': 'VisionPsy Flash Q4 imatrix (QVAC SDK)'
 })
 const artifactSources = Object.freeze({
   'qvac-visionpsy-standard-q8': { model: VISIONPSY_NANO_460M_MULTIMODAL_Q8_0_1, projector: MMPROJ_VISIONPSY_NANO_460M_MULTIMODAL_Q8_0_1 },
+  'qvac-visionpsy-standard-q4': { model: VISIONPSY_NANO_460M_MULTIMODAL_Q4_K_M_1, projector: MMPROJ_VISIONPSY_NANO_460M_MULTIMODAL_Q8_0_1 },
   'qvac-visionpsy': { model: VISIONPSY_NANO_460M_MULTIMODAL_Q8_0, projector: MMPROJ_VISIONPSY_NANO_460M_MULTIMODAL_Q8_0 },
   'qvac-visionpsy-flash-q4': { model: VISIONPSY_NANO_460M_MULTIMODAL_Q4_K_M, projector: MMPROJ_VISIONPSY_NANO_460M_MULTIMODAL_Q8_0 }
 })
@@ -87,11 +98,15 @@ for (const [caseIndex, showcaseCase] of cases.entries()) {
   const order = rotate(providerIds, caseIndex)
   for (const [orderIndex, providerId] of order.entries()) {
     if (results.some(item => item.caseId === showcaseCase.id && item.providerId === providerId)) continue
-    process.stdout.write(`[${caseIndex + 1}/${cases.length} · ${orderIndex + 1}/3] ${showcaseCase.id} → ${providerLabels[providerId]}\n`)
+    process.stdout.write(`[${caseIndex + 1}/${cases.length} · ${orderIndex + 1}/${providerIds.length}] ${showcaseCase.id} → ${providerLabels[providerId]}\n`)
     const result = await runCaseWithRetries(showcaseCase, providerId, false)
     const checkpointed = { caseIndex, executionOrder: order, orderIndex, ...result }
     results.push(checkpointed)
     await appendFile(checkpointPath, `${JSON.stringify(checkpointed)}\n`)
+    const completedInferences = results.filter(item => !item.warmup).length
+    const totalInferences = cases.length * providerIds.length
+    if (completedInferences < totalInferences && interInferenceDelayMs) await pacedPause(interInferenceDelayMs, 'inter-inference')
+    if (completedInferences < totalInferences && batchPauseEvery && batchPauseMs && completedInferences % batchPauseEvery === 0) await pacedPause(batchPauseMs, `batch boundary ${completedInferences}/${totalInferences}`)
   }
   const completeCases = results.filter(item => !item.warmup).length / providerIds.length
   if (Number.isInteger(completeCases)) process.stdout.write(`${progressLine(results, completeCases, cases.length)}\n`)
@@ -114,7 +129,7 @@ const inferenceFinishedAt = results.map(item => {
 const report = {
   schemaVersion: 2,
   runId: runId || null,
-  protocol: `QVAC Vision Lab Experiment 06 · ${suite.name} · three-way${runId ? ` · ${runId}` : ''}`,
+  protocol: `QVAC Vision Lab Experiment 06 · ${suite.name} · ${providerIds.length === 1 ? 'single-provider addendum' : `${providerIds.length}-way`}${runId ? ` · ${runId}` : ''}`,
   baseUrl,
   startedAt: Number.isFinite(inferenceStartedAt) ? new Date(inferenceStartedAt).toISOString() : startedAt,
   finishedAt: Number.isFinite(inferenceFinishedAt) ? new Date(inferenceFinishedAt).toISOString() : new Date().toISOString(),
@@ -128,7 +143,7 @@ const report = {
     prompt: suite.prompt,
     promptTemplate: 'Question: <question>\\nOptions:\\nA. ...\\nPlease select the correct answer from the options above. ',
     imageMessageOrder: 'image before text',
-    orderPolicy: shuffleSeed ? 'cases deterministically shuffled; provider order uses a balanced three-position Latin rotation' : 'provider order rotates by case index',
+    orderPolicy: providerIds.length === 1 ? 'single provider; case order fixed by the declared shuffle seed' : shuffleSeed ? `cases deterministically shuffled; provider order uses a balanced ${providerIds.length}-position Latin rotation` : 'provider order rotates by case index',
     shuffleSeed: shuffleSeed || null,
     warmupPolicy: 'one excluded warm-up per provider',
     inputManifest: cases.map(item => ({
@@ -163,7 +178,14 @@ const report = {
       totalMemoryBytes: os.totalmem(),
       node: process.version
     },
-    retryPolicy: 'up to three attempts for transport/runtime failure only; valid wrong answers are never retried'
+    retryPolicy: 'up to three attempts for transport/runtime failure only; valid wrong answers are never retried',
+    resourcePacing: {
+      sequential: true,
+      interInferenceDelayMs,
+      batchPauseEvery: batchPauseEvery || null,
+      batchPauseMs: batchPauseMs || null,
+      note: 'Pacing changes wall-clock duty cycle only; model, prompt, generation and scoring settings remain frozen.'
+    }
   },
   providers: Object.fromEntries(providerIds.map(id => [id, catalog.providers.find(item => item.id === id)])),
   warmups,
@@ -373,6 +395,16 @@ function sanitizeRunId(value) {
   return String(value || '').trim().toLowerCase().replace(/[^a-z0-9._-]+/g, '-').replace(/^-+|-+$/g, '').slice(0, 80)
 }
 
+function nonNegativeInteger(value, fallback) {
+  const parsed = Number(value)
+  return Number.isInteger(parsed) && parsed >= 0 ? parsed : fallback
+}
+
+async function pacedPause(milliseconds, reason) {
+  process.stdout.write(`PAUSE ${Math.round(milliseconds / 1000)}s · ${reason}\n`)
+  await new Promise(resolve => setTimeout(resolve, milliseconds))
+}
+
 function progressLine(results, completeCases, totalCases) {
   const scores = providerIds.map(providerId => {
     const items = results.filter(item => !item.warmup && item.providerId === providerId)
@@ -385,7 +417,7 @@ function progressLine(results, completeCases, totalCases) {
 function markdownReport(report) {
   const mixedScoring = report.dataset.scoring.startsWith('mixed:')
   const lines = [
-    `# VisionPsy three-way · ${report.dataset.name}`,
+    `# VisionPsy ${providerIds.length === 1 ? 'single-provider addendum' : `${providerIds.length}-way`} · ${report.dataset.name}`,
     '',
     `- Run: ${report.startedAt} → ${report.finishedAt}`,
     `- Dataset: ${report.dataset.caseCount} cases${report.dataset.sourceMd5 ? `; source MD5 \`${report.dataset.sourceMd5}\`` : ''}.`,
