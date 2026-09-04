@@ -2,6 +2,7 @@ const $ = selector => document.querySelector(selector)
 const showcaseSearchParams = new URLSearchParams(window.location.search)
 const useRecordedDemo3Replay = showcaseSearchParams.get('demo3') === 'replay'
 const useLocalFrameCapture = showcaseSearchParams.get('captureFrames') === '1'
+const autoStartDemo3Capture = useRecordedDemo3Replay && useLocalFrameCapture && showcaseSearchParams.get('autostartDemo3') === '1'
 const liveDemoReplaySpeed = Math.max(1, Number(showcaseSearchParams.get('replaySpeed')) || 1.5)
 const COMPARISON_PROVIDER_IDS = Object.freeze(['qvac-visionpsy-standard-q8', 'qvac-visionpsy-standard-q4', 'qvac-visionpsy', 'qvac-visionpsy-flash-q4'])
 const PROVIDER_BADGES = Object.freeze({
@@ -34,9 +35,9 @@ const LIVE_DEMO_3_SCENES = Object.freeze([
     imageUrl: '/showcase/personal-dogs/demo-3-mountain-companions.jpg',
     filename: 'demo-3-mountain-companions.jpg',
     prompt: 'The two mountain explorers have very different looks. Which dog is on the left, and how do their coats differ? Answer in one cheerful sentence using visible features rather than breed names.',
-    expectedAnswer: '2 points · left dog: white and brown · coat contrast: fluffy/long vs short/smooth or tan/reddish',
+    expectedAnswer: 'left dog: white and brown · coat contrast: fluffy/long vs short/smooth or tan/reddish',
     demoKind: 'dog-rubric',
-    questionLabel: '01 · NATURAL VISUAL QUESTION · TWO-POINT RUBRIC'
+    questionLabel: '01 · NATURAL VISUAL QUESTION · SEMANTIC SCORE 0–1'
   },
   {
     id: 'personal-dog-1',
@@ -44,9 +45,9 @@ const LIVE_DEMO_3_SCENES = Object.freeze([
     imageUrl: '/showcase/personal-dogs/demo-3-quietest-nap.jpg',
     filename: 'demo-3-quietest-nap.jpg',
     prompt: 'This little dog seems to have found its perfect nap spot. Is it awake or asleep, and what surface is it resting on? Answer like a warm photo caption in one short sentence.',
-    expectedAnswer: '2 points · asleep · tiled floor',
+    expectedAnswer: 'asleep · tiled floor',
     demoKind: 'dog-rubric',
-    questionLabel: '02 · WARM PHOTO CAPTION · TWO-POINT RUBRIC'
+    questionLabel: '02 · WARM PHOTO CAPTION · SEMANTIC SCORE 0–1'
   },
   {
     id: 'personal-dog-2',
@@ -54,9 +55,9 @@ const LIVE_DEMO_3_SCENES = Object.freeze([
     imageUrl: '/showcase/personal-dogs/demo-3-picnic-nap.jpg',
     filename: 'demo-3-picnic-nap.jpg',
     prompt: 'This outdoor nap looks wonderfully cozy. What is the dog lying on, and what bright-colored item is it wearing? Answer like a warm photo caption in one short sentence.',
-    expectedAnswer: '2 points · patterned blanket · orange harness',
+    expectedAnswer: 'patterned blanket · orange harness',
     demoKind: 'dog-rubric',
-    questionLabel: '03 · OBJECT + ATTRIBUTE · TWO-POINT RUBRIC'
+    questionLabel: '03 · OBJECT + ATTRIBUTE · SEMANTIC SCORE 0–1'
   },
   {
     id: 'personal-dog-5',
@@ -64,42 +65,42 @@ const LIVE_DEMO_3_SCENES = Object.freeze([
     imageUrl: '/showcase/personal-dogs/demo-3-cafe-companions.jpg',
     filename: 'demo-3-cafe-companions.jpg',
     prompt: 'These cafe companions look ready to leave. How many dogs are visible, and what item with a loop-shaped handle lies on the floor beside them? Answer in one playful sentence.',
-    expectedAnswer: '2 points · two dogs · retractable leash/lead',
+    expectedAnswer: 'two dogs · retractable leash/lead',
     demoKind: 'dog-rubric',
-    questionLabel: '04 · COUNT + OBJECT ID · TWO-POINT RUBRIC'
+    questionLabel: '04 · COUNT + OBJECT ID · SEMANTIC SCORE 0–1'
   }
 ])
 const LIVE_DEMO_3_REPLAY_RESULTS = Object.freeze({
   'personal-dog-3': Object.freeze({
-    'qvac-visionpsy-standard-q8': Object.freeze({ output: 'The dog on the left is the Cavalier King Charles Spaniel, identifiable by its white and brown coat. Its fur is soft and long, while the dog on the right has a short tan coat.', timeToFirstTokenMs: 2720, latencyMs: 3080, tokensPerSecond: 120.2, outputTokens: 43 }),
-    'qvac-visionpsy-standard-q4': Object.freeze({ output: 'The dog on the left is the Cavalier King Charles Spaniel. It has a white and brown coat, long floppy ears, and a fluffy tail.', timeToFirstTokenMs: 8222, latencyMs: 8650, tokensPerSecond: 73.5, outputTokens: 31 }),
-    'qvac-visionpsy': Object.freeze({ output: 'The dog on the left has a white and brown coat, while the dog on the right has a tan and white coat.', timeToFirstTokenMs: 1880, latencyMs: 2100, tokensPerSecond: 113.1, outputTokens: 25 }),
-    'qvac-visionpsy-flash-q4': Object.freeze({ output: 'The dog on the left has a white and brown coat, while the dog on the right has a brown and white coat.', timeToFirstTokenMs: 1860, latencyMs: 2050, tokensPerSecond: 132.8, outputTokens: 25 })
+    'qvac-visionpsy-standard-q8': Object.freeze({ output: 'The dog on the left is the Cavalier King Charles Spaniel, identifiable by its white and brown coat. Its fur is soft and long, while the dog on the right has a short tan coat.', timeToFirstTokenMs: 2720, latencyMs: 3080, tokensPerSecond: 120.2, outputTokens: 43, semanticScore: 0.75, semanticReason: 'Complete comparison; minor miss: starts with a breed name.' }),
+    'qvac-visionpsy-standard-q4': Object.freeze({ output: 'The dog on the left is the Cavalier King Charles Spaniel. It has a white and brown coat, long floppy ears, and a fluffy tail.', timeToFirstTokenMs: 8222, latencyMs: 8650, tokensPerSecond: 73.5, outputTokens: 31, semanticScore: 0.5, semanticReason: 'Gets the left dog, but omits the coat comparison.' }),
+    'qvac-visionpsy': Object.freeze({ output: 'The dog on the left has a white and brown coat, while the dog on the right has a tan and white coat.', timeToFirstTokenMs: 1880, latencyMs: 2100, tokensPerSecond: 113.1, outputTokens: 25, semanticScore: 1, semanticReason: 'Correct and complete using visible coat features.' }),
+    'qvac-visionpsy-flash-q4': Object.freeze({ output: 'The dog on the left has a white and brown coat, while the dog on the right has a brown and white coat.', timeToFirstTokenMs: 1860, latencyMs: 2050, tokensPerSecond: 132.8, outputTokens: 25, semanticScore: 0.5, semanticReason: 'Gets the left dog, but not a meaningful coat contrast.' })
   }),
   'personal-dog-1': Object.freeze({
-    'qvac-visionpsy-standard-q8': Object.freeze({ output: 'It is asleep.', timeToFirstTokenMs: 2310, latencyMs: 2360, tokensPerSecond: 89.2, outputTokens: 4 }),
-    'qvac-visionpsy-standard-q4': Object.freeze({ output: 'It is asleep. The dog is resting on a tiled floor.', timeToFirstTokenMs: 5027, latencyMs: 5231, tokensPerSecond: 69.4, outputTokens: 14 }),
-    'qvac-visionpsy': Object.freeze({ output: 'The little dog is peacefully asleep on a clean, white tiled floor.', timeToFirstTokenMs: 2270, latencyMs: 2410, tokensPerSecond: 105.9, outputTokens: 15 }),
-    'qvac-visionpsy-flash-q4': Object.freeze({ output: 'The little dog is peacefully asleep on a clean, white tiled floor.', timeToFirstTokenMs: 2260, latencyMs: 2360, tokensPerSecond: 145.3, outputTokens: 15 })
+    'qvac-visionpsy-standard-q8': Object.freeze({ output: 'It is asleep.', timeToFirstTokenMs: 2310, latencyMs: 2360, tokensPerSecond: 89.2, outputTokens: 4, semanticScore: 0.5, semanticReason: 'Correct about sleep, but omits the tiled floor.' }),
+    'qvac-visionpsy-standard-q4': Object.freeze({ output: 'It is asleep. The dog is resting on a tiled floor.', timeToFirstTokenMs: 5027, latencyMs: 5231, tokensPerSecond: 69.4, outputTokens: 14, semanticScore: 1, semanticReason: 'Correctly answers both requested details.' }),
+    'qvac-visionpsy': Object.freeze({ output: 'The little dog is peacefully asleep on a clean, white tiled floor.', timeToFirstTokenMs: 2270, latencyMs: 2410, tokensPerSecond: 105.9, outputTokens: 15, semanticScore: 1, semanticReason: 'Correct, complete and naturally phrased.' }),
+    'qvac-visionpsy-flash-q4': Object.freeze({ output: 'The little dog is peacefully asleep on a clean, white tiled floor.', timeToFirstTokenMs: 2260, latencyMs: 2360, tokensPerSecond: 145.3, outputTokens: 15, semanticScore: 1, semanticReason: 'Correct, complete and naturally phrased.' })
   }),
   'personal-dog-2': Object.freeze({
-    'qvac-visionpsy-standard-q8': Object.freeze({ output: "The dog is resting on a colorful, patterned blanket adorned with elephants and intricate designs. It's wearing a vibrant orange harness.", timeToFirstTokenMs: 2480, latencyMs: 2700, tokensPerSecond: 113.2, outputTokens: 25 }),
-    'qvac-visionpsy-standard-q4': Object.freeze({ output: "The dog is lying on a colorful blanket adorned with elephants and patterns. It's wearing a bright orange harness.", timeToFirstTokenMs: 5863, latencyMs: 6185, tokensPerSecond: 69.3, outputTokens: 22 }),
-    'qvac-visionpsy': Object.freeze({ output: "The dog is lying on a colorful, patterned blanket, and it's wearing an orange harness.", timeToFirstTokenMs: 1930, latencyMs: 2100, tokensPerSecond: 109.5, outputTokens: 19 }),
-    'qvac-visionpsy-flash-q4': Object.freeze({ output: "The dog is lying on a colorful, patterned blanket, and it's wearing an orange harness. The scene is bathed in warm sunlight, making the nap look especially cozy.", timeToFirstTokenMs: 1880, latencyMs: 2190, tokensPerSecond: 134.1, outputTokens: 40 })
+    'qvac-visionpsy-standard-q8': Object.freeze({ output: "The dog is resting on a colorful, patterned blanket adorned with elephants and intricate designs. It's wearing a vibrant orange harness.", timeToFirstTokenMs: 2480, latencyMs: 2700, tokensPerSecond: 113.2, outputTokens: 25, semanticScore: 1, semanticReason: 'Correctly identifies both the patterned blanket and orange harness.' }),
+    'qvac-visionpsy-standard-q4': Object.freeze({ output: "The dog is lying on a colorful blanket adorned with elephants and patterns. It's wearing a bright orange harness.", timeToFirstTokenMs: 5863, latencyMs: 6185, tokensPerSecond: 69.3, outputTokens: 22, semanticScore: 1, semanticReason: 'Correctly identifies both the patterned blanket and orange harness.' }),
+    'qvac-visionpsy': Object.freeze({ output: "The dog is lying on a colorful, patterned blanket, and it's wearing an orange harness.", timeToFirstTokenMs: 1930, latencyMs: 2100, tokensPerSecond: 109.5, outputTokens: 19, semanticScore: 1, semanticReason: 'Correctly identifies both the patterned blanket and orange harness.' }),
+    'qvac-visionpsy-flash-q4': Object.freeze({ output: "The dog is lying on a colorful, patterned blanket, and it's wearing an orange harness. The scene is bathed in warm sunlight, making the nap look especially cozy.", timeToFirstTokenMs: 1880, latencyMs: 2190, tokensPerSecond: 134.1, outputTokens: 40, semanticScore: 1, semanticReason: 'Correctly identifies both requested details; the additional caption remains image-consistent.' })
   }),
   'personal-dog-5': Object.freeze({
-    'qvac-visionpsy-standard-q8': Object.freeze({ output: 'Two dogs are visible, and the item on the floor is a dog leash.', timeToFirstTokenMs: 3320, latencyMs: 3500, tokensPerSecond: 97.0, outputTokens: 17 }),
-    'qvac-visionpsy-standard-q4': Object.freeze({ output: 'There are two dogs visible in the cafe, and the item on the floor is a loop-shaped handle for a pet toy.', timeToFirstTokenMs: 5869, latencyMs: 6266, tokensPerSecond: 69.3, outputTokens: 27 }),
-    'qvac-visionpsy': Object.freeze({ output: 'Two dogs are visible, and the item on the floor is a pet grooming brush.', timeToFirstTokenMs: 2060, latencyMs: 2230, tokensPerSecond: 100.8, outputTokens: 17 }),
-    'qvac-visionpsy-flash-q4': Object.freeze({ output: 'Two dogs are visible, and the item on the floor is a pet grooming brush.', timeToFirstTokenMs: 2150, latencyMs: 2310, tokensPerSecond: 113.4, outputTokens: 17 })
+    'qvac-visionpsy-standard-q8': Object.freeze({ output: 'Two dogs are visible, and the item on the floor is a dog leash.', timeToFirstTokenMs: 3320, latencyMs: 3500, tokensPerSecond: 97.0, outputTokens: 17, semanticScore: 1, semanticReason: 'Correct count and identifies the leash.' }),
+    'qvac-visionpsy-standard-q4': Object.freeze({ output: 'There are two dogs visible in the cafe, and the item on the floor is a loop-shaped handle for a pet toy.', timeToFirstTokenMs: 5869, latencyMs: 6266, tokensPerSecond: 69.3, outputTokens: 27, semanticScore: 0.5, semanticReason: 'Correct count, but mistakes the leash for a pet toy.' }),
+    'qvac-visionpsy': Object.freeze({ output: 'Two dogs are visible, and the item on the floor is a pet grooming brush.', timeToFirstTokenMs: 2060, latencyMs: 2230, tokensPerSecond: 100.8, outputTokens: 17, semanticScore: 0.5, semanticReason: 'Correct count, but mistakes the leash for a brush.' }),
+    'qvac-visionpsy-flash-q4': Object.freeze({ output: 'Two dogs are visible, and the item on the floor is a pet grooming brush.', timeToFirstTokenMs: 2150, latencyMs: 2310, tokensPerSecond: 113.4, outputTokens: 17, semanticScore: 0.5, semanticReason: 'Correct count, but mistakes the leash for a brush.' })
   })
 })
 const LIVE_DEMO_OFFICIAL_RESULTS = Object.freeze([
-  { providerId: 'qvac-visionpsy-standard-q8', local: 58.30, official: 59.1, artifact: 'VisionPsy Standard Q8_0' },
-  { providerId: 'qvac-visionpsy-standard-q4', local: 57.91, official: 60.3, artifact: 'VisionPsy Standard Q4_K_M-i' },
-  { providerId: 'qvac-visionpsy', local: 57.25, official: 56.7, artifact: 'VisionPsy Flash Q8_0' },
-  { providerId: 'qvac-visionpsy-flash-q4', local: 55.95, official: 54.9, artifact: 'VisionPsy Flash Q4_K_M-i' }
+  { providerId: 'qvac-visionpsy-standard-q8', correct: 446, local: 58.30, official: 59.1, artifact: 'VisionPsy Standard Q8_0' },
+  { providerId: 'qvac-visionpsy-standard-q4', correct: 443, local: 57.91, official: 60.3, artifact: 'VisionPsy Standard Q4_K_M-i' },
+  { providerId: 'qvac-visionpsy', correct: 438, local: 57.25, official: 56.7, artifact: 'VisionPsy Flash Q8_0' },
+  { providerId: 'qvac-visionpsy-flash-q4', correct: 428, local: 55.95, official: 54.9, artifact: 'VisionPsy Flash Q4_K_M-i' }
 ])
 
 const showcase = {
@@ -156,6 +157,8 @@ const liveDemo = {
   recordingStartedAt: null,
   introEndedAtMs: null,
   popupStartedAtMs: null,
+  officialStartedAtMs: null,
+  auditCardStartedAt: null,
   audioContext: null,
   musicElement: null,
   musicNodes: []
@@ -209,6 +212,11 @@ async function initialize() {
   }
   renderConversation()
   void loadVerifiedBenchmark()
+  if (autoStartDemo3Capture) {
+    setTimeout(() => {
+      if (!liveDemo.running) void startLiveDemo3Replay().catch(error => showLiveDemoError(error))
+    }, 250)
+  }
 }
 
 async function loadVerifiedBenchmark() {
@@ -226,6 +234,9 @@ async function loadVerifiedBenchmark() {
     const randomBaseline = report.sanityBaselines?.weightedRandomOptionBaseline
     const repeatability = report.repeatability
     const repeatabilityCard = repeatability ? `<div><b>Deterministic repeatability</b><small>${repeatability.cases} stratified cases × ${repeatability.repeats} passes</small><small>${repeatability.newInferences} new inferences</small><small>Max score swing ${repeatability.maximumAccuracySwingPoints.toFixed(2)} pp</small><small>Exact outputs ${(repeatability.minimumExactOutputAgreement * 100).toFixed(1)}% minimum</small></div>` : ''
+    const controlledPerformance = report.controlledPerformance
+    const fastestPerformance = controlledPerformance?.models?.[0]
+    const performanceCard = controlledPerformance ? `<div><b>Controlled local timing</b><small>${controlledPerformance.cases} cases × 4 models</small><small>Balanced four-position rotation</small><small>Fastest mean response ${durationCell(fastestPerformance?.latencyMs?.mean)}</small><small>Local Mac only</small></div>` : ''
     $('#showcase-verified-summary').innerHTML = report.providers.map((provider, index) => `<article class="showcase-cycle-summary-card">
       <header><div><span>OFFICIAL-765 RANK ${index + 1} · ${escapeHtml(PROVIDER_BADGES[provider.providerId] || provider.providerId)}${provider.providerId === 'qvac-visionpsy-standard-q4' ? ' · SEPARATE ADDENDUM' : ''}</span><h3>${escapeHtml(provider.label)}</h3></div><b>${provider.real.passed}/${provider.real.cases}</b></header>
       <div class="showcase-cycle-summary-kpis">
@@ -233,11 +244,9 @@ async function loadVerifiedBenchmark() {
         <span>Published matching GGUF<b>${(provider.officialRealWorldQaAccuracy * 100).toFixed(1)}%</b></span>
         <span>Local vs published<b>${provider.deviationFromOfficial >= 0 ? '+' : ''}${(provider.deviationFromOfficial * 100).toFixed(2)} pp</b></span>
         <span>Incorrect answers<b>${provider.real.failed}/${provider.real.cases}</b></span>
-        <span>Mean TTFT<b>${durationCell(provider.performance.ttftMs.mean)}</b></span>
-        <span>Mean latency<b>${durationCell(provider.performance.latencyMs.mean)}</b></span>
-        <span>Peak process RSS<b>${bytesCell(provider.performance.processRssPeakBytes.max)}</b></span>
+        <span>Image-cluster 95%<b>${provider.real.imageClusterBootstrap95.map(value => `${(value * 100).toFixed(1)}%`).join('–')}</b></span>
       </div>
-    </article>`).join('') + `<div class="showcase-pairwise"><span>STATISTICAL VERDICT · ${escapeHtml(report.statisticalVerdict.replaceAll('_', ' '))}</span><div><b>Paired quality result</b><small>Score spread ${realSpread} answers</small><small>Minimum Holm p ${minimumP.toFixed(3)}</small><small>${minimumP < 0.05 ? 'Significant pair found' : 'No significant pair'}</small><small>${minimumP < 0.05 ? 'Read pairwise details' : 'Do not claim a winner'}</small></div><div><b>Frozen benchmark protocol</b><small>Complete RealWorldQA 765</small><small>Exact option scoring</small><small>Primary rotation + Q4 addendum</small><small>Performance not directly ranked</small></div><div><b>Direct upstream scorer</b><small>VLMEvalKit ${escapeHtml(report.methodology?.scorerParity?.revision?.slice(0, 8) || 'pinned')}</small><small>${report.methodology?.scorerParity?.extractionDifferences ?? '—'} extraction differences</small><small>${report.methodology?.scorerParity?.passVerdictChanges ?? '—'} verdict changes</small><small>Checksum verified</small></div>${repeatabilityCard}<div><b>Sanity baselines</b><small>Majority letter ${Number.isFinite(majorityBaseline) ? `${(majorityBaseline * 100).toFixed(1)}%` : 'pending rerun'}</small><small>Weighted random ${Number.isFinite(randomBaseline) ? `${(randomBaseline * 100).toFixed(1)}%` : 'pending rerun'}</small><small>Categories are local heuristics</small><small>Local corroboration, not vendor replica</small></div></div>`
+    </article>`).join('') + `<div class="showcase-pairwise"><span>STATISTICAL VERDICT · ${escapeHtml(report.statisticalVerdict.replaceAll('_', ' '))}</span><div><b>Paired quality result</b><small>Score spread ${realSpread} answers</small><small>Minimum Holm p ${minimumP.toFixed(3)}</small><small>${minimumP < 0.05 ? 'Significant pair found' : 'No significant pair'}</small><small>${minimumP < 0.05 ? 'Read pairwise details' : 'Do not claim a winner'}</small></div><div><b>Frozen benchmark protocol</b><small>Complete RealWorldQA 765</small><small>VLMEvalKit option inference</small><small>Binary gold accuracy</small><small>Performance separately controlled</small></div><div><b>Direct upstream scorer</b><small>VLMEvalKit ${escapeHtml(report.methodology?.scorerParity?.revision?.slice(0, 8) || 'pinned')}</small><small>${report.methodology?.scorerParity?.extractionDifferences ?? '—'} extraction ${report.methodology?.scorerParity?.extractionDifferences === 1 ? 'difference' : 'differences'}</small><small>${report.methodology?.scorerParity?.passVerdictChanges ?? '—'} verdict ${report.methodology?.scorerParity?.passVerdictChanges === 1 ? 'change' : 'changes'}</small><small>Checksum verified</small></div>${repeatabilityCard}${performanceCard}<div><b>Sanity baselines</b><small>Majority letter ${Number.isFinite(majorityBaseline) ? `${(majorityBaseline * 100).toFixed(1)}%` : 'pending rerun'}</small><small>Weighted random ${Number.isFinite(randomBaseline) ? `${(randomBaseline * 100).toFixed(1)}%` : 'pending rerun'}</small><small>Categories are local heuristics</small><small>Local corroboration, not vendor replica</small></div></div>`
   } catch {}
 }
 
@@ -342,7 +351,7 @@ function updateSuiteUi() {
     'validation-real-b': ['Fifty additional official real-image cases', 'RealWorldQA · second blind stratified sample', 'more real'],
     'validation-real-c': ['One hundred fifty extended real-image cases', 'RealWorldQA · third blind stratified sample', 'extended real'],
     'official-remainder': ['Four hundred ninety-five final official questions', 'RealWorldQA · every previously untested source row', 'final real'],
-    'official-all': ['Complete official RealWorldQA', '765 questions · 762 unique real images', 'official 765']
+    'official-all': ['Complete official RealWorldQA', '765 official questions · full source perimeter', 'official 765']
   }
   const [title, count, shortLabel] = labels[showcase.suite]
   $('#showcase-library-title').textContent = title
@@ -783,6 +792,8 @@ async function startLiveDemo(mode = 'benchmark') {
   liveDemo.cursor = { x: 1460, y: 62, clickAt: 0 }
   liveDemo.startedAt = performance.now()
   liveDemo.completedElapsedMs = null
+  liveDemo.officialStartedAtMs = null
+  liveDemo.auditCardStartedAt = null
   liveDemo.recordingChunks = []
   $('#showcase-demo-overlay').classList.remove('hidden')
   $('#showcase-demo-canvas').classList.remove('hidden')
@@ -814,6 +825,7 @@ async function startLiveDemo(mode = 'benchmark') {
     await startLocalFrameCapture()
     liveDemo.introEndedAtMs = null
     liveDemo.popupStartedAtMs = null
+    liveDemo.officialStartedAtMs = null
     $('#showcase-demo-note').textContent = 'REC · canvas recording active · all inference stays local'
 
     if (dogMode) {
@@ -892,7 +904,12 @@ async function startLiveDemo(mode = 'benchmark') {
       liveDemo.finalCard = 'kpis'
       liveDemo.phase = replayingDogResults ? 'FINAL POPUP · RECORDED FOUR-SCENE KPIS' : 'FINAL POPUP · MEASURED FOUR-SCENE KPIS'
       await moveLiveDemoCursor(1470, 70, 520)
-      await waitForLiveDemo(8500)
+      await waitForLiveDemo(5000)
+      liveDemo.officialStartedAtMs = performance.now() - liveDemo.recordingStartedAt
+      liveDemo.auditCardStartedAt = performance.now()
+      liveDemo.finalCard = 'official-results'
+      liveDemo.phase = 'FULL AUDIT · OFFICIAL REALWORLDQA 765'
+      await waitForLiveDemo(9000)
     }
     liveDemo.phase = replayingDogResults ? 'REPLAY COMPLETE · 4 PERSONAL PHOTOS · 16 RECORDED RESULTS' : dogMode ? 'SCENARIO 1 COMPLETE · 4 PERSONAL PHOTOS · 16 LIVE INFERENCES' : 'SCENARIO 2 COMPLETE · 3 IMAGES · 12 LIVE INFERENCES'
     await waitForLiveDemo(2200)
@@ -1047,7 +1064,15 @@ async function replayLiveDemoProvider(item, providerId) {
     tokensPerSecond: replay.tokensPerSecond,
     outputTokens: replay.outputTokens
   }
-  card.evaluation = evaluateLiveDemoAnswer(item, replay.output, null)
+  card.evaluation = Number.isFinite(replay.semanticScore)
+    ? {
+        status: `${replay.semanticScore.toFixed(2)}/1`,
+        detail: replay.semanticReason,
+        points: replay.semanticScore,
+        maxPoints: 1,
+        method: 'editorial-semantic-quarter-scale'
+      }
+    : evaluateLiveDemoAnswer(item, replay.output, null)
   card.status = 'complete'
 }
 
@@ -1162,8 +1187,13 @@ async function startLocalFrameCapture() {
       const targetAt = localFrameCapture.startedAt + (localFrameCapture.frameIndex * intervalMs)
       const waitMs = targetAt - performance.now()
       if (waitMs > 1) await wait(waitMs)
-      const blob = await new Promise(resolve => canvas.toBlob(resolve, 'image/jpeg', 0.9))
-      if (!blob) throw new Error('The clean canvas frame could not be encoded.')
+      // Snapshot synchronously before yielding. Asynchronous canvas encoding may finish after the
+      // animation loop has started drawing the next frame, producing torn captures.
+      const dataUrl = canvas.toDataURL('image/jpeg', 0.9)
+      const encoded = atob(dataUrl.slice(dataUrl.indexOf(',') + 1))
+      const bytes = new Uint8Array(encoded.length)
+      for (let byteIndex = 0; byteIndex < encoded.length; byteIndex += 1) bytes[byteIndex] = encoded.charCodeAt(byteIndex)
+      const blob = new Blob([bytes], { type: 'image/jpeg' })
       const elapsedMs = performance.now() - localFrameCapture.startedAt
       const index = localFrameCapture.frameIndex
       const response = await fetch(`/api/showcase/capture-frame?run=${encodeURIComponent(localFrameCapture.runId)}&index=${index}`, {
@@ -1193,7 +1223,8 @@ async function stopLocalFrameCapture() {
       elapsedMs,
       timestampsMs: localFrameCapture.timestampsMs,
       introEndedAtMs: liveDemo.introEndedAtMs,
-      popupStartedAtMs: liveDemo.popupStartedAtMs
+      popupStartedAtMs: liveDemo.popupStartedAtMs,
+      officialStartedAtMs: liveDemo.officialStartedAtMs
     })
   })
 }
@@ -1435,10 +1466,10 @@ function drawLiveDemoFrame() {
   ctx.fillStyle = replaying ? LIVE_DEMO_THEME.blue : '#ff453a'
   ctx.beginPath(); ctx.arc(1335, 49, 7, 0, Math.PI * 2); ctx.fill()
   ctx.fillStyle = LIVE_DEMO_THEME.text
-  ctx.fillText(replaying ? 'REPLAY' : liveDemo.recorder?.state === 'recording' || localFrameCapture.running ? 'REC' : 'LIVE', 1352, 54)
+  ctx.fillText(replaying ? 'SOURCE RUN' : liveDemo.recorder?.state === 'recording' || localFrameCapture.running ? 'REC' : 'LIVE', 1352, 54)
   ctx.fillStyle = '#8e8e93'
   const elapsed = liveDemo.startedAt ? (performance.now() - liveDemo.startedAt) / 1000 : 0
-  ctx.fillText(`${elapsed.toFixed(1)} s`, 1430, 54)
+  ctx.fillText(`${elapsed.toFixed(1)} s`, 1460, 54)
   ctx.fillStyle = LIVE_DEMO_THEME.primary
   ctx.font = '800 11px ui-monospace, SFMono-Regular, Menlo, monospace'
   ctx.textAlign = 'right'
@@ -1760,14 +1791,15 @@ function drawLiveDemoCard(ctx, providerId, index) {
   ctx.font = '700 10px ui-monospace, SFMono-Regular, Menlo, monospace'
   wrapLiveDemoText(ctx, compactVersion(provider?.modelVersion), x + 20, y + 97, width - 40, 15, 2)
 
-  const verdict = card.evaluation?.status || (card.status === 'running' ? 'STREAMING' : card.status === 'error' ? 'ERROR' : card.status === 'complete' ? 'DONE' : 'READY')
+  const semanticReview = card.evaluation?.method === 'editorial-semantic-quarter-scale'
+  const verdict = semanticReview ? 'RUBRIC REVIEW' : card.evaluation?.status || (card.status === 'running' ? 'STREAMING' : card.status === 'error' ? 'ERROR' : card.status === 'complete' ? 'DONE' : 'READY')
   ctx.fillStyle = ['PASS', '2/2'].includes(verdict) ? LIVE_DEMO_THEME.primary : ['FAIL', 'ERROR', '0/2'].includes(verdict) ? '#ff6961' : verdict === '1/2' || active ? '#ffd166' : verdict === 'OPEN' ? LIVE_DEMO_THEME.blue : '#8e8e93'
   ctx.font = '900 13px ui-monospace, SFMono-Regular, Menlo, monospace'
   ctx.textAlign = 'right'
   ctx.fillText(verdict, x + width - 20, y + 35)
   ctx.textAlign = 'left'
 
-  if (card.evaluation?.detail) {
+  if (card.evaluation?.detail && !semanticReview) {
     ctx.fillStyle = '#8e8e93'
     ctx.font = '700 10px ui-monospace, SFMono-Regular, Menlo, monospace'
     wrapLiveDemoText(ctx, card.evaluation.detail, x + 20, y + 137, width - 40, 15, 2)
@@ -1776,10 +1808,27 @@ function drawLiveDemoCard(ctx, providerId, index) {
   ctx.fillStyle = '#f5f5f7'
   ctx.font = '700 15px ui-monospace, SFMono-Regular, Menlo, monospace'
   const output = card.output || (active ? 'Waiting for the first token…' : 'Same image and question queued.')
-  wrapLiveDemoText(ctx, output, x + 20, y + 190, width - 40, 21, 15)
+  wrapLiveDemoText(ctx, output, x + 20, y + 190, width - 40, 21, semanticReview ? 12 : 15)
+
+  if (semanticReview) {
+    drawLiveDemoPanel(ctx, x + 20, y + 463, width - 40, 62, 12, 'rgba(22,227,193,.07)', 'rgba(22,227,193,.30)', 1)
+    ctx.fillStyle = LIVE_DEMO_THEME.primary
+    ctx.font = '900 10px ui-monospace, SFMono-Regular, Menlo, monospace'
+    ctx.fillText('RUBRIC SCORE', x + 31, y + 484)
+    ctx.font = '900 17px ui-monospace, SFMono-Regular, Menlo, monospace'
+    ctx.fillText(card.evaluation.status, x + 31, y + 508)
+    ctx.fillStyle = '#a1a1a6'
+    ctx.font = '700 9px -apple-system, BlinkMacSystemFont, sans-serif'
+    wrapLiveDemoText(ctx, card.evaluation.detail, x + 106, y + 483, width - 137, 13, 3)
+  }
 
   ctx.strokeStyle = '#242426'
   ctx.beginPath(); ctx.moveTo(x + 20, y + 540); ctx.lineTo(x + width - 20, y + 540); ctx.stroke()
+  if (liveDemo.mode === 'dogs-replay') {
+    ctx.fillStyle = '#6e6e73'
+    ctx.font = '800 8px ui-monospace, SFMono-Regular, Menlo, monospace'
+    ctx.fillText('RECORDED SAMPLE · NOT SPEED-RANKED', x + 20, y + 558)
+  }
   const metrics = card.metrics || {}
   const metricItems = [
     ['TTFT', formatDuration(metrics.timeToFirstTokenMs)],
@@ -1800,50 +1849,136 @@ function drawLiveDemoCard(ctx, providerId, index) {
 }
 
 function drawLiveDemoFinalCard(ctx) {
-  ctx.fillStyle = '#8e8e93'
+  const elapsed = Math.max(0, (performance.now() - (liveDemo.auditCardStartedAt || performance.now())) / 1000)
+  const plotMin = 54
+  const plotMax = 61
+  const plotX = 885
+  const plotWidth = 585
+  const plotValueX = value => plotX + (((value - plotMin) / (plotMax - plotMin)) * plotWidth)
+
+  ctx.fillStyle = 'rgba(0,0,0,.50)'
+  ctx.fillRect(0, 92, 1600, 808)
+  ctx.fillStyle = LIVE_DEMO_THEME.primary
   ctx.font = '800 12px ui-monospace, SFMono-Regular, Menlo, monospace'
-  ctx.fillText('FINAL CARD · EXACT MATCHING ARTIFACTS', 48, 126)
+  ctx.fillText('THE EVIDENCE LAYER · OFFICIAL REALWORLDQA', 60, 133)
   ctx.fillStyle = '#f5f5f7'
-  ctx.font = '800 56px -apple-system, BlinkMacSystemFont, sans-serif'
-  ctx.fillText('Local replication vs QVAC/Tether', 48, 195)
+  ctx.font = '800 47px -apple-system, BlinkMacSystemFont, sans-serif'
+  ctx.fillText('From four dog photos to 765 questions.', 60, 190)
   ctx.fillStyle = '#a1a1a6'
-  ctx.font = '600 22px -apple-system, BlinkMacSystemFont, sans-serif'
-  ctx.fillText('RealWorldQA · 765 questions · accuracy · same GGUF quantization column', 50, 233)
+  ctx.font = '600 19px -apple-system, BlinkMacSystemFont, sans-serif'
+  ctx.fillText('Cute demo for intuition. Full benchmark for evidence.', 62, 225)
+
+  drawLiveDemoPanel(ctx, 60, 258, 330, 494, 22, LIVE_DEMO_THEME.surface, LIVE_DEMO_THEME.border, 1)
+  ctx.fillStyle = LIVE_DEMO_THEME.blue
+  ctx.font = '800 11px ui-monospace, SFMono-Regular, Menlo, monospace'
+  ctx.fillText('FROZEN PROTOCOL', 86, 292)
+  const protocolItems = [
+    ['765', 'GOLD QUESTIONS'],
+    ['4', 'LOCAL MODEL VARIANTS'],
+    ['0 / 1', 'EXACT OPTION SCORE'],
+    ['470e5178', 'VLMEVALKIT REVISION']
+  ]
+  protocolItems.forEach(([value, label], index) => {
+    const x = 86 + ((index % 2) * 148)
+    const y = 342 + (Math.floor(index / 2) * 112)
+    ctx.fillStyle = index === 0 ? LIVE_DEMO_THEME.primary : '#f5f5f7'
+    ctx.font = '900 28px ui-monospace, SFMono-Regular, Menlo, monospace'
+    ctx.fillText(value, x, y)
+    ctx.fillStyle = '#6e6e73'
+    ctx.font = '800 9px ui-monospace, SFMono-Regular, Menlo, monospace'
+    ctx.fillText(label, x, y + 25)
+  })
+  drawLiveDemoPanel(ctx, 82, 574, 286, 147, 16, 'rgba(22,227,193,.07)', 'rgba(22,227,193,.28)', 1)
+  ctx.fillStyle = LIVE_DEMO_THEME.primary
+  ctx.font = '900 11px ui-monospace, SFMono-Regular, Menlo, monospace'
+  ctx.fillText('AUDITED VERDICT', 104, 605)
+  ctx.fillStyle = '#f5f5f7'
+  ctx.font = '900 23px -apple-system, BlinkMacSystemFont, sans-serif'
+  ctx.fillText('No clear winner', 104, 641)
+  ctx.fillStyle = '#a1a1a6'
+  ctx.font = '700 12px ui-monospace, SFMono-Regular, Menlo, monospace'
+  ctx.fillText('18-answer local spread', 104, 672)
+  ctx.fillText('minimum Holm p = 1.000', 104, 697)
+
+  drawLiveDemoPanel(ctx, 416, 258, 1136, 494, 22, LIVE_DEMO_THEME.surface, LIVE_DEMO_THEME.border, 1)
+  ctx.fillStyle = '#f5f5f7'
+  ctx.font = '900 16px ui-monospace, SFMono-Regular, Menlo, monospace'
+  ctx.fillText('ACCURACY · LOCAL VS PUBLISHED MATCHING GGUF', 448, 294)
+  ctx.fillStyle = LIVE_DEMO_THEME.primary
+  ctx.beginPath(); ctx.arc(1238, 289, 6, 0, Math.PI * 2); ctx.fill()
+  ctx.fillStyle = '#a1a1a6'
+  ctx.font = '800 9px ui-monospace, SFMono-Regular, Menlo, monospace'
+  ctx.fillText('LOCAL', 1251, 293)
+  ctx.strokeStyle = LIVE_DEMO_THEME.blue
+  ctx.lineWidth = 2
+  ctx.beginPath(); ctx.arc(1323, 289, 6, 0, Math.PI * 2); ctx.stroke()
+  ctx.fillStyle = '#a1a1a6'
+  ctx.fillText('PUBLISHED', 1337, 293)
+
+  for (let tick = plotMin; tick <= plotMax; tick += 1) {
+    const x = plotValueX(tick)
+    ctx.strokeStyle = tick === plotMin || tick === plotMax ? 'rgba(142,142,147,.28)' : 'rgba(142,142,147,.12)'
+    ctx.lineWidth = 1
+    ctx.beginPath(); ctx.moveTo(x, 328); ctx.lineTo(x, 724); ctx.stroke()
+    ctx.fillStyle = '#6e6e73'
+    ctx.font = '800 9px ui-monospace, SFMono-Regular, Menlo, monospace'
+    ctx.textAlign = 'center'
+    ctx.fillText(`${tick}%`, x, 322)
+    ctx.textAlign = 'left'
+  }
+  ctx.fillStyle = '#6e6e73'
+  ctx.font = '700 9px ui-monospace, SFMono-Regular, Menlo, monospace'
+  ctx.fillText('ZOOMED AXIS · 54–61%', plotX, 742)
 
   LIVE_DEMO_OFFICIAL_RESULTS.forEach((result, index) => {
-    const y = 270 + (index * 122)
+    const rowProgress = Math.min(1, Math.max(0, (elapsed - (index * .28)) / .75))
+    const eased = 1 - Math.pow(1 - rowProgress, 3)
+    const y = 378 + (index * 96)
+    const localX = plotValueX(result.local)
+    const officialX = plotValueX(result.official)
     const delta = result.local - result.official
-    drawLiveDemoPanel(ctx, 48, y, 1504, 102, 18, '#0b0b0d', index === 0 ? '#ff9f0a' : '#2c2c2e', index === 0 ? 2 : 1)
-    ctx.fillStyle = index === 0 ? '#ffb340' : '#64d2ff'
-    ctx.font = '800 12px ui-monospace, SFMono-Regular, Menlo, monospace'
-    ctx.fillText(PROVIDER_BADGES[result.providerId], 76, y + 34)
+    ctx.save()
+    ctx.globalAlpha = eased
+    ctx.translate((1 - eased) * 18, 0)
+    ctx.fillStyle = index < 2 ? LIVE_DEMO_THEME.primary : LIVE_DEMO_THEME.blue
+    ctx.font = '900 11px ui-monospace, SFMono-Regular, Menlo, monospace'
+    ctx.fillText(PROVIDER_BADGES[result.providerId], 448, y - 19)
     ctx.fillStyle = '#f5f5f7'
-    ctx.font = '800 22px -apple-system, BlinkMacSystemFont, sans-serif'
-    ctx.fillText(result.artifact, 76, y + 67)
+    ctx.font = '800 16px -apple-system, BlinkMacSystemFont, sans-serif'
+    ctx.fillText(result.artifact, 448, y + 4)
+    ctx.fillStyle = '#a1a1a6'
+    ctx.font = '800 11px ui-monospace, SFMono-Regular, Menlo, monospace'
+    ctx.fillText(`${result.correct}/765 · ${result.local.toFixed(2)}% · Δ ${delta >= 0 ? '+' : ''}${delta.toFixed(2)} pp`, 448, y + 27)
 
-    const columns = [
-      ['OUR LOCAL RUN', `${result.local.toFixed(2)}%`],
-      ['OFFICIAL QVAC', `${result.official.toFixed(1)}%`],
-      ['DELTA', `${delta >= 0 ? '+' : ''}${delta.toFixed(2)} pp`]
-    ]
-    columns.forEach(([label, value], columnIndex) => {
-      const x = 740 + (columnIndex * 250)
-      ctx.fillStyle = '#6e6e73'
-      ctx.font = '800 10px ui-monospace, SFMono-Regular, Menlo, monospace'
-      ctx.fillText(label, x, y + 34)
-      ctx.fillStyle = columnIndex === 2 ? (Math.abs(delta) < .5 ? '#5ee478' : delta > 0 ? '#64d2ff' : '#ffb340') : '#f5f5f7'
-      ctx.font = '900 29px ui-monospace, SFMono-Regular, Menlo, monospace'
-      ctx.fillText(value, x, y + 75)
-    })
+    ctx.strokeStyle = '#303735'
+    ctx.lineWidth = 6
+    ctx.lineCap = 'round'
+    ctx.beginPath(); ctx.moveTo(plotX, y); ctx.lineTo(plotX + plotWidth, y); ctx.stroke()
+    ctx.strokeStyle = 'rgba(75,184,255,.55)'
+    ctx.lineWidth = 3
+    ctx.beginPath(); ctx.moveTo(localX, y); ctx.lineTo(officialX, y); ctx.stroke()
+    ctx.fillStyle = LIVE_DEMO_THEME.primary
+    ctx.beginPath(); ctx.arc(localX, y, 9, 0, Math.PI * 2); ctx.fill()
+    ctx.strokeStyle = LIVE_DEMO_THEME.blue
+    ctx.lineWidth = 3
+    ctx.beginPath(); ctx.arc(officialX, y, 9, 0, Math.PI * 2); ctx.stroke()
+    ctx.fillStyle = LIVE_DEMO_THEME.primary
+    ctx.font = '900 10px ui-monospace, SFMono-Regular, Menlo, monospace'
+    ctx.textAlign = 'center'
+    ctx.fillText(result.local.toFixed(1), localX, y - 16)
+    ctx.fillStyle = LIVE_DEMO_THEME.blue
+    ctx.fillText(result.official.toFixed(1), officialX, y + 25)
+    ctx.textAlign = 'left'
+    ctx.restore()
   })
 
-  drawLiveDemoPanel(ctx, 48, 784, 1504, 72, 18, 'rgba(10,132,255,.10)', 'rgba(100,210,255,.35)', 1)
-  ctx.fillStyle = '#64d2ff'
-  ctx.font = '800 12px ui-monospace, SFMono-Regular, Menlo, monospace'
-  ctx.fillText('READ WITH CARE', 76, 814)
+  drawLiveDemoPanel(ctx, 60, 774, 1492, 82, 18, 'rgba(75,184,255,.08)', 'rgba(75,184,255,.30)', 1)
+  ctx.fillStyle = LIVE_DEMO_THEME.blue
+  ctx.font = '900 11px ui-monospace, SFMono-Regular, Menlo, monospace'
+  ctx.fillText('READ THIS AS CORROBORATION, NOT A LEADERBOARD', 88, 807)
   ctx.fillStyle = '#d1d1d6'
-  ctx.font = '600 16px -apple-system, BlinkMacSystemFont, sans-serif'
-  ctx.fillText('Replication-style comparison, not an official leaderboard submission; harness and prompt path are documented separately.', 76, 839)
+  ctx.font = '700 15px -apple-system, BlinkMacSystemFont, sans-serif'
+  ctx.fillText('VLMEvalKit option inference · binary gold scoring · local QVAC SDK 0.18.2 · no significant pair after Holm correction.', 88, 835)
 }
 
 function summarizeLiveDemoProvider(providerId) {
@@ -1865,7 +2000,6 @@ function summarizeLiveDemoProvider(providerId) {
 function drawLiveDemoKpiCard(ctx) {
   const summaries = COMPARISON_PROVIDER_IDS.map(summarizeLiveDemoProvider)
   const totalInferences = liveDemo.results.length * COMPARISON_PROVIDER_IDS.length
-  const elapsed = liveDemo.completedElapsedMs
 
   ctx.fillStyle = 'rgba(0,0,0,.68)'
   ctx.fillRect(0, 92, 1600, 808)
@@ -1875,34 +2009,35 @@ function drawLiveDemoKpiCard(ctx) {
   ctx.font = '800 12px ui-monospace, SFMono-Regular, Menlo, monospace'
   ctx.fillText(liveDemo.mode === 'dogs-replay' ? 'FINAL POPUP · PREVIOUSLY RECORDED RUN' : 'FINAL POPUP · MEASURED AFTER EVERY INFERENCE COMPLETED', 82, 153)
   ctx.fillStyle = '#f5f5f7'
-  ctx.font = '800 47px -apple-system, BlinkMacSystemFont, sans-serif'
-  ctx.fillText('4 personal photos · 16 local inferences', 82, 210)
+  ctx.font = '800 44px -apple-system, BlinkMacSystemFont, sans-serif'
+  ctx.fillText('What did each model notice?', 82, 207)
   ctx.fillStyle = '#a1a1a6'
-  ctx.font = '600 18px -apple-system, BlinkMacSystemFont, sans-serif'
-  ctx.fillText('Fact points are summed. TTFT, latency and generation speed are averaged per model.', 84, 243)
+  ctx.font = '600 17px -apple-system, BlinkMacSystemFont, sans-serif'
+  ctx.fillText('Frozen editorial rubric · each answer receives 0, 0.25, 0.50, 0.75 or 1 for correctness and completeness.', 84, 240)
 
-  drawLiveDemoPanel(ctx, 82, 270, 1436, 76, 17, 'rgba(10,132,255,.10)', 'rgba(100,210,255,.32)', 1)
+  drawLiveDemoPanel(ctx, 82, 266, 1436, 72, 17, 'rgba(75,184,255,.08)', 'rgba(75,184,255,.28)', 1)
   const cycleItems = [
-    ['FULL WALL-CLOCK CYCLE', formatDuration(elapsed)],
     ['REAL PHOTOS', `${liveDemo.results.length}`],
-    [liveDemo.mode === 'dogs-replay' ? 'RECORDED RESULTS' : 'SEQUENTIAL INFERENCES', `${totalInferences}`],
-    ['RUNTIME', `SDK ${LIVE_DEMO_RUNTIME.sdk} · LLAMA.CPP ${LIVE_DEMO_RUNTIME.backend}`]
+    ['NATURAL QUESTIONS', `${liveDemo.results.length}`],
+    [liveDemo.mode === 'dogs-replay' ? 'RECORDED ANSWERS' : 'LOCAL ANSWERS', `${totalInferences}`],
+    ['LOCAL RUNTIME', `QVAC SDK ${LIVE_DEMO_RUNTIME.sdk}`]
   ]
   cycleItems.forEach(([label, value], index) => {
     const x = 108 + (index * 350)
     ctx.fillStyle = '#6e6e73'
     ctx.font = '800 9px ui-monospace, SFMono-Regular, Menlo, monospace'
-    ctx.fillText(label, x, 297)
-    ctx.fillStyle = index === 0 ? '#64d2ff' : '#f5f5f7'
-    ctx.font = '900 20px ui-monospace, SFMono-Regular, Menlo, monospace'
-    ctx.fillText(value, x, 327)
+    ctx.fillText(label, x, 292)
+    ctx.fillStyle = index === 3 ? LIVE_DEMO_THEME.primary : '#f5f5f7'
+    ctx.font = '900 19px ui-monospace, SFMono-Regular, Menlo, monospace'
+    ctx.fillText(value, x, 320)
   })
 
   summaries.forEach((summary, index) => {
     const x = 82 + (index * 359)
-    const y = 370
+    const y = 360
     const provider = showcase.providers.find(item => item.id === summary.providerId)
-    drawLiveDemoPanel(ctx, x, y, 335, 406, 19, LIVE_DEMO_THEME.surfaceRaised, index === 0 ? LIVE_DEMO_THEME.primary : LIVE_DEMO_THEME.border, index === 0 ? 2 : 1)
+    const score = summary.maxPoints ? summary.points / summary.maxPoints : null
+    drawLiveDemoPanel(ctx, x, y, 335, 416, 20, LIVE_DEMO_THEME.surfaceRaised, index === 0 ? LIVE_DEMO_THEME.primary : LIVE_DEMO_THEME.border, index === 0 ? 2 : 1)
     ctx.fillStyle = index === 0 ? LIVE_DEMO_THEME.primary : LIVE_DEMO_THEME.blue
     ctx.font = '800 11px ui-monospace, SFMono-Regular, Menlo, monospace'
     ctx.fillText(PROVIDER_BADGES[summary.providerId], x + 24, y + 32)
@@ -1913,19 +2048,48 @@ function drawLiveDemoKpiCard(ctx) {
     ctx.font = '700 9px ui-monospace, SFMono-Regular, Menlo, monospace'
     wrapLiveDemoText(ctx, compactVersion(provider?.modelVersion), x + 24, y + 108, 287, 15, 2)
 
+    ctx.fillStyle = Number.isFinite(score) ? LIVE_DEMO_THEME.primary : '#f5f5f7'
+    ctx.font = '900 42px ui-monospace, SFMono-Regular, Menlo, monospace'
+    ctx.fillText(Number.isFinite(score) ? `${(score * 100).toFixed(1)}%` : '—', x + 24, y + 180)
+    ctx.fillStyle = '#c7cbc9'
+    ctx.font = '700 14px -apple-system, BlinkMacSystemFont, sans-serif'
+    ctx.fillText(summary.maxPoints ? `${summary.points.toFixed(2)} of ${summary.maxPoints} answer score` : 'No scored answers', x + 24, y + 207)
+
+    const progressX = x + 24
+    const progressY = y + 226
+    const progressWidth = 287
+    ctx.fillStyle = '#252c29'
+    ctx.beginPath()
+    ctx.roundRect(progressX, progressY, progressWidth, 10, 5)
+    ctx.fill()
+    if (Number.isFinite(score)) {
+      const progressGradient = ctx.createLinearGradient(progressX, 0, progressX + progressWidth, 0)
+      progressGradient.addColorStop(0, LIVE_DEMO_THEME.primary)
+      progressGradient.addColorStop(1, LIVE_DEMO_THEME.blue)
+      ctx.fillStyle = progressGradient
+      ctx.beginPath()
+      ctx.roundRect(progressX, progressY, Math.max(10, progressWidth * score), 10, 5)
+      ctx.fill()
+    }
+
+    ctx.strokeStyle = LIVE_DEMO_THEME.border
+    ctx.lineWidth = 1
+    ctx.beginPath()
+    ctx.moveTo(x + 24, y + 258)
+    ctx.lineTo(x + 311, y + 258)
+    ctx.stroke()
+
     const metrics = [
-      ['FACT POINTS', summary.maxPoints ? `${summary.points}/${summary.maxPoints} · ${((summary.points / summary.maxPoints) * 100).toFixed(1)}%` : '—'],
-      ['AVG TTFT', formatDuration(summary.avgTtftMs)],
-      ['AVG LATENCY', formatDuration(summary.avgLatencyMs)],
-      ['AVG SPEED', Number.isFinite(summary.avgTokensPerSecond) ? `${summary.avgTokensPerSecond.toFixed(1)} tok/s` : '—'],
-      ['TOTAL OUTPUT', `${summary.totalTokens} tok`]
+      ['AVG FIRST TOKEN', formatDuration(summary.avgTtftMs)],
+      ['AVG RESPONSE', formatDuration(summary.avgLatencyMs)],
+      ['GENERATION', Number.isFinite(summary.avgTokensPerSecond) ? `${summary.avgTokensPerSecond.toFixed(1)} tok/s` : '—']
     ]
     metrics.forEach(([label, value], metricIndex) => {
-      const metricY = y + 165 + (metricIndex * 45)
+      const metricY = y + 293 + (metricIndex * 42)
       ctx.fillStyle = '#6e6e73'
       ctx.font = '800 9px ui-monospace, SFMono-Regular, Menlo, monospace'
       ctx.fillText(label, x + 24, metricY)
-      ctx.fillStyle = metricIndex === 0 ? LIVE_DEMO_THEME.primary : '#f5f5f7'
+      ctx.fillStyle = '#f5f5f7'
       ctx.font = '900 15px ui-monospace, SFMono-Regular, Menlo, monospace'
       ctx.textAlign = 'right'
       ctx.fillText(value, x + 311, metricY)
@@ -1935,7 +2099,7 @@ function drawLiveDemoKpiCard(ctx) {
 
   ctx.fillStyle = '#8e8e93'
   ctx.font = '700 13px -apple-system, BlinkMacSystemFont, sans-serif'
-  ctx.fillText('Exploratory personal-photo audit · four scenes are illustrative and are not an official benchmark or ranking.', 84, 824)
+  ctx.fillText('Editorial rubric score for four examples · recorded timings are not speed-ranked · RealWorldQA remains separate and binary.', 84, 824)
 }
 
 function drawLiveDemoPanel(ctx, x, y, width, height, radius, fill, stroke, lineWidth = 1) {

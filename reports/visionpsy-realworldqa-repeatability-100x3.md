@@ -5,6 +5,7 @@
 | Model | Repeat 1 | Repeat 2 | Repeat 3 | Max swing | Exact output agreement | Pass/fail agreement |
 |---|---:|---:|---:|---:|---:|---:|
 | VisionPsy Standard Q8 (QVAC SDK) | 60/100 (60.0%) | 60/100 (60.0%) | 60/100 (60.0%) | 0.00 pp | 100/100 (100.0%) | 100/100 (100.0%) |
+| VisionPsy Standard Q4 imatrix (QVAC SDK) | 59/100 (59.0%) | 59/100 (59.0%) | 59/100 (59.0%) | 0.00 pp | 100/100 (100.0%) | 100/100 (100.0%) |
 | VisionPsy Flash Q8 (QVAC SDK) | 52/100 (52.0%) | 52/100 (52.0%) | 52/100 (52.0%) | 0.00 pp | 100/100 (100.0%) | 100/100 (100.0%) |
 | VisionPsy Flash Q4 imatrix (QVAC SDK) | 55/100 (55.0%) | 55/100 (55.0%) | 55/100 (55.0%) | 0.00 pp | 100/100 (100.0%) | 100/100 (100.0%) |
 

@@ -1,6 +1,6 @@
 {
-  "schemaVersion": 3,
-  "generatedAt": "2026-09-04T16:04:59.906Z",
+  "schemaVersion": 4,
+  "generatedAt": "2026-09-04T20:46:28.627Z",
   "title": "VisionPsy · RealWorldQA 765 · upstream-prompt QVAC audit",
   "statisticalVerdict": "NO_CLEAR_WINNER_AFTER_HOLM",
   "realPairwise": [
@@ -11,6 +11,11 @@
       "rightLabel": "VisionPsy Standard Q4 imatrix (QVAC SDK)",
       "leftOnly": 37,
       "rightOnly": 34,
+      "accuracyDifferencePoints": 0.39215686274509803,
+      "imageClusterBootstrap95DifferencePoints": [
+        -1.7015706806282722,
+        2.490170380078637
+      ],
       "exactMcNemarP": 0.8125886494061618,
       "disagreementExamples": [
         {
@@ -323,6 +328,11 @@
       "rightLabel": "VisionPsy Flash Q8 (QVAC SDK)",
       "leftOnly": 84,
       "rightOnly": 76,
+      "accuracyDifferencePoints": 1.045751633986928,
+      "imageClusterBootstrap95DifferencePoints": [
+        -2.102582636154853,
+        4.193971166448231
+      ],
       "exactMcNemarP": 0.5801292063047091,
       "disagreementExamples": [
         {
@@ -635,6 +645,11 @@
       "rightLabel": "VisionPsy Flash Q4 imatrix (QVAC SDK)",
       "leftOnly": 87,
       "rightOnly": 69,
+      "accuracyDifferencePoints": 2.3529411764705883,
+      "imageClusterBootstrap95DifferencePoints": [
+        -0.7853403141361256,
+        5.598958333333334
+      ],
       "exactMcNemarP": 0.17329061816573263,
       "disagreementExamples": [
         {
@@ -947,6 +962,11 @@
       "rightLabel": "VisionPsy Flash Q8 (QVAC SDK)",
       "leftOnly": 88,
       "rightOnly": 83,
+      "accuracyDifferencePoints": 0.6535947712418301,
+      "imageClusterBootstrap95DifferencePoints": [
+        -2.6178010471204187,
+        4.052287581699346
+      ],
       "exactMcNemarP": 0.7597940341218286,
       "disagreementExamples": [
         {
@@ -1259,6 +1279,11 @@
       "rightLabel": "VisionPsy Flash Q4 imatrix (QVAC SDK)",
       "leftOnly": 92,
       "rightOnly": 77,
+      "accuracyDifferencePoints": 1.9607843137254901,
+      "imageClusterBootstrap95DifferencePoints": [
+        -1.3038235163959817,
+        5.359477124183006
+      ],
       "exactMcNemarP": 0.28147844170582365,
       "disagreementExamples": [
         {
@@ -1571,6 +1596,11 @@
       "rightLabel": "VisionPsy Flash Q4 imatrix (QVAC SDK)",
       "leftOnly": 43,
       "rightOnly": 33,
+      "accuracyDifferencePoints": 1.3071895424836601,
+      "imageClusterBootstrap95DifferencePoints": [
+        -0.9150326797385622,
+        3.5340314136125657
+      ],
       "exactMcNemarP": 0.3018724904870077,
       "disagreementExamples": [
         {
@@ -1892,9 +1922,8 @@
   "methodology": {
     "dataset": "RealWorldQA",
     "questions": 765,
-    "uniqueRealImages": 762,
     "sourceMd5": "4de008f55dc4fd008ca9e15321dc44b7",
-    "scoring": "Exact multiple-choice option accuracy; one point per question; no cross-suite aggregation.",
+    "scoring": "Checksum-pinned VLMEvalKit option inference; binary gold accuracy; one point per question; no cross-suite aggregation.",
     "prompt": "Question: <question>\\nOptions:\\nA. ...\\nPlease select the correct answer from the options above. ",
     "providerOrder": "Primary three-model run used balanced Latin rotation; Standard Q4 was a preregistered single-provider addendum over the identical seeded case order.",
     "warmup": "one excluded warm-up per provider",
@@ -1914,12 +1943,16 @@
       "extractionDifferences": 1,
       "passVerdictChanges": 1
     },
-    "performanceComparability": "Accuracy is paired on identical inputs. Standard Q4 was executed later as a separately paced addendum, so its latency, throughput, RAM, CPU and GPU telemetry is local operational evidence and must not be ranked directly against the primary three-model run.",
+    "performanceComparability": "The full-run telemetry is not directly rankable because Standard Q4 was a later paced addendum. A separate 50-case four-model run uses identical inputs, excluded warm-ups and balanced four-position rotation for local-device timing analysis.",
+    "uncertainty": "Wilson intervals describe question-level binomial uncertainty. A supplementary deterministic bootstrap resamples image clusters so questions sharing a source image are not treated as independent.",
     "officialDifference": "This audit freezes the public VLMEvalKit prompt/scorer revision, dataset checksum, generation values, artifact hashes and QVAC-native stack. It cannot establish parity with unavailable vendor-internal environment details, hardware or numerical kernels."
   },
   "officialReferences": {
-    "standardGguf": "https://huggingface.co/qvac/VisionPsy-Nano-460M-GGUFs",
-    "flashGguf": "https://huggingface.co/qvac/VisionPsy-Nano-460M-Flash-GGUFs",
+    "accessedAt": "2026-09-04",
+    "standardGguf": "https://huggingface.co/qvac/VisionPsy-Nano-460M-GGUFs/commit/4138c5bd6e026d67cebf2dbd2d81c6229c14cdc1",
+    "standardRevision": "4138c5bd6e026d67cebf2dbd2d81c6229c14cdc1",
+    "flashGguf": "https://huggingface.co/qvac/VisionPsy-Nano-460M-Flash-GGUFs/commit/a24fb9cdd1119406b15ff60b06a51f8438a931c1",
+    "flashRevision": "a24fb9cdd1119406b15ff60b06a51f8438a931c1",
     "researchRepository": "https://github.com/tether-ai-research/qvac-visionpsy-nano",
     "announcement": "https://qvac.tether.io/blog/visionpsy-nano-state-of-the-art-vision-ai-in-its-weight-class-small-enough-to-run-on-your-phone/"
   },
@@ -2063,9 +2096,9 @@
       "severity": "High",
       "risk": "Its 765 answers use identical inputs, prompt, scorer, generation values and native QVAC stack, but were collected after the three-model run under changing low-resource pacing.",
       "solutionA": "Rank all four variants by both accuracy and speed as if they ran together.",
-      "solutionB": "Use the four-way grid for paired accuracy; label Standard Q4 performance telemetry non-comparable until a dedicated counterbalanced performance run exists.",
-      "recommended": "B",
-      "consequence": "The 2×2 quality comparison is auditable, while performance claims remain bounded."
+      "solutionB": "Use the four-way grid for paired accuracy and a separate counterbalanced run for local timing.",
+      "recommended": "B completed",
+      "consequence": "The 2×2 quality comparison and the separate local timing diagnostic are now distinct artifacts."
     },
     {
       "id": 12,
@@ -2076,11 +2109,30 @@
       "solutionB": "Publish order and temperature-independent quality separately from device-specific performance.",
       "recommended": "B",
       "consequence": "Accuracy remains paired; latency is explicitly local-device evidence."
+    },
+    {
+      "id": 13,
+      "title": "Some questions share a source image",
+      "severity": "Medium",
+      "risk": "Question-level intervals can slightly overstate independence when several questions use the same visual input.",
+      "solutionA": "Keep Wilson intervals only.",
+      "solutionB": "Add image-cluster bootstrap intervals and paired difference intervals as a robustness check.",
+      "recommended": "B completed",
+      "consequence": "Public uncertainty now reflects the shared-image structure without changing the benchmark denominator."
+    },
+    {
+      "id": 14,
+      "title": "Public benchmark material may have appeared in training data",
+      "severity": "Medium",
+      "risk": "Neither this local run nor the public model cards establish training-set decontamination for RealWorldQA.",
+      "solutionA": "Assume the public test set is uncontaminated.",
+      "solutionB": "State that contamination cannot be audited from released artifacts and avoid treating this score as proof of unseen-data generalization.",
+      "recommended": "B",
+      "consequence": "The result remains a benchmark corroboration, not a clean-room generalization claim."
     }
   ],
   "questionInventory": {
     "questions": 765,
-    "uniqueImageHashes": 762,
     "answerLetters": {
       "A": 280,
       "B": 337,
@@ -2132,6 +2184,11 @@
       "rightLabel": "VisionPsy Standard Q4 imatrix (QVAC SDK)",
       "leftOnly": 37,
       "rightOnly": 34,
+      "accuracyDifferencePoints": 0.39215686274509803,
+      "imageClusterBootstrap95DifferencePoints": [
+        -1.7015706806282722,
+        2.490170380078637
+      ],
       "exactMcNemarP": 0.8125886494061618,
       "disagreementExamples": [
         {
@@ -2444,6 +2501,11 @@
       "rightLabel": "VisionPsy Flash Q8 (QVAC SDK)",
       "leftOnly": 84,
       "rightOnly": 76,
+      "accuracyDifferencePoints": 1.045751633986928,
+      "imageClusterBootstrap95DifferencePoints": [
+        -2.102582636154853,
+        4.193971166448231
+      ],
       "exactMcNemarP": 0.5801292063047091,
       "disagreementExamples": [
         {
@@ -2756,6 +2818,11 @@
       "rightLabel": "VisionPsy Flash Q4 imatrix (QVAC SDK)",
       "leftOnly": 87,
       "rightOnly": 69,
+      "accuracyDifferencePoints": 2.3529411764705883,
+      "imageClusterBootstrap95DifferencePoints": [
+        -0.7853403141361256,
+        5.598958333333334
+      ],
       "exactMcNemarP": 0.17329061816573263,
       "disagreementExamples": [
         {
@@ -3068,6 +3135,11 @@
       "rightLabel": "VisionPsy Flash Q8 (QVAC SDK)",
       "leftOnly": 88,
       "rightOnly": 83,
+      "accuracyDifferencePoints": 0.6535947712418301,
+      "imageClusterBootstrap95DifferencePoints": [
+        -2.6178010471204187,
+        4.052287581699346
+      ],
       "exactMcNemarP": 0.7597940341218286,
       "disagreementExamples": [
         {
@@ -3380,6 +3452,11 @@
       "rightLabel": "VisionPsy Flash Q4 imatrix (QVAC SDK)",
       "leftOnly": 92,
       "rightOnly": 77,
+      "accuracyDifferencePoints": 1.9607843137254901,
+      "imageClusterBootstrap95DifferencePoints": [
+        -1.3038235163959817,
+        5.359477124183006
+      ],
       "exactMcNemarP": 0.28147844170582365,
       "disagreementExamples": [
         {
@@ -3692,6 +3769,11 @@
       "rightLabel": "VisionPsy Flash Q4 imatrix (QVAC SDK)",
       "leftOnly": 43,
       "rightOnly": 33,
+      "accuracyDifferencePoints": 1.3071895424836601,
+      "imageClusterBootstrap95DifferencePoints": [
+        -0.9150326797385622,
+        3.5340314136125657
+      ],
       "exactMcNemarP": 0.3018724904870077,
       "disagreementExamples": [
         {
@@ -4001,15 +4083,14 @@
   "repeatability": {
     "cases": 100,
     "repeats": 3,
-    "newInferences": 600,
+    "newInferences": 800,
     "coverageProviderIds": [
       "qvac-visionpsy-standard-q8",
+      "qvac-visionpsy-standard-q4",
       "qvac-visionpsy",
       "qvac-visionpsy-flash-q4"
     ],
-    "excludedProviderIds": [
-      "qvac-visionpsy-standard-q4"
-    ],
+    "excludedProviderIds": [],
     "seed": "repeatability-20260901",
     "stratifiedBy": [
       "expected answer letter",
@@ -4040,6 +4121,41 @@
             "passed": 60,
             "cases": 100,
             "accuracy": 0.6
+          }
+        ],
+        "maximumAccuracySwingPoints": 0,
+        "identicalOutputs": {
+          "cases": 100,
+          "total": 100,
+          "rate": 1
+        },
+        "identicalPassFailVerdicts": {
+          "cases": 100,
+          "total": 100,
+          "rate": 1
+        }
+      },
+      {
+        "providerId": "qvac-visionpsy-standard-q4",
+        "label": "VisionPsy Standard Q4 imatrix (QVAC SDK)",
+        "repeatScores": [
+          {
+            "repeat": 1,
+            "passed": 59,
+            "cases": 100,
+            "accuracy": 0.59
+          },
+          {
+            "repeat": 2,
+            "passed": 59,
+            "cases": 100,
+            "accuracy": 0.59
+          },
+          {
+            "repeat": 3,
+            "passed": 59,
+            "cases": 100,
+            "accuracy": 0.59
           }
         ],
         "maximumAccuracySwingPoints": 0,
@@ -4127,6 +4243,180 @@
     ],
     "interpretation": "Repeat 1 is the frozen 765-case primary run. Repeats 2 and 3 are new local inferences over the same deterministic 100-case subset. Accuracy ranges and exact-output agreement measure local repeatability; they are not confidence intervals for all possible prompts or hardware."
   },
+  "controlledPerformance": {
+    "purpose": "Local-device timing diagnostic; separate from the complete quality denominator.",
+    "cases": 50,
+    "inferences": 200,
+    "warmupsExcluded": 4,
+    "orderPolicy": "cases deterministically shuffled; provider order uses a balanced 4-position Latin rotation",
+    "generation": {
+      "temp": 0,
+      "top_p": 1,
+      "top_k": 40,
+      "seed": 42,
+      "predict": 16
+    },
+    "environment": {
+      "platform": "darwin",
+      "release": "25.6.0",
+      "architecture": "arm64",
+      "cpu": "Apple M4",
+      "logicalCpuCount": 10,
+      "totalMemoryBytes": 17179869184,
+      "node": "v22.22.0"
+    },
+    "models": [
+      {
+        "providerId": "qvac-visionpsy-flash-q4",
+        "label": "VisionPsy Flash Q4 imatrix (QVAC SDK)",
+        "ttftMs": {
+          "count": 50,
+          "mean": 2233.86,
+          "median": 1985.5,
+          "p95": 3202.3999999999996,
+          "min": 1254,
+          "max": 4204,
+          "sum": 111693
+        },
+        "latencyMs": {
+          "count": 50,
+          "mean": 2256.74,
+          "median": 2007,
+          "p95": 3238.5499999999993,
+          "min": 1265,
+          "max": 4217,
+          "sum": 112837
+        },
+        "tokensPerSecond": {
+          "count": 50,
+          "mean": 75.89864768435439,
+          "median": 80.76892222716052,
+          "p95": 94.99821748517667,
+          "min": 25.61803509670808,
+          "max": 100.30090270812437,
+          "sum": 3794.932384217719
+        },
+        "executionPositions": {
+          "1": 12,
+          "2": 12,
+          "3": 13,
+          "4": 13
+        }
+      },
+      {
+        "providerId": "qvac-visionpsy",
+        "label": "VisionPsy Flash Q8 (QVAC SDK)",
+        "ttftMs": {
+          "count": 50,
+          "mean": 2247.68,
+          "median": 2067.5,
+          "p95": 3220.75,
+          "min": 1233,
+          "max": 3854,
+          "sum": 112384
+        },
+        "latencyMs": {
+          "count": 50,
+          "mean": 2266.9,
+          "median": 2079.5,
+          "p95": 3252.8,
+          "min": 1245,
+          "max": 3878,
+          "sum": 113345
+        },
+        "tokensPerSecond": {
+          "count": 50,
+          "mean": 67.8153245021986,
+          "median": 72.82948985968297,
+          "p95": 86.72346568964873,
+          "min": 18.41858066417402,
+          "max": 92.93968214628705,
+          "sum": 3390.7662251099305
+        },
+        "executionPositions": {
+          "1": 12,
+          "2": 13,
+          "3": 13,
+          "4": 12
+        }
+      },
+      {
+        "providerId": "qvac-visionpsy-standard-q4",
+        "label": "VisionPsy Standard Q4 imatrix (QVAC SDK)",
+        "ttftMs": {
+          "count": 50,
+          "mean": 3953.08,
+          "median": 3511,
+          "p95": 5551.849999999999,
+          "min": 2465,
+          "max": 5652,
+          "sum": 197654
+        },
+        "latencyMs": {
+          "count": 50,
+          "mean": 3972.02,
+          "median": 3539.5,
+          "p95": 5572.2,
+          "min": 2478,
+          "max": 5668,
+          "sum": 198601
+        },
+        "tokensPerSecond": {
+          "count": 50,
+          "mean": 78.21045571010963,
+          "median": 79.04509896958676,
+          "p95": 97.95657072216903,
+          "min": 43.39524388127061,
+          "max": 108.20168794633196,
+          "sum": 3910.5227855054814
+        },
+        "executionPositions": {
+          "1": 13,
+          "2": 13,
+          "3": 12,
+          "4": 12
+        }
+      },
+      {
+        "providerId": "qvac-visionpsy-standard-q8",
+        "label": "VisionPsy Standard Q8 (QVAC SDK)",
+        "ttftMs": {
+          "count": 50,
+          "mean": 4006.36,
+          "median": 3679.5,
+          "p95": 5557.2,
+          "min": 2583,
+          "max": 6460,
+          "sum": 200318
+        },
+        "latencyMs": {
+          "count": 50,
+          "mean": 4021.98,
+          "median": 3692.5,
+          "p95": 5574.2,
+          "min": 2595,
+          "max": 6473,
+          "sum": 201099
+        },
+        "tokensPerSecond": {
+          "count": 50,
+          "mean": 72.11524728176256,
+          "median": 76.9259177198372,
+          "p95": 84.39072118845515,
+          "min": 22.10970837294656,
+          "max": 95.65716472163766,
+          "sum": 3605.762364088128
+        },
+        "executionPositions": {
+          "1": 13,
+          "2": 12,
+          "3": 12,
+          "4": 13
+        }
+      }
+    ],
+    "interpretation": "The ordering is descriptive for this Mac and controlled run. It is not a portable hardware benchmark, and system-wide GPU or unified-memory samples are not model-isolated."
+  },
   "providers": [
     {
       "providerId": "qvac-visionpsy-standard-q8",
@@ -4140,6 +4430,10 @@
         "interval": [
           54.77370656671995,
           61.74465343363721
+        ],
+        "imageClusterBootstrap95": [
+          0.5482912373515291,
+          0.6181102362204725
         ]
       },
       "officialRealWorldQaAccuracy": 0.591,
@@ -4392,6 +4686,10 @@
         "interval": [
           54.37897875288272,
           61.358986286827644
+        ],
+        "imageClusterBootstrap95": [
+          0.5430809399477807,
+          0.6143790849673203
         ]
       },
       "officialRealWorldQaAccuracy": 0.603,
@@ -4632,6 +4930,10 @@
         "interval": [
           53.72159790442218,
           60.715708867543526
+        ],
+        "imageClusterBootstrap95": [
+          0.5373525557011796,
+          0.6065359477124183
         ]
       },
       "officialRealWorldQaAccuracy": 0.567,
@@ -4883,6 +5185,10 @@
         "interval": [
           52.408693748785254,
           59.42729648769114
+        ],
+        "imageClusterBootstrap95": [
+          0.5234986945169713,
+          0.5942408376963351
         ]
       },
       "officialRealWorldQaAccuracy": 0.549,
@@ -5139,6 +5445,7 @@
     "standardQ4Addendum": "visionpsy-standard-q4-realworldqa-765-qvac-sdk-vlmevalkit-470e517.json",
     "scorerParity": "visionpsy-realworldqa-vlmevalkit-upstream-470e517.json",
     "repeatability": "visionpsy-realworldqa-repeatability-100x3.json",
+    "controlledPerformance": "visionpsy-four-way-performance-realworldqa-validation-50-counterbalanced-50.json",
     "checkpoints": [
       ".visionpsy-three-way-realworldqa-765-qvac-sdk-vlmevalkit-470e517.checkpoint.ndjson",
       ".visionpsy-standard-q4-realworldqa-765-qvac-sdk-vlmevalkit-470e517.checkpoint.ndjson"
