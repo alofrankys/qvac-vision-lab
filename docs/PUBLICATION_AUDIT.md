@@ -25,6 +25,8 @@ The completed public evidence covers Standard Q8_0, Standard Q4_K_M imatrix, Fla
 
 ## Remaining limitations
 
+The 2026-09-05 dog-demo addendum replaces unsourced editorial grades with a documented, model-name-blinded GPT-6 Astra review. Prompts, image hashes, anonymous mappings and all three judge outputs are published separately. The video shows mean rubric score out of ten, not accuracy; fresh local answers cannot inherit those scores. This improves traceability, not certification. The review remains four selected examples, one judge model, an author-designed rubric and no independent human calibration. See [the complete protocol and limitations](DOG_DEMO_ASTRA_REVIEW.md).
+
 - Source code is licensed under Apache-2.0. Dataset, model and personal-photo rights remain separate under `THIRD_PARTY_NOTICES.md`.
 - The four personal dog photos are intentionally included but remain copyright of the repository owner.
 - Full RealWorldQA reconstruction requires the official source TSV and about 130 MB of generated local assets.

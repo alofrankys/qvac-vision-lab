@@ -13,3 +13,7 @@ The Standard Q4_K_M imatrix extension is preregistered and completed as document
 - `visionpsy-standard-preprocess-ablation.{json,md}` — separate preprocessing sensitivity evidence.
 
 See `docs/REALWORLDQA_METHODOLOGY.md` before quoting results.
+
+## Separate illustrative dog review
+
+`visionpsy-dog-demo-astra-20260905.json` contains the frozen 2026-09-05 GPT-6 Astra review of the four-photo recorded dog demo: exact protocol, anonymous inputs and mappings, original judge outputs and aggregates. It is not part of any RealWorldQA aggregate. Read `docs/DOG_DEMO_ASTRA_REVIEW.md` for the distinction between rubric scores, instruction following and factual content.

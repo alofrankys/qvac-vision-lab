@@ -18,7 +18,13 @@ const sourceTrimStartSeconds = 0.65
 const boundaries = [sourceTrimStartSeconds, manifest.introEndedAtMs / 1000, manifest.popupStartedAtMs / 1000, manifest.officialStartedAtMs / 1000, sourceDuration]
 if (!boundaries.every(Number.isFinite) || !boundaries.every((value, index) => !index || value > boundaries[index - 1])) throw new Error(`Invalid capture boundaries in ${captureDir}`)
 
-const speeds = [1.75, 2.5, 1.5, 1.75]
+// Keep the readable intro and two result cards; absorb capture jitter in the replay segment.
+// The video is explicitly a montage, never a real-time performance measurement.
+const targetDurationSeconds = 48
+const fixedSectionsDuration = (boundaries[1] - boundaries[0]) / 1.75 + (boundaries[3] - boundaries[2]) / 1.5 + (boundaries[4] - boundaries[3]) / 1.75
+const replayBudgetSeconds = targetDurationSeconds - fixedSectionsDuration
+if (replayBudgetSeconds <= 0) throw new Error('Intro/result cards exceed the video duration budget')
+const speeds = [1.75, Math.max(1, (boundaries[2] - boundaries[1]) / replayBudgetSeconds), 1.5, 1.75]
 const duration = boundaries.slice(1).reduce((sum, end, index) => sum + ((end - boundaries[index]) / speeds[index]), 0)
 const fadeStart = Math.max(0, duration - 2)
 const videoFilters = speeds.map((speed, index) => `[0:v]trim=start=${boundaries[index]}:end=${boundaries[index + 1]},setpts=(PTS-STARTPTS)/${speed}[v${index}]`).join(';')
@@ -26,6 +32,7 @@ const filter = `${videoFilters};[v0][v1][v2][v3]concat=n=4:v=1:a=0,format=yuv420
 
 execFileSync(ffmpegBinary, [
   '-y',
+  '-filter_complex_threads', '1',
   '-framerate', '20',
   '-i', path.join(captureDir, 'frame-%05d.jpg'),
   '-stream_loop', '-1',
@@ -35,6 +42,7 @@ execFileSync(ffmpegBinary, [
   '-map', '[a]',
   '-r', '30',
   '-c:v', 'libx264',
+  '-threads', '2',
   '-preset', 'medium',
   '-crf', '18',
   '-profile:v', 'high',
