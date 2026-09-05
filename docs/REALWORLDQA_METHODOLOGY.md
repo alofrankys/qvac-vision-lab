@@ -59,7 +59,7 @@ Because Standard Q4's full run was a separately paced addendum, its original tel
 | Standard Q4_K_M imatrix | 3.95 s | 3.97 s | 78.2 tok/s |
 | Standard Q8_0 | 4.01 s | 4.02 s | 72.1 tok/s |
 
-This resolves the earlier apparent six-second Standard Q4 result as a non-comparable replay/addendum observation. The ordering above is descriptive only for this controlled local run; it does not establish portable performance across other hardware. The 50-case accuracy values are also exploratory and do not replace the complete 765-question score.
+The earlier approximately six-second Standard Q4 observation was not reproduced in this controlled run. That observation came from non-comparable collection conditions; this diagnostic does not isolate or prove its original cause. The ordering above is descriptive only for this controlled local run; it does not establish portable performance across other hardware. The 50-case accuracy values are also exploratory and do not replace the complete 765-question score.
 
 ## Interpreting errors
 

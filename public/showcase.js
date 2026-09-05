@@ -1,3 +1,5 @@
+import { DOG_ASTRA_REVIEW, findDogAstraReview } from './showcase/dog-astra-review.js'
+
 const $ = selector => document.querySelector(selector)
 const showcaseSearchParams = new URLSearchParams(window.location.search)
 const useRecordedDemo3Replay = showcaseSearchParams.get('demo3') === 'replay'
@@ -37,7 +39,7 @@ const LIVE_DEMO_3_SCENES = Object.freeze([
     prompt: 'The two mountain explorers have very different looks. Which dog is on the left, and how do their coats differ? Answer in one cheerful sentence using visible features rather than breed names.',
     expectedAnswer: 'left dog: white and brown · coat contrast: fluffy/long vs short/smooth or tan/reddish',
     demoKind: 'dog-rubric',
-    questionLabel: '01 · NATURAL VISUAL QUESTION · SEMANTIC SCORE 0–1'
+    questionLabel: '01 · NATURAL VISUAL QUESTION'
   },
   {
     id: 'personal-dog-1',
@@ -47,7 +49,7 @@ const LIVE_DEMO_3_SCENES = Object.freeze([
     prompt: 'This little dog seems to have found its perfect nap spot. Is it awake or asleep, and what surface is it resting on? Answer like a warm photo caption in one short sentence.',
     expectedAnswer: 'asleep · tiled floor',
     demoKind: 'dog-rubric',
-    questionLabel: '02 · WARM PHOTO CAPTION · SEMANTIC SCORE 0–1'
+    questionLabel: '02 · WARM PHOTO CAPTION'
   },
   {
     id: 'personal-dog-2',
@@ -57,7 +59,7 @@ const LIVE_DEMO_3_SCENES = Object.freeze([
     prompt: 'This outdoor nap looks wonderfully cozy. What is the dog lying on, and what bright-colored item is it wearing? Answer like a warm photo caption in one short sentence.',
     expectedAnswer: 'patterned blanket · orange harness',
     demoKind: 'dog-rubric',
-    questionLabel: '03 · OBJECT + ATTRIBUTE · SEMANTIC SCORE 0–1'
+    questionLabel: '03 · OBJECT + ATTRIBUTE'
   },
   {
     id: 'personal-dog-5',
@@ -67,33 +69,33 @@ const LIVE_DEMO_3_SCENES = Object.freeze([
     prompt: 'These cafe companions look ready to leave. How many dogs are visible, and what item with a loop-shaped handle lies on the floor beside them? Answer in one playful sentence.',
     expectedAnswer: 'two dogs · retractable leash/lead',
     demoKind: 'dog-rubric',
-    questionLabel: '04 · COUNT + OBJECT ID · SEMANTIC SCORE 0–1'
+    questionLabel: '04 · COUNT + OBJECT ID'
   }
 ])
 const LIVE_DEMO_3_REPLAY_RESULTS = Object.freeze({
   'personal-dog-3': Object.freeze({
-    'qvac-visionpsy-standard-q8': Object.freeze({ output: 'The dog on the left is the Cavalier King Charles Spaniel, identifiable by its white and brown coat. Its fur is soft and long, while the dog on the right has a short tan coat.', timeToFirstTokenMs: 2720, latencyMs: 3080, tokensPerSecond: 120.2, outputTokens: 43, semanticScore: 0.75, semanticReason: 'Complete comparison; minor miss: starts with a breed name.' }),
-    'qvac-visionpsy-standard-q4': Object.freeze({ output: 'The dog on the left is the Cavalier King Charles Spaniel. It has a white and brown coat, long floppy ears, and a fluffy tail.', timeToFirstTokenMs: 8222, latencyMs: 8650, tokensPerSecond: 73.5, outputTokens: 31, semanticScore: 0.5, semanticReason: 'Gets the left dog, but omits the coat comparison.' }),
-    'qvac-visionpsy': Object.freeze({ output: 'The dog on the left has a white and brown coat, while the dog on the right has a tan and white coat.', timeToFirstTokenMs: 1880, latencyMs: 2100, tokensPerSecond: 113.1, outputTokens: 25, semanticScore: 1, semanticReason: 'Correct and complete using visible coat features.' }),
-    'qvac-visionpsy-flash-q4': Object.freeze({ output: 'The dog on the left has a white and brown coat, while the dog on the right has a brown and white coat.', timeToFirstTokenMs: 1860, latencyMs: 2050, tokensPerSecond: 132.8, outputTokens: 25, semanticScore: 0.5, semanticReason: 'Gets the left dog, but not a meaningful coat contrast.' })
+    'qvac-visionpsy-standard-q8': Object.freeze({ output: 'The dog on the left is the Cavalier King Charles Spaniel, identifiable by its white and brown coat. Its fur is soft and long, while the dog on the right has a short tan coat.', timeToFirstTokenMs: 2720, latencyMs: 3080, tokensPerSecond: 120.2, outputTokens: 43 }),
+    'qvac-visionpsy-standard-q4': Object.freeze({ output: 'The dog on the left is the Cavalier King Charles Spaniel. It has a white and brown coat, long floppy ears, and a fluffy tail.', timeToFirstTokenMs: 8222, latencyMs: 8650, tokensPerSecond: 73.5, outputTokens: 31 }),
+    'qvac-visionpsy': Object.freeze({ output: 'The dog on the left has a white and brown coat, while the dog on the right has a tan and white coat.', timeToFirstTokenMs: 1880, latencyMs: 2100, tokensPerSecond: 113.1, outputTokens: 25 }),
+    'qvac-visionpsy-flash-q4': Object.freeze({ output: 'The dog on the left has a white and brown coat, while the dog on the right has a brown and white coat.', timeToFirstTokenMs: 1860, latencyMs: 2050, tokensPerSecond: 132.8, outputTokens: 25 })
   }),
   'personal-dog-1': Object.freeze({
-    'qvac-visionpsy-standard-q8': Object.freeze({ output: 'It is asleep.', timeToFirstTokenMs: 2310, latencyMs: 2360, tokensPerSecond: 89.2, outputTokens: 4, semanticScore: 0.5, semanticReason: 'Correct about sleep, but omits the tiled floor.' }),
-    'qvac-visionpsy-standard-q4': Object.freeze({ output: 'It is asleep. The dog is resting on a tiled floor.', timeToFirstTokenMs: 5027, latencyMs: 5231, tokensPerSecond: 69.4, outputTokens: 14, semanticScore: 1, semanticReason: 'Correctly answers both requested details.' }),
-    'qvac-visionpsy': Object.freeze({ output: 'The little dog is peacefully asleep on a clean, white tiled floor.', timeToFirstTokenMs: 2270, latencyMs: 2410, tokensPerSecond: 105.9, outputTokens: 15, semanticScore: 1, semanticReason: 'Correct, complete and naturally phrased.' }),
-    'qvac-visionpsy-flash-q4': Object.freeze({ output: 'The little dog is peacefully asleep on a clean, white tiled floor.', timeToFirstTokenMs: 2260, latencyMs: 2360, tokensPerSecond: 145.3, outputTokens: 15, semanticScore: 1, semanticReason: 'Correct, complete and naturally phrased.' })
+    'qvac-visionpsy-standard-q8': Object.freeze({ output: 'It is asleep.', timeToFirstTokenMs: 2310, latencyMs: 2360, tokensPerSecond: 89.2, outputTokens: 4 }),
+    'qvac-visionpsy-standard-q4': Object.freeze({ output: 'It is asleep. The dog is resting on a tiled floor.', timeToFirstTokenMs: 5027, latencyMs: 5231, tokensPerSecond: 69.4, outputTokens: 14 }),
+    'qvac-visionpsy': Object.freeze({ output: 'The little dog is peacefully asleep on a clean, white tiled floor.', timeToFirstTokenMs: 2270, latencyMs: 2410, tokensPerSecond: 105.9, outputTokens: 15 }),
+    'qvac-visionpsy-flash-q4': Object.freeze({ output: 'The little dog is peacefully asleep on a clean, white tiled floor.', timeToFirstTokenMs: 2260, latencyMs: 2360, tokensPerSecond: 145.3, outputTokens: 15 })
   }),
   'personal-dog-2': Object.freeze({
-    'qvac-visionpsy-standard-q8': Object.freeze({ output: "The dog is resting on a colorful, patterned blanket adorned with elephants and intricate designs. It's wearing a vibrant orange harness.", timeToFirstTokenMs: 2480, latencyMs: 2700, tokensPerSecond: 113.2, outputTokens: 25, semanticScore: 1, semanticReason: 'Correctly identifies both the patterned blanket and orange harness.' }),
-    'qvac-visionpsy-standard-q4': Object.freeze({ output: "The dog is lying on a colorful blanket adorned with elephants and patterns. It's wearing a bright orange harness.", timeToFirstTokenMs: 5863, latencyMs: 6185, tokensPerSecond: 69.3, outputTokens: 22, semanticScore: 1, semanticReason: 'Correctly identifies both the patterned blanket and orange harness.' }),
-    'qvac-visionpsy': Object.freeze({ output: "The dog is lying on a colorful, patterned blanket, and it's wearing an orange harness.", timeToFirstTokenMs: 1930, latencyMs: 2100, tokensPerSecond: 109.5, outputTokens: 19, semanticScore: 1, semanticReason: 'Correctly identifies both the patterned blanket and orange harness.' }),
-    'qvac-visionpsy-flash-q4': Object.freeze({ output: "The dog is lying on a colorful, patterned blanket, and it's wearing an orange harness. The scene is bathed in warm sunlight, making the nap look especially cozy.", timeToFirstTokenMs: 1880, latencyMs: 2190, tokensPerSecond: 134.1, outputTokens: 40, semanticScore: 1, semanticReason: 'Correctly identifies both requested details; the additional caption remains image-consistent.' })
+    'qvac-visionpsy-standard-q8': Object.freeze({ output: "The dog is resting on a colorful, patterned blanket adorned with elephants and intricate designs. It's wearing a vibrant orange harness.", timeToFirstTokenMs: 2480, latencyMs: 2700, tokensPerSecond: 113.2, outputTokens: 25 }),
+    'qvac-visionpsy-standard-q4': Object.freeze({ output: "The dog is lying on a colorful blanket adorned with elephants and patterns. It's wearing a bright orange harness.", timeToFirstTokenMs: 5863, latencyMs: 6185, tokensPerSecond: 69.3, outputTokens: 22 }),
+    'qvac-visionpsy': Object.freeze({ output: "The dog is lying on a colorful, patterned blanket, and it's wearing an orange harness.", timeToFirstTokenMs: 1930, latencyMs: 2100, tokensPerSecond: 109.5, outputTokens: 19 }),
+    'qvac-visionpsy-flash-q4': Object.freeze({ output: "The dog is lying on a colorful, patterned blanket, and it's wearing an orange harness. The scene is bathed in warm sunlight, making the nap look especially cozy.", timeToFirstTokenMs: 1880, latencyMs: 2190, tokensPerSecond: 134.1, outputTokens: 40 })
   }),
   'personal-dog-5': Object.freeze({
-    'qvac-visionpsy-standard-q8': Object.freeze({ output: 'Two dogs are visible, and the item on the floor is a dog leash.', timeToFirstTokenMs: 3320, latencyMs: 3500, tokensPerSecond: 97.0, outputTokens: 17, semanticScore: 1, semanticReason: 'Correct count and identifies the leash.' }),
-    'qvac-visionpsy-standard-q4': Object.freeze({ output: 'There are two dogs visible in the cafe, and the item on the floor is a loop-shaped handle for a pet toy.', timeToFirstTokenMs: 5869, latencyMs: 6266, tokensPerSecond: 69.3, outputTokens: 27, semanticScore: 0.5, semanticReason: 'Correct count, but mistakes the leash for a pet toy.' }),
-    'qvac-visionpsy': Object.freeze({ output: 'Two dogs are visible, and the item on the floor is a pet grooming brush.', timeToFirstTokenMs: 2060, latencyMs: 2230, tokensPerSecond: 100.8, outputTokens: 17, semanticScore: 0.5, semanticReason: 'Correct count, but mistakes the leash for a brush.' }),
-    'qvac-visionpsy-flash-q4': Object.freeze({ output: 'Two dogs are visible, and the item on the floor is a pet grooming brush.', timeToFirstTokenMs: 2150, latencyMs: 2310, tokensPerSecond: 113.4, outputTokens: 17, semanticScore: 0.5, semanticReason: 'Correct count, but mistakes the leash for a brush.' })
+    'qvac-visionpsy-standard-q8': Object.freeze({ output: 'Two dogs are visible, and the item on the floor is a dog leash.', timeToFirstTokenMs: 3320, latencyMs: 3500, tokensPerSecond: 97.0, outputTokens: 17 }),
+    'qvac-visionpsy-standard-q4': Object.freeze({ output: 'There are two dogs visible in the cafe, and the item on the floor is a loop-shaped handle for a pet toy.', timeToFirstTokenMs: 5869, latencyMs: 6266, tokensPerSecond: 69.3, outputTokens: 27 }),
+    'qvac-visionpsy': Object.freeze({ output: 'Two dogs are visible, and the item on the floor is a pet grooming brush.', timeToFirstTokenMs: 2060, latencyMs: 2230, tokensPerSecond: 100.8, outputTokens: 17 }),
+    'qvac-visionpsy-flash-q4': Object.freeze({ output: 'Two dogs are visible, and the item on the floor is a pet grooming brush.', timeToFirstTokenMs: 2150, latencyMs: 2310, tokensPerSecond: 113.4, outputTokens: 17 })
   })
 })
 const LIVE_DEMO_OFFICIAL_RESULTS = Object.freeze([
@@ -826,7 +828,7 @@ async function startLiveDemo(mode = 'benchmark') {
     liveDemo.introEndedAtMs = null
     liveDemo.popupStartedAtMs = null
     liveDemo.officialStartedAtMs = null
-    $('#showcase-demo-note').textContent = 'REC · canvas recording active · all inference stays local'
+    $('#showcase-demo-note').textContent = replayingDogResults ? 'REC · replay of local answers · Astra review performed separately in the cloud' : 'REC · canvas recording active · VisionPsy inference stays local'
 
     if (dogMode) {
       await moveLiveDemoCursor(1470, 70, 420)
@@ -899,7 +901,7 @@ async function startLiveDemo(mode = 'benchmark') {
     }
 
     if (dogMode) {
-      liveDemo.completedElapsedMs = replayingDogResults ? 99_740 : performance.now() - liveDemo.startedAt
+      liveDemo.completedElapsedMs = performance.now() - liveDemo.startedAt
       liveDemo.popupStartedAtMs = performance.now() - liveDemo.recordingStartedAt
       liveDemo.finalCard = 'kpis'
       liveDemo.phase = replayingDogResults ? 'FINAL POPUP · RECORDED FOUR-SCENE KPIS' : 'FINAL POPUP · MEASURED FOUR-SCENE KPIS'
@@ -928,6 +930,7 @@ async function startLiveDemo(mode = 'benchmark') {
     liveDemo.controller = null
     stopLiveDemoRecording()
     liveDemo.running = false
+    liveDemo.completedElapsedMs = performance.now() - liveDemo.startedAt
     $('#showcase-demo-stop').classList.add('hidden')
     $('#showcase-live-demo').disabled = !showcase.dataset?.complete
     $('#showcase-live-demo-3').disabled = false
@@ -950,7 +953,7 @@ async function buildLiveDemoScenes(mode) {
       ...item,
       caseId: item.id,
       imageDataUrl: await showcaseImageDataUrl(item.imageUrl),
-      sourceLabel: 'PERSONAL REAL PHOTO · LOCAL ONLY',
+      sourceLabel: 'PERSONAL REAL PHOTO',
       maxTokens: 80
     })))
   }
@@ -1064,15 +1067,15 @@ async function replayLiveDemoProvider(item, providerId) {
     tokensPerSecond: replay.tokensPerSecond,
     outputTokens: replay.outputTokens
   }
-  card.evaluation = Number.isFinite(replay.semanticScore)
-    ? {
-        status: `${replay.semanticScore.toFixed(2)}/1`,
-        detail: replay.semanticReason,
-        points: replay.semanticScore,
-        maxPoints: 1,
-        method: 'editorial-semantic-quarter-scale'
-      }
-    : evaluateLiveDemoAnswer(item, replay.output, null)
+  const review = findDogAstraReview(item, providerId, replay.output)
+  if (!review) throw new Error('Recorded answer has no matching frozen Astra review. Re-evaluate before displaying a judge score.')
+  card.evaluation = {
+    status: `${(review.score * 10).toFixed(0)}/10`,
+    detail: review.reason,
+    points: review.score,
+    maxPoints: 1,
+    method: DOG_ASTRA_REVIEW.method
+  }
   card.status = 'complete'
 }
 
@@ -1466,9 +1469,9 @@ function drawLiveDemoFrame() {
   ctx.fillStyle = replaying ? LIVE_DEMO_THEME.blue : '#ff453a'
   ctx.beginPath(); ctx.arc(1335, 49, 7, 0, Math.PI * 2); ctx.fill()
   ctx.fillStyle = LIVE_DEMO_THEME.text
-  ctx.fillText(replaying ? 'SOURCE RUN' : liveDemo.recorder?.state === 'recording' || localFrameCapture.running ? 'REC' : 'LIVE', 1352, 54)
+  ctx.fillText(replaying ? 'REPLAY' : liveDemo.recorder?.state === 'recording' || localFrameCapture.running ? 'REC' : 'LIVE', 1352, 54)
   ctx.fillStyle = '#8e8e93'
-  const elapsed = liveDemo.startedAt ? (performance.now() - liveDemo.startedAt) / 1000 : 0
+  const elapsed = (liveDemo.completedElapsedMs ?? (liveDemo.startedAt ? performance.now() - liveDemo.startedAt : 0)) / 1000
   ctx.fillText(`${elapsed.toFixed(1)} s`, 1460, 54)
   ctx.fillStyle = LIVE_DEMO_THEME.primary
   ctx.font = '800 11px ui-monospace, SFMono-Regular, Menlo, monospace'
@@ -1536,7 +1539,7 @@ function drawLiveDemoIntroCard(ctx) {
     drawLiveDemoIntroReveal(ctx, .05, 58, 134, () => {
       ctx.fillStyle = '#8e8e93'
       ctx.font = '800 12px ui-monospace, SFMono-Regular, Menlo, monospace'
-      ctx.fillText('BEFORE WE GO LIVE · THE VISUAL SETUP', 58, 134)
+      ctx.fillText(liveDemo.mode === 'dogs-replay' ? 'BEFORE THE REPLAY · THE VISUAL SETUP' : 'BEFORE WE GO LIVE · THE VISUAL SETUP', 58, 134)
     })
     ctx.font = '800 58px -apple-system, BlinkMacSystemFont, sans-serif'
     const photosTitle = '4 real photos.'
@@ -1583,7 +1586,7 @@ function drawLiveDemoIntroCard(ctx) {
       ctx.fillText('NEXT · THE FOUR LOCAL VARIANTS', 58, 790)
       ctx.fillStyle = '#8e8e93'
       ctx.font = '600 16px -apple-system, BlinkMacSystemFont, sans-serif'
-      ctx.fillText('Each answer will be streamed and scored fact by fact.', 58, 820)
+      ctx.fillText(liveDemo.mode === 'dogs-replay' ? 'Recorded local answers · reviewed separately by GPT-6 Astra.' : 'Each answer will be streamed and checked against visible facts.', 58, 820)
     })
     ctx.restore()
     return
@@ -1791,8 +1794,8 @@ function drawLiveDemoCard(ctx, providerId, index) {
   ctx.font = '700 10px ui-monospace, SFMono-Regular, Menlo, monospace'
   wrapLiveDemoText(ctx, compactVersion(provider?.modelVersion), x + 20, y + 97, width - 40, 15, 2)
 
-  const semanticReview = card.evaluation?.method === 'editorial-semantic-quarter-scale'
-  const verdict = semanticReview ? 'RUBRIC REVIEW' : card.evaluation?.status || (card.status === 'running' ? 'STREAMING' : card.status === 'error' ? 'ERROR' : card.status === 'complete' ? 'DONE' : 'READY')
+  const semanticReview = card.evaluation?.method === DOG_ASTRA_REVIEW.method
+  const verdict = semanticReview ? 'AI JUDGE' : card.evaluation?.status || (card.status === 'running' ? 'STREAMING' : card.status === 'error' ? 'ERROR' : card.status === 'complete' ? 'DONE' : 'READY')
   ctx.fillStyle = ['PASS', '2/2'].includes(verdict) ? LIVE_DEMO_THEME.primary : ['FAIL', 'ERROR', '0/2'].includes(verdict) ? '#ff6961' : verdict === '1/2' || active ? '#ffd166' : verdict === 'OPEN' ? LIVE_DEMO_THEME.blue : '#8e8e93'
   ctx.font = '900 13px ui-monospace, SFMono-Regular, Menlo, monospace'
   ctx.textAlign = 'right'
@@ -1814,7 +1817,7 @@ function drawLiveDemoCard(ctx, providerId, index) {
     drawLiveDemoPanel(ctx, x + 20, y + 463, width - 40, 62, 12, 'rgba(22,227,193,.07)', 'rgba(22,227,193,.30)', 1)
     ctx.fillStyle = LIVE_DEMO_THEME.primary
     ctx.font = '900 10px ui-monospace, SFMono-Regular, Menlo, monospace'
-    ctx.fillText('RUBRIC SCORE', x + 31, y + 484)
+    ctx.fillText('ASTRA SCORE', x + 31, y + 484)
     ctx.font = '900 17px ui-monospace, SFMono-Regular, Menlo, monospace'
     ctx.fillText(card.evaluation.status, x + 31, y + 508)
     ctx.fillStyle = '#a1a1a6'
@@ -2000,6 +2003,7 @@ function summarizeLiveDemoProvider(providerId) {
 function drawLiveDemoKpiCard(ctx) {
   const summaries = COMPARISON_PROVIDER_IDS.map(summarizeLiveDemoProvider)
   const totalInferences = liveDemo.results.length * COMPARISON_PROVIDER_IDS.length
+  const astraReplay = liveDemo.mode === 'dogs-replay'
 
   ctx.fillStyle = 'rgba(0,0,0,.68)'
   ctx.fillRect(0, 92, 1600, 808)
@@ -2013,7 +2017,9 @@ function drawLiveDemoKpiCard(ctx) {
   ctx.fillText('What did each model notice?', 82, 207)
   ctx.fillStyle = '#a1a1a6'
   ctx.font = '600 17px -apple-system, BlinkMacSystemFont, sans-serif'
-  ctx.fillText('Frozen editorial rubric · each answer receives 0, 0.25, 0.50, 0.75 or 1 for correctness and completeness.', 84, 240)
+  ctx.fillText(astraReplay
+    ? 'GPT-6 Astra · 3 blinded passes · 80% requested facts / 10% grounding / 10% explicit constraints'
+    : 'Local visual checklist · new answers are not automatically reviewed by GPT-6 Astra.', 84, 240)
 
   drawLiveDemoPanel(ctx, 82, 266, 1436, 72, 17, 'rgba(75,184,255,.08)', 'rgba(75,184,255,.28)', 1)
   const cycleItems = [
@@ -2037,8 +2043,8 @@ function drawLiveDemoKpiCard(ctx) {
     const y = 360
     const provider = showcase.providers.find(item => item.id === summary.providerId)
     const score = summary.maxPoints ? summary.points / summary.maxPoints : null
-    drawLiveDemoPanel(ctx, x, y, 335, 416, 20, LIVE_DEMO_THEME.surfaceRaised, index === 0 ? LIVE_DEMO_THEME.primary : LIVE_DEMO_THEME.border, index === 0 ? 2 : 1)
-    ctx.fillStyle = index === 0 ? LIVE_DEMO_THEME.primary : LIVE_DEMO_THEME.blue
+    drawLiveDemoPanel(ctx, x, y, 335, 416, 20, LIVE_DEMO_THEME.surfaceRaised, LIVE_DEMO_THEME.border, 1)
+    ctx.fillStyle = LIVE_DEMO_THEME.blue
     ctx.font = '800 11px ui-monospace, SFMono-Regular, Menlo, monospace'
     ctx.fillText(PROVIDER_BADGES[summary.providerId], x + 24, y + 32)
     ctx.fillStyle = '#f5f5f7'
@@ -2050,10 +2056,10 @@ function drawLiveDemoKpiCard(ctx) {
 
     ctx.fillStyle = Number.isFinite(score) ? LIVE_DEMO_THEME.primary : '#f5f5f7'
     ctx.font = '900 42px ui-monospace, SFMono-Regular, Menlo, monospace'
-    ctx.fillText(Number.isFinite(score) ? `${(score * 100).toFixed(1)}%` : '—', x + 24, y + 180)
+    ctx.fillText(Number.isFinite(score) ? (astraReplay ? `${(score * 10).toFixed(2)}/10` : `${(score * 100).toFixed(1)}%`) : '—', x + 24, y + 180)
     ctx.fillStyle = '#c7cbc9'
     ctx.font = '700 14px -apple-system, BlinkMacSystemFont, sans-serif'
-    ctx.fillText(summary.maxPoints ? `${summary.points.toFixed(2)} of ${summary.maxPoints} answer score` : 'No scored answers', x + 24, y + 207)
+    ctx.fillText(summary.maxPoints ? (astraReplay ? 'Mean judge score · four photos' : `${summary.points.toFixed(2)} of ${summary.maxPoints} checklist score`) : 'No scored answers', x + 24, y + 207)
 
     const progressX = x + 24
     const progressY = y + 226
@@ -2079,7 +2085,11 @@ function drawLiveDemoKpiCard(ctx) {
     ctx.lineTo(x + 311, y + 258)
     ctx.stroke()
 
-    const metrics = [
+    const metrics = astraReplay ? [
+      ['JUDGE PASSES', '3 / answer'],
+      ['SCORE AGREEMENT', '3 of 3'],
+      ['SCOPE', '4 examples']
+    ] : [
       ['AVG FIRST TOKEN', formatDuration(summary.avgTtftMs)],
       ['AVG RESPONSE', formatDuration(summary.avgLatencyMs)],
       ['GENERATION', Number.isFinite(summary.avgTokensPerSecond) ? `${summary.avgTokensPerSecond.toFixed(1)} tok/s` : '—']
@@ -2099,7 +2109,10 @@ function drawLiveDemoKpiCard(ctx) {
 
   ctx.fillStyle = '#8e8e93'
   ctx.font = '700 13px -apple-system, BlinkMacSystemFont, sans-serif'
-  ctx.fillText('Editorial rubric score for four examples · recorded timings are not speed-ranked · RealWorldQA remains separate and binary.', 84, 824)
+  ctx.fillText(astraReplay
+    ? 'Standard and Flash tie on factual content at each quantization; format compliance separates overall scores.'
+    : 'Local checklist for four examples · recorded timings are not speed-ranked.', 84, 803)
+  ctx.fillText('Illustrative judge scores, not benchmark accuracy · RealWorldQA remains separate and binary.', 84, 831)
 }
 
 function drawLiveDemoPanel(ctx, x, y, width, height, radius, fill, stroke, lineWidth = 1) {

@@ -36,7 +36,7 @@ Provider choice is explicit. There is no silent fallback, and provider/runtime/m
 
 Experiment 06 exposes two public scenarios:
 
-1. **Dog stories** — four personal photographs, four natural questions and 16 live local inferences across the 2×2 Standard/Flash × Q8/Q4 grid. This is an explanatory demo, not a benchmark.
+1. **Dog stories** — four personal photographs, four natural questions and four local VisionPsy variants. The published video is an accelerated replay of 16 recorded answers, with a separate blinded GPT-6 Astra review. The app can also run new local inferences; those do not inherit the frozen Astra grades. This is an explanatory demo, not a benchmark.
 2. **RealWorldQA corroboration** — all 765 official scored cases reconstructed from the checksum-locked TSV (`MD5 4de008f55dc4fd008ca9e15321dc44b7`). Questions and options are preserved; the pinned VLMEvalKit scorer infers the selected option, which is then compared with the gold option for binary accuracy. No synthetic or external suite enters the aggregate.
 
 All four variants use QVAC SDK and the same QVAC llama.cpp backend on Apple Metal; preprocessing remains model-specific. The primary three-variant run uses the checksum-pinned upstream VLMEvalKit prompt, deterministic case shuffling with a published seed, and a balanced three-position provider rotation. Standard Q4 was added later under a frozen preregistration over the identical 765 inputs, prompt, scorer, generation settings and case order. This makes the four-way **accuracy** comparison paired; its separately paced performance telemetry is not a direct speed ranking. Recording Assist shows raw answers, Pass/Fail, TTFT, latency, throughput, tokens, process RSS/CPU, and system-wide macOS GPU samples.
@@ -51,6 +51,14 @@ All four variants use QVAC SDK and the same QVAC llama.cpp backend on Apple Meta
 Standard Q8 finished three answers ahead of Standard Q4 and eight ahead of Flash Q8. None of the six paired exact McNemar comparisons remains significant after Holm correction, and every image-cluster bootstrap interval for a paired score difference includes zero, so the defensible conclusion is **no clear local winner**. A separate 100-case, three-pass repeatability audit now covers all four variants: every raw output and pass/fail verdict repeated exactly, with 0.00 pp maximum score swing. This is a **local corroboration**, not a bit-for-bit reproduction of Tether’s in-house evaluation. Read the [methodology](docs/REALWORLDQA_METHODOLOGY.md), [publication audit](docs/PUBLICATION_AUDIT.md), [combined audit](reports/visionpsy-realworldqa-765-qvac-sdk-vlmevalkit-audit.md), [primary raw run](reports/visionpsy-three-way-realworldqa-765-qvac-sdk-vlmevalkit-470e517.md), [Standard Q4 addendum](reports/visionpsy-standard-q4-realworldqa-765-qvac-sdk-vlmevalkit-470e517.md), and [controlled performance diagnostic](reports/visionpsy-four-way-performance-realworldqa-validation-50-counterbalanced-50.md).
 
 A separate 50-case four-way timing diagnostic, with excluded warm-ups and balanced execution order, measured mean local latency of 2.26 s (Flash Q4), 2.27 s (Flash Q8), 3.97 s (Standard Q4) and 4.02 s (Standard Q8). It is a Mac-specific performance check and is never merged into the 765-question quality result.
+
+### Reading the dog-demo scores
+
+The video displays **mean Astra rubric score out of 10**, not benchmark accuracy: Standard Q8 **8.50**, Standard Q4 **7.75**, Flash Q8 **9.00**, Flash Q4 **8.25**. Each photo has equal weight. Three separately randomized, model-name-blinded passes returned identical scores; this measures judge stability, not proof of correctness. There are four images, not a larger statistical sample created by repeating the judge.
+
+The rubric weights requested facts 80%, absence of unsupported extra claims 10%, and explicit constraints such as one sentence/no breed names 10%. Standard and Flash **tie on the factual-content subscore at each quantization**; instruction following separates their overall scores. The rubric was fixed before these judging calls, but the demo questions and answers were already selected and seen. This is neither a held-out benchmark nor human-validated ground truth. The Astra review ran separately through cloud-hosted Codex; VisionPsy answers were local. No claim of end-to-end cloud-free judging is made.
+
+See the [dog-review methodology and per-photo results](docs/DOG_DEMO_ASTRA_REVIEW.md) and [complete prompts, anonymous mappings and raw judge outputs](reports/visionpsy-dog-demo-astra-20260905.json). These scores never enter the RealWorldQA aggregate. The old recorded dog timings remain historical samples, not a speed ranking.
 
 ## Reusable Visual Q&A workflow
 

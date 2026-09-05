@@ -32,6 +32,7 @@ scripts/__pycache__/
 packs/
 reports/*
 !reports/README.md
+!reports/visionpsy-dog-demo-astra-20260905.json
 !reports/visionpsy-three-way-realworldqa-765-qvac-sdk-unified-0182.json
 !reports/visionpsy-three-way-realworldqa-765-qvac-sdk-unified-0182.md
 !reports/visionpsy-realworldqa-765-qvac-sdk-unified-audit.json
