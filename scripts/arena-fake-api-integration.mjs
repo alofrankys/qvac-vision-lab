@@ -77,7 +77,7 @@ async function successfulPrimaryScenario() {
   assert.equal(progress.totalQuestions, 30)
   assert.equal(progress.totalPredictions, 90)
   const repeated = await api(`/api/arena/batches/${created.batch.id}/run`, { method: 'POST', allowError: true })
-  assert.equal(repeated.status, 400)
+  assert.equal(repeated.status, 409)
   const result = await running
   assert.equal(result.batch.status, 'AWAITING_JUDGMENT')
   assert.equal(result.batch.completedRounds, 30)

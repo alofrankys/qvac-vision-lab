@@ -772,3 +772,4 @@ let toastTimer
 function toast(message, error=false) { const element=$('#toast'); element.textContent=message; element.className=`toast show${error?' error':''}`; clearTimeout(toastTimer); toastTimer=setTimeout(()=>element.className='toast',4200) }
 
 load().catch(error => toast(error.message, true))
+import { localFetch as fetch } from './local-api.js'

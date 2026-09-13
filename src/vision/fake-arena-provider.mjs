@@ -6,7 +6,7 @@ const REVISIONS = {
   'qvac-smolvlm2': 'ccd7aae53bcb1997355c2f094959e72b3642ce17'
 }
 
-export function createFakeArenaProviders() { return PRIMARY_ARENA_PROVIDER_IDS.map(id => new FakeArenaProvider(id)) }
+export function createFakeArenaProviders(extraIds = []) { return [...new Set([...PRIMARY_ARENA_PROVIDER_IDS, ...extraIds])].map(id => new FakeArenaProvider(id)) }
 
 class FakeArenaProvider {
   constructor(id) {
