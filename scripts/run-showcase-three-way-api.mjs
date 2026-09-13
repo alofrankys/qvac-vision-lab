@@ -1,4 +1,6 @@
 import { createHash } from 'node:crypto'
+import { openSync, closeSync, unlinkSync } from 'node:fs'
+import { protocolHash, validateCheckpoint } from './checkpoint-protocol.mjs'
 import { execFileSync } from 'node:child_process'
 import { appendFile, mkdir, readFile, writeFile } from 'node:fs/promises'
 import os from 'node:os'
@@ -40,6 +42,11 @@ const reportsDir = path.join(root, 'reports')
 await mkdir(reportsDir, { recursive: true })
 const reportStem = `${reportPrefix}-${suite.slug}${runId ? `-${runId}` : ''}`
 const checkpointPath = path.join(reportsDir, `.${reportStem}.checkpoint.ndjson`)
+// Exclusive writer lock. A stale lock after a hard kill is intentionally not
+// removed automatically: verify its owner is gone before recovering it.
+const lockPath = `${checkpointPath}.lock`
+const lockFd = openSync(lockPath, 'wx')
+process.on('exit', () => { closeSync(lockFd); try { unlinkSync(lockPath) } catch {} })
 const resumeEnabled = process.env.QVAC_SHOWCASE_RESUME === '1'
 const defaultProviderIds = Object.freeze(['qvac-visionpsy-standard-q8', 'qvac-visionpsy', 'qvac-visionpsy-flash-q4'])
 const availableProviderIds = Object.freeze([...defaultProviderIds, 'qvac-visionpsy-standard-q4'])
@@ -70,12 +77,20 @@ for (const providerId of providerIds) {
   if (!provider?.ready) throw new Error(`${providerLabels[providerId]} is unavailable: ${provider?.reason || 'missing status'}`)
 }
 
-const startedAt = new Date().toISOString()
-const warmups = []
-for (const [index, providerId] of providerIds.entries()) {
-  await waitForLoadHeadroom(`warm-up ${index + 1}/${providerIds.length}`)
-  process.stdout.write(`Warm-up ${index + 1}/${providerIds.length}: ${providerLabels[providerId]}\n`)
-  warmups.push(await runCaseWithRetries(cases[0], providerId, true))
+// Freeze identity before any inference. Pacing is deliberately excluded.
+const frozenProtocol = {
+  schemaVersion: 1, suiteId, shuffleSeed, providerIds,
+  cases: cases.map(item => ({ id: item.id, imageSha256: item.imageSha256, prompt: item.prompt, expectedLetter: item.expectedLetter })),
+  providers: providerIds.map(id => { const p = catalog.providers.find(item => item.id === id); return { id, model: p.model, modelVersion: p.modelVersion, runtime: p.runtime, runtimeVersion: p.runtimeVersion } }),
+  artifacts: Object.fromEntries(providerIds.map(id => [id, { model: artifactMetadata(artifactSources[id].model), projector: artifactMetadata(artifactSources[id].projector) }])),
+  code: Object.fromEntries(await Promise.all(['src/server.mjs', 'src/vision/qvac-provider.mjs', 'src/vision/providers.mjs', 'src/showcase/index.mjs', 'src/image-pipeline/pipeline.mjs', 'scripts/run-showcase-three-way-api.mjs', 'scripts/checkpoint-protocol.mjs', 'package-lock.json'].map(async file => [file, sha256(await readFile(path.join(root, file)))]))),
+  generation: { temp: 0, top_p: 1, top_k: 40, seed: 42, predict: 16 },
+  scorer: vlmevalkitScorerSha256
+}
+const frozenProtocolHash = protocolHash(frozenProtocol)
+for (const extension of ['json', 'md']) {
+  try { await readFile(path.join(reportsDir, `${reportStem}.${extension}`)); throw new Error('Completed report already exists; select a new run ID. Existing evidence will not be overwritten.') }
+  catch (error) { if (error.code !== 'ENOENT') throw error }
 }
 
 let results = []
@@ -83,20 +98,26 @@ if (resumeEnabled) {
   try {
     const checkpoint = await readFile(checkpointPath, 'utf8')
     results = checkpoint.split('\n').filter(Boolean).map(line => JSON.parse(line))
-    const validCaseIds = new Set(cases.map(item => item.id))
-    const seen = new Set()
-    results = results.filter(item => {
-      const key = `${item.caseId}:${item.providerId}`
-      if (!validCaseIds.has(item.caseId) || !providerIds.includes(item.providerId) || seen.has(key)) return false
-      seen.add(key)
-      return true
-    })
+    validateCheckpoint(results, frozenProtocolHash, cases.map(item => item.id), providerIds)
     if (results.length) process.stdout.write(`Resuming from ${results.length}/${cases.length * providerIds.length} checkpointed inferences.\n`)
   } catch (error) {
     if (error.code !== 'ENOENT') throw error
   }
 }
-if (!resumeEnabled || !results.length) await writeFile(checkpointPath, '')
+if (!resumeEnabled) await writeFile(checkpointPath, '', { flag: 'wx' })
+const protocolPath = `${checkpointPath}.protocol.json`
+try { await writeFile(protocolPath, `${JSON.stringify({ hash: frozenProtocolHash, protocol: frozenProtocol }, null, 2)}\n`, { flag: 'wx' }) }
+catch (error) {
+  if (error.code !== 'EEXIST') throw error
+  const stored = JSON.parse(await readFile(protocolPath, 'utf8'))
+  if (stored.hash !== frozenProtocolHash || protocolHash(stored.protocol) !== frozenProtocolHash) throw new Error('Frozen protocol does not match; use a new run ID')
+}
+const startedAt = new Date().toISOString()
+const warmups = []
+for (const [index, providerId] of providerIds.entries()) {
+  await waitForLoadHeadroom(`warm-up ${index + 1}/${providerIds.length}`)
+  warmups.push(await runCaseWithRetries(cases[0], providerId, true))
+}
 for (const [caseIndex, showcaseCase] of cases.entries()) {
   const order = rotate(providerIds, caseIndex)
   for (const [orderIndex, providerId] of order.entries()) {
@@ -104,7 +125,7 @@ for (const [caseIndex, showcaseCase] of cases.entries()) {
     await waitForLoadHeadroom(`case ${caseIndex + 1}/${cases.length}`)
     process.stdout.write(`[${caseIndex + 1}/${cases.length} · ${orderIndex + 1}/${providerIds.length}] ${showcaseCase.id} → ${providerLabels[providerId]}\n`)
     const result = await runCaseWithRetries(showcaseCase, providerId, false)
-    const checkpointed = { caseIndex, executionOrder: order, orderIndex, ...result }
+    const checkpointed = { protocolHash: frozenProtocolHash, caseIndex, executionOrder: order, orderIndex, ...result }
     results.push(checkpointed)
     await appendFile(checkpointPath, `${JSON.stringify(checkpointed)}\n`)
     const completedInferences = results.filter(item => !item.warmup).length
@@ -131,6 +152,8 @@ const inferenceFinishedAt = results.map(item => {
 }).filter(Number.isFinite).sort((a, b) => b - a)[0]
 
 const report = {
+  frozenProtocolHash,
+  frozenProtocol,
   schemaVersion: 2,
   runId: runId || null,
   protocol: `QVAC Vision Lab Experiment 06 · ${suite.name} · ${providerIds.length === 1 ? 'single-provider addendum' : `${providerIds.length}-way`}${runId ? ` · ${runId}` : ''}`,
@@ -202,8 +225,8 @@ const report = {
 
 const jsonPath = path.join(reportsDir, `${reportStem}.json`)
 const markdownPath = path.join(reportsDir, `${reportStem}.md`)
-await writeFile(jsonPath, `${JSON.stringify(report, null, 2)}\n`)
-await writeFile(markdownPath, markdownReport(report))
+await writeFile(jsonPath, `${JSON.stringify(report, null, 2)}\n`, { flag: 'wx' })
+await writeFile(markdownPath, markdownReport(report), { flag: 'wx' })
 process.stdout.write(`\n${markdownReport(report)}\nSaved ${jsonPath}\nSaved ${markdownPath}\n`)
 
 async function runCase(showcaseCase, providerId, warmup) {
@@ -226,6 +249,11 @@ async function runCase(showcaseCase, providerId, warmup) {
   if (!response.ok || failure) throw new Error(`${providerLabels[providerId]} failed on ${showcaseCase.id}: ${failure?.error || `HTTP ${response.status}`}`)
   const complete = events.findLast(event => event.type === 'complete')
   if (!complete) throw new Error(`${providerLabels[providerId]} returned no complete event for ${showcaseCase.id}`)
+  if (complete.provider?.id !== providerId) throw new Error(`Returned provider mismatch for ${showcaseCase.id}; refusing to attribute this response`)
+  const expectedProvider = catalog.providers.find(item => item.id === providerId)
+  for (const field of ['model', 'modelVersion', 'runtime', 'runtimeVersion']) {
+    if (complete.provider[field] !== expectedProvider[field]) throw new Error(`Returned ${field} changed since protocol freeze; result rejected`)
+  }
   return {
     warmup,
     caseId: showcaseCase.id,
@@ -237,6 +265,8 @@ async function runCase(showcaseCase, providerId, warmup) {
     expectedAnswer: showcaseCase.expectedAnswer,
     providerId,
     requestStartedAt,
+    returnedProvider: complete.provider,
+    returnedInput: events.find(event => event.type === 'started')?.image,
     output: complete.output,
     evaluation: complete.evaluation,
     metrics: complete.metrics
@@ -379,7 +409,7 @@ function stableJson(value) {
 }
 
 function sha256(value) {
-  return createHash('sha256').update(String(value ?? '')).digest('hex')
+  return createHash('sha256').update(Buffer.isBuffer(value) ? value : String(value ?? '')).digest('hex')
 }
 
 function artifactMetadata(source) {

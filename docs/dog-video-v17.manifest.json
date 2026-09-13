@@ -1,0 +1,32 @@
+{
+  "schemaVersion": 1,
+  "presentation": "Animated replay of actual saved responses; synthetic reveal cadence; original metrics; not a live speed benchmark",
+  "generatedAt": "2026-09-05T15:12:55.790Z",
+  "renderTimeSourceHashes": {
+    "public/showcase.js": "08aba1f0998e06c3d4f52e7d805dd9818fdc678bb79e5d3f1974f39c384c2e6e",
+    "public/showcase/dog-astra-review.js": "13eb2d63d6a30438d1795379943755073c00e1bdcc6c59cd9a45ce21ccfd6e02",
+    "public/showcase/visionpsy-four-way-realworldqa-765.json": "a888ff9cef286260addb65848b2c2387d997e49637f79d149da3e786fd541518",
+    "reports/visionpsy-dog-demo-astra-20260905.json": "35cc642fe54ac0dc589d109f826d4c55fc4e85efc5438ccc3553a4f3b8fccd93",
+    "scripts/render-dog-demo-video.mjs": "52bf2261730aacc48084300df4b81b9fb5448e6a24b36c5745b05dc819395ed8",
+    "scripts/video-frame-timeline.mjs": "a850755b6143f54e05fd4f6dd672f5da1382fe30f841d7538c7294d5ad8e55f0"
+  },
+  "sourceHashScope": "Files present at render time, not proof of which JavaScript was executed by the capture browser",
+  "captureManifestSha256": "e1d90966c233c5bde64a439059721b4998b760201335e5385534763d0170f2ba",
+  "frameSequenceSha256": "9910472b55f7d549ec9c1dd17149bb5738c305913549ce4ab2b7bb5703d4256c",
+  "audioSha256": "7d239cd91ff509c4d074cd48f6323443349fdb524d7065c193213bb075ae250a",
+  "outputSha256": "b48545efd9e3435b8f67c8970e13e4613800a87c0a06569c9565501128e7277f",
+  "settings": {
+    "targetDurationSeconds": 50,
+    "speeds": [
+      1.75,
+      3.3231241362021278,
+      1.3857250000238395,
+      1.1212100000023852
+    ],
+    "dogResultsSeconds": 4,
+    "benchmarkResultsSeconds": 10,
+    "audioVolume": 0.1,
+    "audioFadeSeconds": 2
+  },
+  "ffmpegVersion": "ffmpeg version 8.1.2 Copyright (c) 2000-2026 the FFmpeg developers"
+}

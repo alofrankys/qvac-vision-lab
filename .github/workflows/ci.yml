@@ -34,4 +34,5 @@ jobs:
           done
           exit 1
       - run: npm test
+      - run: npm run arena:test:integration
       - run: npm run showcase:audit:methodology

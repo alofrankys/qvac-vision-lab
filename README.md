@@ -101,6 +101,12 @@ See [architecture](docs/ARCHITECTURE.md), the [PawVault experiment index](docs/e
 
 ## Run and reproduce
 
+Read the [adversarial remediation and release gates](docs/ADVERSARIAL_REMEDIATION.md).
+The video uses **animated replay of actual saved answers**, not the original token
+event timeline. Historical metrics are retained; animation speed cannot measure
+model speed. New benchmark runs require a new run ID when canonical reports exist.
+Strict checkpoint fingerprints apply to new runs, not retroactively to old evidence.
+
 Requirements: macOS 14+, Node.js 22.17+, npm 10.9+. Apple Silicon is recommended.
 
 The npm dependency tree includes QVAC native binaries for several supported platforms. A clean `npm ci` currently occupies approximately 5.7 GB; model files and reconstructed RealWorldQA images require additional disk space.

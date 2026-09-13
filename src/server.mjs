@@ -26,6 +26,7 @@ import { buildArenaBundle, buildPrivateMappingBundle } from './arena/export.mjs'
 import { EVIDENCE_TIERS, addQuestion, addQuestionToSet, applyBlindReviewImport, applyQuestionImport, benchmarkCoverage, benchmarkDiff, blindReviewTemplate, buildReviewQueue, changeDatasetMembership, cloneBenchmarkVersion, createBenchmarkSet, createDataset, createRunSelection, csvTemplate, datasetBuilderView, duplicateQuestion, lockBenchmarkSet, lockPreview, previewBlindReviewImport, previewQuestionImport, removeQuestionFromSet, updateDataset, updateQuestion, validateBenchmarkSet } from './arena/builder.mjs'
 import { REALWORLDQA_DATASET_STATUS, ResourceSampler, SHOWCASE_CASES, SHOWCASE_PROVIDER_IDS, buildShowcaseConversationPrompt, scoreShowcaseAnswer } from './showcase/index.mjs'
 import { assertLocalRequest } from './http/local-request-policy.mjs'
+import { CaptureBudget } from './http/capture-budget.mjs'
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..')
 const publicDir = path.join(root, 'public')
@@ -41,11 +42,14 @@ const dogTruthPath = path.join(benchmarkDir, 'dog-count-ground-truth.json')
 const store = await new StateStore(path.join(dataDir, 'pawvault.json')).init()
 const fakeArenaMode = process.env.QVAC_ARENA_TEST_FAKE_PROVIDERS === '1'
 if (fakeArenaMode && (!process.env.NODE_ENV?.startsWith('test') || !dataDir.startsWith(os.tmpdir()))) throw new Error('Fake Arena providers are restricted to NODE_ENV=test and a temporary data directory')
-const providers = new VisionProviderRegistry(fakeArenaMode ? createFakeArenaProviders() : undefined)
+const providers = new VisionProviderRegistry(fakeArenaMode ? createFakeArenaProviders(SHOWCASE_PROVIDER_IDS) : undefined)
 const arenaModelLock = await readModelLock()
 const activeRuns = new Map()
 const activeBatches = new Map()
 const serverStartedAt = new Date().toISOString()
+const browserSessionToken = randomUUID()
+const captureBudget = new CaptureBudget()
+let inferenceRequestActive = false
 const BENCHMARK_PRESETS = Object.freeze([FOCUSED_BASE_PRESET, SEMANTIC_EXTRACTION_PRESET, MINIMAL_SMART_SEMANTIC_PRESET])
 const ALL_SEMANTIC_TASK_IDS = Object.freeze([...SEMANTIC_TASK_IDS, ...MINIMAL_SEMANTIC_TASK_IDS])
 await Promise.all([
@@ -60,9 +64,17 @@ await migrateImagePipelines()
 const MIME = { '.html': 'text/html; charset=utf-8', '.js': 'text/javascript; charset=utf-8', '.css': 'text/css; charset=utf-8', '.svg': 'image/svg+xml', '.png': 'image/png', '.jpg': 'image/jpeg', '.jpeg': 'image/jpeg', '.heic': 'image/heic', '.webp': 'image/webp', '.m4a': 'audio/mp4', '.mp3': 'audio/mpeg', '.mp4': 'video/mp4' }
 
 const server = createServer(async (request, response) => {
+  let ownsInferenceSlot = false
   try {
     assertLocalRequest(request)
     const url = new URL(request.url, 'http://127.0.0.1')
+    if (url.pathname.startsWith('/api/') && !['GET', 'HEAD', 'OPTIONS'].includes(request.method) && (request.headers.origin || request.headers['sec-fetch-site']) && request.headers['x-qvac-session'] !== browserSessionToken) throw httpError(403, 'Missing or expired local session token; reload the page')
+    const startsInference = request.method === 'POST' && (url.pathname === '/api/analyze' || url.pathname === '/api/showcase/run' || /^\/api\/(?:arena\/(?:rounds|batches)\/[^/]+\/run|vqa\/runs\/[^/]+\/analyze)$/.test(url.pathname))
+    if (startsInference) {
+      if (inferenceRequestActive || activeRuns.size || activeBatches.size) throw httpError(409, 'Inference capacity is occupied; retry after completion or cancellation')
+      inferenceRequestActive = true
+      ownsInferenceSlot = true
+    }
     if (url.pathname.startsWith('/api/')) return await handleApi(request, response, url)
     if (url.pathname.startsWith('/photos/')) return await servePhoto(response, url.pathname.slice(8))
     if (url.pathname.startsWith('/previews/')) return await servePreview(response, url.pathname.slice(10))
@@ -71,12 +83,23 @@ const server = createServer(async (request, response) => {
     if (!error.statusCode || error.statusCode >= 500) console.error(error)
     if (response.headersSent) { response.destroy(); return }
     sendJson(response, error.statusCode || 500, { error: error.message || String(error), code: error.code || null, blockers: error.blockers || undefined, batch: error.batch || undefined })
+  } finally {
+    if (ownsInferenceSlot) inferenceRequestActive = false
   }
 })
 
 async function handleApi(request, response, url) {
+  if (request.method === 'GET' && url.pathname === '/api/session') {
+    response.setHeader('Cache-Control', 'no-store')
+    return sendJson(response, 200, { token: browserSessionToken })
+  }
   if (request.method === 'GET' && url.pathname === '/api/health') {
-    return sendJson(response, 200, { ok: true, serverStartedAt, frameCaptureEnabled: showcaseFrameCaptureEnabled, activeBatchIds: [...activeBatches.keys()], activeRunIds: [...activeRuns.keys()] })
+    const modelStates = await Promise.all(SHOWCASE_PROVIDER_IDS.map(async id => { const status = await providers.get(id).status(); return { id, ready: status.state === 'READY', loaded: status.loaded ?? null } }))
+    return sendJson(response, 200, { ok: true, serverStartedAt, frameCaptureEnabled: showcaseFrameCaptureEnabled, activeBatchIds: [...activeBatches.keys()], activeRunIds: [...activeRuns.keys()], inferenceActive: activeRuns.size > 0, modelStates, idleNote: 'No active inference does not imply models are unloaded; loaded=null means unavailable.' })
+  }
+  if (request.method === 'POST' && url.pathname === '/api/showcase/cancel') {
+    for (const [id, active] of activeRuns) if (id.startsWith('showcase_')) active.controller.abort()
+    return sendJson(response, 200, { ok: true, note: 'Cancellation requested; this does not unload resident models.' })
   }
   if (request.method === 'GET' && url.pathname === '/api/showcase') {
     const statuses = await Promise.all(SHOWCASE_PROVIDER_IDS.map(id => providers.get(id).status()))
@@ -89,6 +112,7 @@ async function handleApi(request, response, url) {
       runtimeVersion: item.runtimeVersion,
       label: item.label,
       ready: item.state === 'READY',
+      loaded: item.loaded ?? null,
       reason: item.reason || null
     })) })
   }
@@ -100,13 +124,16 @@ async function handleApi(request, response, url) {
     await mkdir(captureDir, { recursive: true })
     if (url.searchParams.get('kind') === 'manifest') {
       const manifest = await jsonBody(request, 2 * 1024 * 1024)
-      await writeFile(path.join(captureDir, 'manifest.json'), `${JSON.stringify(manifest, null, 2)}\n`)
+      const serialized = `${JSON.stringify(manifest, null, 2)}\n`
+      captureBudget.reserve(runId, Buffer.byteLength(serialized), false)
+      await writeFile(path.join(captureDir, 'manifest.json'), serialized, { flag: 'wx' })
       return sendJson(response, 200, { ok: true })
     }
     const index = Number(url.searchParams.get('index'))
     if (!Number.isInteger(index) || index < 0 || index > 10000) throw badRequest('Invalid capture frame index')
     const frame = await rawBody(request, 3 * 1024 * 1024)
-    await writeFile(path.join(captureDir, `frame-${String(index).padStart(5, '0')}.jpg`), frame)
+    captureBudget.reserve(runId, frame.length)
+    await writeFile(path.join(captureDir, `frame-${String(index).padStart(5, '0')}.jpg`), frame, { flag: 'wx' })
     response.writeHead(204)
     response.end()
     return
@@ -1087,6 +1114,7 @@ function platformDiagnostics() {
 
 async function runShowcase(request, response) {
   const controller = new AbortController()
+  const runId = `showcase_${Date.now()}_${randomUUID().slice(0, 8)}`
   let sampler = null
   let samplerStopped = false
   let closed = false
@@ -1107,13 +1135,15 @@ async function runShowcase(request, response) {
     if (!prompt || prompt.length > 12000) throw badRequest('Write a question between 1 and 12,000 characters')
     const inferencePrompt = buildShowcaseConversationPrompt(body.conversation, prompt, body.imageTitle)
     const selectedCase = SHOWCASE_CASES.find(item => item.id === body.caseId)
-    const providerId = SHOWCASE_PROVIDER_IDS.includes(body.providerId) ? body.providerId : SHOWCASE_PROVIDER_IDS[0]
+    if (!SHOWCASE_PROVIDER_IDS.includes(body.providerId)) throw badRequest('Unknown showcase providerId; explicit model selection is required')
+    const providerId = body.providerId
+    if (activeRuns.size || activeBatches.size) throw httpError(409, 'An inference or batch is already active; retry when it finishes')
+    activeRuns.set(runId, { controller, providers: [] })
     const provider = providers.get(providerId)
     const status = await provider.status()
     if (status.state !== 'READY') throw httpError(503, status.reason || 'Selected VisionPsy runtime is unavailable')
     const image = await resolveShowcaseImage(body)
     const { inferencePath, ...publicImage } = image
-    const runId = `showcase_${Date.now()}_${randomUUID().slice(0, 8)}`
 
     response.writeHead(200, {
       'Content-Type': 'application/x-ndjson; charset=utf-8',
@@ -1147,6 +1177,7 @@ async function runShowcase(request, response) {
       }
     })
     const resources = await stopSampler()
+    if (result.providerId !== providerId) throw httpError(502, 'Provider identity mismatch; result rejected')
     emit('complete', {
       runId,
       output: result.rawOutput,
@@ -1177,6 +1208,8 @@ async function runShowcase(request, response) {
     }
     emit('error', { code: error.code || null, error: error.message || String(error), resources })
     if (!response.writableEnded) response.end()
+  } finally {
+    activeRuns.delete(runId)
   }
 }
 
@@ -1211,6 +1244,7 @@ async function resolveShowcaseImage(body) {
     width: pipeline.normalized.width,
     height: pipeline.normalized.height,
     sizeBytes: pipeline.normalized.sizeBytes,
+    inferenceImageSha256: await sha256Path(path.join(showcaseInferenceDir, pipeline.normalized.filename)),
     inferencePath: path.join(showcaseInferenceDir, pipeline.normalized.filename)
   }
 }
@@ -1332,7 +1366,7 @@ function badRequest(message) { return httpError(400, message) }
 function notFound(message) { return httpError(404, message) }
 
 const port = Number(process.env.PORT || 8877)
-server.listen(port, '127.0.0.1', () => console.log(`QVAC Vision Lab ready at http://127.0.0.1:${port}`))
+server.listen(port, '127.0.0.1', () => console.log(`QVAC Vision Lab ready at http://127.0.0.1:${server.address().port}`))
 
 async function shutdown(signal) {
   console.log(`\n${signal}: closing QVAC runtime…`)

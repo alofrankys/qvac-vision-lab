@@ -6,9 +6,10 @@ export function assertLocalRequest(request) {
 
   const origin = request.headers.origin
   if (!origin) return
-  let originHost
-  try { originHost = normalizeHostname(new URL(origin).hostname) } catch { throw forbidden('Invalid request Origin') }
-  if (!LOOPBACK_HOSTS.has(originHost)) throw forbidden('Cross-origin access to the local QVAC Vision Lab API is not allowed')
+  let parsed
+  try { parsed = new URL(origin) } catch { throw forbidden('Invalid request Origin') }
+  const expected = new URL(`http://${request.headers.host}`).origin
+  if (parsed.origin !== expected || origin !== parsed.origin) throw forbidden('Cross-origin access to the local QVAC Vision Lab API is not allowed')
 }
 
 function hostnameFromAuthority(authority) {

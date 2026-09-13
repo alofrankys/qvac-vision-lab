@@ -1048,11 +1048,11 @@ async function replayLiveDemoProvider(item, providerId) {
   card.output = ''
   card.metrics = null
   card.evaluation = null
-  liveDemo.phase = `RUNNING ${PROVIDER_BADGES[providerId]} · RECORDED REAL LOCAL STREAM`
+  liveDemo.phase = `ANIMATED REPLAY · ${PROVIDER_BADGES[providerId]} · ACTUAL RESPONSE`
   const acceleratedLatencyMs = replay.latencyMs / liveDemoReplaySpeed
   const firstTokenDelayMs = Math.min(acceleratedLatencyMs * .72, replay.timeToFirstTokenMs / liveDemoReplaySpeed)
   await wait(firstTokenDelayMs)
-  liveDemo.phase = `STREAMING ${PROVIDER_BADGES[providerId]} · FIRST TOKEN RECEIVED`
+  liveDemo.phase = `ANIMATED REPLAY · ${PROVIDER_BADGES[providerId]} · ORIGINAL METRICS`
   const words = replay.output.split(/(\s+)/)
   const streamDurationMs = Math.max(220, acceleratedLatencyMs - firstTokenDelayMs)
   const wordDelayMs = Math.max(12, streamDurationMs / Math.max(1, words.length))
@@ -1216,7 +1216,7 @@ async function stopLocalFrameCapture() {
   localFrameCapture.running = false
   await localFrameCapture.loopPromise
   const elapsedMs = performance.now() - localFrameCapture.startedAt
-  await fetch(`/api/showcase/capture-frame?run=${encodeURIComponent(localFrameCapture.runId)}&kind=manifest`, {
+  const response = await fetch(`/api/showcase/capture-frame?run=${encodeURIComponent(localFrameCapture.runId)}&kind=manifest`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({
@@ -1230,6 +1230,7 @@ async function stopLocalFrameCapture() {
       officialStartedAtMs: liveDemo.officialStartedAtMs
     })
   })
+  if (!response.ok) throw new Error(`Capture manifest was not saved (${response.status}); recording is incomplete`)
 }
 
 async function createDogDemoMusicTrack() {
@@ -1463,16 +1464,16 @@ function drawLiveDemoFrame() {
   const replaying = liveDemo.mode === 'dogs-replay'
   ctx.fillStyle = LIVE_DEMO_THEME.primary
   ctx.font = '800 13px ui-monospace, SFMono-Regular, Menlo, monospace'
-  ctx.fillText(replaying ? 'EXPERIMENT 06 · AUTOMATED RECORDED REPLAY' : 'EXPERIMENT 06 · AUTOMATED LIVE DEMO', 48, 77)
+  ctx.fillText(replaying ? 'ANIMATED REPLAY · ACTUAL ANSWERS · ORIGINAL METRICS' : 'EXPERIMENT 06 · AUTOMATED LIVE DEMO', 48, 77)
   ctx.fillStyle = '#8e8e93'
-  ctx.fillText(`SCENE ${Math.min(cases.length, liveDemo.sceneIndex + 1)} / ${cases.length} · SAME IMAGE · SAME QUESTION`, 590, 55)
+  ctx.fillText(replaying && liveDemo.finalCard ? (liveDemo.finalCard === 'kpis' ? 'DOG DEMO COMPLETE · FOUR PHOTOS' : 'SEPARATE BENCHMARK · GENERAL IMAGES') : `SCENE ${Math.min(cases.length, liveDemo.sceneIndex + 1)} / ${cases.length} · SAME IMAGE · SAME QUESTION`, 590, 55)
   ctx.fillStyle = replaying ? LIVE_DEMO_THEME.blue : '#ff453a'
   ctx.beginPath(); ctx.arc(1335, 49, 7, 0, Math.PI * 2); ctx.fill()
   ctx.fillStyle = LIVE_DEMO_THEME.text
   ctx.fillText(replaying ? 'REPLAY' : liveDemo.recorder?.state === 'recording' || localFrameCapture.running ? 'REC' : 'LIVE', 1352, 54)
   ctx.fillStyle = '#8e8e93'
   const elapsed = (liveDemo.completedElapsedMs ?? (liveDemo.startedAt ? performance.now() - liveDemo.startedAt : 0)) / 1000
-  ctx.fillText(`${elapsed.toFixed(1)} s`, 1460, 54)
+  if (!liveDemo.finalCard) ctx.fillText(`${elapsed.toFixed(1)} s`, 1460, 54)
   ctx.fillStyle = LIVE_DEMO_THEME.primary
   ctx.font = '800 11px ui-monospace, SFMono-Regular, Menlo, monospace'
   ctx.textAlign = 'right'
@@ -1488,7 +1489,6 @@ function drawLiveDemoFrame() {
   if (liveDemo.finalCard) {
     if (liveDemo.finalCard === 'kpis') drawLiveDemoKpiCard(ctx)
     else drawLiveDemoFinalCard(ctx)
-    drawLiveDemoCursor(ctx)
     return
   }
 
@@ -1785,21 +1785,23 @@ function drawLiveDemoCard(ctx, providerId, index) {
   const active = card.status === 'running'
   drawLiveDemoPanel(ctx, x, y, width, height, 21, LIVE_DEMO_THEME.surface, active ? LIVE_DEMO_THEME.primary : LIVE_DEMO_THEME.border, active ? 3 : 1)
   ctx.fillStyle = LIVE_DEMO_THEME.primary
-  ctx.font = '800 12px ui-monospace, SFMono-Regular, Menlo, monospace'
+  ctx.font = liveDemo.mode === 'dogs-replay' ? '800 19px -apple-system, BlinkMacSystemFont, sans-serif' : '800 12px ui-monospace, SFMono-Regular, Menlo, monospace'
   ctx.fillText(PROVIDER_BADGES[providerId], x + 24, y + 31)
+  if (liveDemo.mode !== 'dogs-replay') {
   ctx.fillStyle = '#f5f5f7'
   ctx.font = '800 16px -apple-system, BlinkMacSystemFont, sans-serif'
   wrapLiveDemoText(ctx, provider?.model || providerId, x + 20, y + 61, width - 40, 21, 2)
   ctx.fillStyle = '#6e6e73'
   ctx.font = '700 10px ui-monospace, SFMono-Regular, Menlo, monospace'
   wrapLiveDemoText(ctx, compactVersion(provider?.modelVersion), x + 20, y + 97, width - 40, 15, 2)
+  }
 
   const semanticReview = card.evaluation?.method === DOG_ASTRA_REVIEW.method
   const verdict = semanticReview ? 'AI JUDGE' : card.evaluation?.status || (card.status === 'running' ? 'STREAMING' : card.status === 'error' ? 'ERROR' : card.status === 'complete' ? 'DONE' : 'READY')
   ctx.fillStyle = ['PASS', '2/2'].includes(verdict) ? LIVE_DEMO_THEME.primary : ['FAIL', 'ERROR', '0/2'].includes(verdict) ? '#ff6961' : verdict === '1/2' || active ? '#ffd166' : verdict === 'OPEN' ? LIVE_DEMO_THEME.blue : '#8e8e93'
   ctx.font = '900 13px ui-monospace, SFMono-Regular, Menlo, monospace'
   ctx.textAlign = 'right'
-  ctx.fillText(verdict, x + width - 20, y + 35)
+  ctx.fillText(verdict, x + width - 20, y + (liveDemo.mode === 'dogs-replay' ? 68 : 35))
   ctx.textAlign = 'left'
 
   if (card.evaluation?.detail && !semanticReview) {
@@ -1809,9 +1811,9 @@ function drawLiveDemoCard(ctx, providerId, index) {
   }
 
   ctx.fillStyle = '#f5f5f7'
-  ctx.font = '700 15px ui-monospace, SFMono-Regular, Menlo, monospace'
+  ctx.font = liveDemo.mode === 'dogs-replay' ? '600 18px -apple-system, BlinkMacSystemFont, sans-serif' : '700 15px ui-monospace, SFMono-Regular, Menlo, monospace'
   const output = card.output || (active ? 'Waiting for the first token…' : 'Same image and question queued.')
-  wrapLiveDemoText(ctx, output, x + 20, y + 190, width - 40, 21, semanticReview ? 12 : 15)
+  wrapLiveDemoText(ctx, output, x + 20, y + (liveDemo.mode === 'dogs-replay' ? 143 : 190), width - 40, liveDemo.mode === 'dogs-replay' ? 25 : 21, semanticReview ? 12 : 15)
 
   if (semanticReview) {
     drawLiveDemoPanel(ctx, x + 20, y + 463, width - 40, 62, 12, 'rgba(22,227,193,.07)', 'rgba(22,227,193,.30)', 1)
@@ -1828,9 +1830,30 @@ function drawLiveDemoCard(ctx, providerId, index) {
   ctx.strokeStyle = '#242426'
   ctx.beginPath(); ctx.moveTo(x + 20, y + 540); ctx.lineTo(x + width - 20, y + 540); ctx.stroke()
   if (liveDemo.mode === 'dogs-replay') {
-    ctx.fillStyle = '#6e6e73'
-    ctx.font = '800 8px ui-monospace, SFMono-Regular, Menlo, monospace'
-    ctx.fillText('RECORDED SAMPLE · NOT SPEED-RANKED', x + 20, y + 558)
+    const metrics = card.metrics || {}
+    const items = [
+      ['GENERATION', Number.isFinite(metrics.tokensPerSecond) ? `${metrics.tokensPerSecond.toFixed(1)} tok/s` : '—'],
+      ['OUTPUT', Number.isFinite(metrics.outputTokens) ? `${metrics.outputTokens} tokens` : '—'],
+      ['RESPONSE', formatDuration(metrics.latencyMs)],
+      ['FIRST TOKEN', formatDuration(metrics.timeToFirstTokenMs)]
+    ]
+    ctx.fillStyle = '#a1a1a6'
+    ctx.font = '600 12px -apple-system, BlinkMacSystemFont, sans-serif'
+    ctx.fillText('RECORDED RUN METRICS', x + 20, y + 566)
+    items.forEach(([label, value], metricIndex) => {
+      const metricX = x + 20 + (metricIndex % 2) * 119
+      const metricY = y + 594 + Math.floor(metricIndex / 2) * 60
+      ctx.fillStyle = '#a1a1a6'
+      ctx.font = '700 11px -apple-system, BlinkMacSystemFont, sans-serif'
+      ctx.fillText(label, metricX, metricY)
+      ctx.fillStyle = '#f5f5f7'
+      ctx.font = '800 18px -apple-system, BlinkMacSystemFont, sans-serif'
+      ctx.fillText(value, metricX, metricY + 25)
+    })
+    ctx.fillStyle = '#a1a1a6'
+    ctx.font = '500 12px -apple-system, BlinkMacSystemFont, sans-serif'
+    ctx.fillText('Not a controlled speed test', x + 20, y + 715)
+    return
   }
   const metrics = card.metrics || {}
   const metricItems = [
@@ -1851,7 +1874,106 @@ function drawLiveDemoCard(ctx, providerId, index) {
   })
 }
 
+// Video-only summaries: full statistical details remain in the dashboard/report.
+function drawDogVideoRatings(ctx) {
+  ctx.fillStyle = LIVE_DEMO_THEME.surface
+  ctx.fillRect(0, 92, 1600, 808)
+  ctx.fillStyle = LIVE_DEMO_THEME.primary
+  ctx.font = '800 19px -apple-system, BlinkMacSystemFont, sans-serif'
+  ctx.fillText('DOG DEMO COMPLETE · RESULTS', 72, 153)
+  ctx.fillStyle = '#f5f5f7'
+  ctx.font = '800 55px -apple-system, BlinkMacSystemFont, sans-serif'
+  ctx.fillText('How well did they answer?', 72, 226)
+  ctx.fillStyle = '#bfc9c5'
+  ctx.font = '500 27px -apple-system, BlinkMacSystemFont, sans-serif'
+  ctx.fillText('Average GPT-6 Astra rating · 4 dog photos', 74, 278)
+
+  COMPARISON_PROVIDER_IDS.map(summarizeLiveDemoProvider).forEach((summary, index) => {
+    const x = 72 + index * 368
+    const score = summary.maxPoints ? summary.points / summary.maxPoints : null
+    drawLiveDemoPanel(ctx, x, 348, 352, 318, 25, LIVE_DEMO_THEME.surfaceRaised, LIVE_DEMO_THEME.border, 1)
+    ctx.fillStyle = '#f5f5f7'
+    ctx.font = '800 27px -apple-system, BlinkMacSystemFont, sans-serif'
+    ctx.fillText(PROVIDER_BADGES[summary.providerId], x + 25, 402)
+    ctx.fillStyle = LIVE_DEMO_THEME.primary
+    ctx.font = '900 67px -apple-system, BlinkMacSystemFont, sans-serif'
+    ctx.fillText(Number.isFinite(score) ? (score * 10).toFixed(2) : '—', x + 25, 518)
+    ctx.fillStyle = '#bfc9c5'
+    ctx.font = '600 27px -apple-system, BlinkMacSystemFont, sans-serif'
+    ctx.fillText('/ 10', x + 227, 518)
+    drawLiveDemoPanel(ctx, x + 25, 574, 302, 12, 6, '#293530', '#293530', 0)
+    if (Number.isFinite(score)) drawLiveDemoPanel(ctx, x + 25, 574, 302 * score, 12, 6, LIVE_DEMO_THEME.primary, LIVE_DEMO_THEME.primary, 0)
+  })
+  ctx.fillStyle = '#bfc9c5'
+  ctx.font = '500 26px -apple-system, BlinkMacSystemFont, sans-serif'
+  ctx.fillText('Illustrative AI ratings, not benchmark accuracy.', 74, 766)
+}
+
+function drawDogVideoBenchmark(ctx) {
+  const elapsed = Math.max(0, (performance.now() - (liveDemo.auditCardStartedAt || performance.now())) / 1000)
+  ctx.fillStyle = LIVE_DEMO_THEME.surface
+  ctx.fillRect(0, 92, 1600, 808)
+  ctx.fillStyle = LIVE_DEMO_THEME.blue
+  ctx.font = '800 19px -apple-system, BlinkMacSystemFont, sans-serif'
+  ctx.fillText('SEPARATE TEST · NOT THE FOUR DOG PHOTOS', 72, 143)
+  ctx.fillStyle = '#f5f5f7'
+  ctx.font = '800 49px -apple-system, BlinkMacSystemFont, sans-serif'
+  ctx.fillText('RealWorldQA: the benchmark used by Tether', 72, 206)
+  ctx.fillStyle = '#bfc9c5'
+  ctx.font = '500 25px -apple-system, BlinkMacSystemFont, sans-serif'
+  ctx.fillText('765 questions on general real-world images · 4 variants · 3,060 local answers', 74, 250)
+  ctx.font = '500 21px -apple-system, BlinkMacSystemFont, sans-serif'
+  ctx.fillText('Objects, counting & spatial reasoning · scored against reference answers', 74, 289)
+  const plotX = 365
+  const plotWidth = 670
+  ctx.fillStyle = '#a1a1a6'
+  ctx.font = '600 17px -apple-system, BlinkMacSystemFont, sans-serif'
+  ctx.fillText('CORRECT ANSWERS · SCALE 0–100%', plotX, 342)
+  ctx.textAlign = 'right'
+  ctx.fillStyle = LIVE_DEMO_THEME.primary
+  ctx.fillText('OUR LOCAL TEST', 1270, 342)
+  ctx.fillStyle = LIVE_DEMO_THEME.blue
+  ctx.fillText('TETHER PUBLISHED', 1530, 342)
+  ctx.textAlign = 'left'
+  LIVE_DEMO_OFFICIAL_RESULTS.forEach((result, index) => {
+    const y = 397 + index * 75
+    // Round only once from the integer count, not an already rounded percentage.
+    const accuracy = result.correct / 765 * 100
+    const progress = Math.min(1, Math.max(0, (elapsed - index * .10) / .5))
+    ctx.fillStyle = '#f5f5f7'
+    ctx.font = '800 27px -apple-system, BlinkMacSystemFont, sans-serif'
+    ctx.fillText(PROVIDER_BADGES[result.providerId], 74, y + 9)
+    drawLiveDemoPanel(ctx, plotX, y - 17, plotWidth, 30, 15, '#293530', '#293530', 0)
+    const barWidth = plotWidth * accuracy / 100 * (1 - (1 - progress) ** 3)
+    if (barWidth > 0) drawLiveDemoPanel(ctx, plotX, y - 17, barWidth, 30, 15, LIVE_DEMO_THEME.primary, LIVE_DEMO_THEME.primary, 0)
+    ctx.fillStyle = LIVE_DEMO_THEME.primary
+    ctx.font = '900 36px -apple-system, BlinkMacSystemFont, sans-serif'
+    ctx.textAlign = 'right'
+    ctx.fillText(`${accuracy.toFixed(1)}%`, 1270, y + 11)
+    ctx.fillStyle = LIVE_DEMO_THEME.blue
+    ctx.fillText(`${result.official.toFixed(1)}%`, 1530, y + 11)
+    ctx.textAlign = 'left'
+  })
+  ctx.fillStyle = '#a1a1a6'
+  ctx.font = '600 18px -apple-system, BlinkMacSystemFont, sans-serif'
+  ;[0, 25, 50, 75, 100].forEach(tick => {
+    ctx.textAlign = 'center'
+    ctx.fillText(`${tick}%`, plotX + plotWidth * tick / 100, 671)
+  })
+  ctx.textAlign = 'left'
+  ctx.fillStyle = '#f5f5f7'
+  ctx.font = '600 24px -apple-system, BlinkMacSystemFont, sans-serif'
+  ctx.fillText('Local results are close: no statistically clear winner.', 74, 730)
+  ctx.fillStyle = '#bfc9c5'
+  ctx.font = '500 21px -apple-system, BlinkMacSystemFont, sans-serif'
+  ctx.fillText('Matching model variants · same dataset, not an identical reproduction of Tether\'s setup.', 74, 773)
+  ctx.fillStyle = LIVE_DEMO_THEME.blue
+  ctx.font = '600 23px -apple-system, BlinkMacSystemFont, sans-serif'
+  ctx.fillText('Full methodology & results on GitHub · alofrankys/qvac-vision-lab', 74, 825)
+}
+
 function drawLiveDemoFinalCard(ctx) {
+  if (liveDemo.mode === 'dogs-replay') return drawDogVideoBenchmark(ctx)
   const elapsed = Math.max(0, (performance.now() - (liveDemo.auditCardStartedAt || performance.now())) / 1000)
   const plotMin = 54
   const plotMax = 61
@@ -2001,6 +2123,7 @@ function summarizeLiveDemoProvider(providerId) {
 }
 
 function drawLiveDemoKpiCard(ctx) {
+  if (liveDemo.mode === 'dogs-replay') return drawDogVideoRatings(ctx)
   const summaries = COMPARISON_PROVIDER_IDS.map(summarizeLiveDemoProvider)
   const totalInferences = liveDemo.results.length * COMPARISON_PROVIDER_IDS.length
   const astraReplay = liveDemo.mode === 'dogs-replay'
@@ -2469,3 +2592,4 @@ function escapeHtml(value = '') { return String(value).replace(/[&<>"']/g, chara
 function failUi(message) { setStage('ATTENTION', 'error'); $('#showcase-run-footnote').textContent = message; return Object.assign(new Error(message), { shown: true }) }
 
 initialize()
+import { localFetch as fetch } from './local-api.js'
