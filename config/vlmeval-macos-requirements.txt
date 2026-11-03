@@ -19,7 +19,7 @@ setuptools
 openai
 python-dotenv
 google-genai
-litellm==1.84.4
+litellm==1.109.0.dev1
 qwen_vl_utils
 omegaconf
 opencv-python
